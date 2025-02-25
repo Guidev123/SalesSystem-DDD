@@ -21,11 +21,10 @@
 
         public static bool operator ==(Entity a, Entity b)
         {
-            if (ReferenceEquals(a, null) && ReferenceEquals(b, null)) return true;
-            if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
+            if (a is null && b is null) return true;
+            if (!(a is not null && b is not null)) return false;
 
             return a.Equals(b);
-
         }
 
         public static bool operator !=(Entity a, Entity b) => !(a == b);
