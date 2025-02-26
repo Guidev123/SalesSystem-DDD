@@ -13,16 +13,18 @@ namespace SalesSystem.Catalog.Domain.Entities
             CategoryId = categoryId;
             CreatedAt = DateTime.Now;
             Active = true;
+            Validate();
         }
+
         protected Product() { }
 
-        public string Name { get; private set; } = string.Empty;
+        public string Name { get; } = string.Empty;
         public string Description { get; private set; } = string.Empty;
         public string ImageUrl { get; private set; } = string.Empty;
         public bool Active { get; private set; }
         public decimal Price { get; private set; }
-        public DateTime CreatedAt { get; private set; }
         public int QuantityInStock { get; private set; }
+        public DateTime CreatedAt { get; }
         public Guid CategoryId { get; private set; }
         public Category Category { get; private set; } = null!;
 
@@ -32,31 +34,40 @@ namespace SalesSystem.Catalog.Domain.Entities
 
         public void UpdateCategory(Category category)
         {
+            AssertionConcern.EnsureDifferent(category.Id, Guid.Empty, "The field 'CategoryId' cannot be empty. Please provide a valid category ID.");
             Category = category;
             CategoryId = category.Id;
         }
 
         public void UpdateDescription(string description)
         {
+            AssertionConcern.EnsureNotEmpty(description, "The field 'Description' cannot be empty. Please provide a valid product description.");
             Description = description;
         }
 
         public void DebitStock(int quantity)
         {
             if (quantity < 0) quantity *= -1;
+            AssertionConcern.EnsureTrue(HasStock(quantity), "Insufficient  stock");
             QuantityInStock -= quantity;
         }
 
         public void AddStock(int quantity)
         {
+            AssertionConcern.EnsureGreaterThan(quantity, 0, "The 'Quantity' must be greater than 0");
             QuantityInStock += quantity;
         }
 
         public bool HasStock(int quantity) => QuantityInStock >= quantity;  
 
-        public void Validate()
+        public override void Validate()
         {
-
+            AssertionConcern.EnsureNotEmpty(Name, "The field 'Name' cannot be empty. Please provide a valid product name.");
+            AssertionConcern.EnsureNotEmpty(Description, "The field 'Description' cannot be empty. Please provide a valid product description.");
+            AssertionConcern.EnsureDifferent(CategoryId, Guid.Empty, "The field 'CategoryId' cannot be empty. Please provide a valid category ID.");
+            AssertionConcern.EnsureGreaterThan(Price, 0, "The field 'Price' must be greater than $0. Please provide a valid price.");
+            AssertionConcern.EnsureNotEmpty(ImageUrl, "The field 'ImageUrl' cannot be empty. Please provide a valid image URL.");
+            AssertionConcern.EnsureTrue(Active, "The product must be active. Please ensure the product is marked as active.");
         }
     }
 }

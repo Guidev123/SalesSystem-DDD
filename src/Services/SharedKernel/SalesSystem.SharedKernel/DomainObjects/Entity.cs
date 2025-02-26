@@ -27,6 +27,8 @@
             return a.Equals(b);
         }
 
+        public abstract void Validate();
+
         public static bool operator !=(Entity a, Entity b) => !(a == b);
 
         public override int GetHashCode() => (GetType().GetHashCode() * 907) + Id.GetHashCode();
