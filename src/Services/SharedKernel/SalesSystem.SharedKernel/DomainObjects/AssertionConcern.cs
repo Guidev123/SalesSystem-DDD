@@ -32,7 +32,7 @@ namespace SalesSystem.SharedKernel.DomainObjects
 
         public static void EnsureNotEmpty(string value, string message)
         {
-            if (string.IsNullOrWhiteSpace(value)) throw new DomainException(message);
+            if (string.IsNullOrEmpty(value)) throw new DomainException(message);
         }
 
         public static void EnsureNotNull(object obj, string message)

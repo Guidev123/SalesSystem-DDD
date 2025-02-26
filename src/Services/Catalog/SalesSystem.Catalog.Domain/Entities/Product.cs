@@ -1,16 +1,18 @@
-﻿using SalesSystem.SharedKernel.DomainObjects;
+﻿using SalesSystem.Catalog.Domain.ValueObjects;
+using SalesSystem.SharedKernel.DomainObjects;
 
 namespace SalesSystem.Catalog.Domain.Entities
 {
     public class Product : Entity, IAggregateRoot
     {
-        public Product(string name, string description, decimal price, string imageUrl, Guid categoryId)
+        public Product(string name, string description, decimal price, string imageUrl, Guid categoryId, Dimensions dimensions)
         {
             Name = name;
             Description = description;
             Price = price;
             ImageUrl = imageUrl;
             CategoryId = categoryId;
+            Dimensions = dimensions;
             CreatedAt = DateTime.Now;
             Active = true;
             Validate();
@@ -24,6 +26,7 @@ namespace SalesSystem.Catalog.Domain.Entities
         public bool Active { get; private set; }
         public decimal Price { get; private set; }
         public int QuantityInStock { get; private set; }
+        public Dimensions Dimensions { get; private set; } = null!;
         public DateTime CreatedAt { get; }
         public Guid CategoryId { get; private set; }
         public Category Category { get; private set; } = null!;
@@ -48,7 +51,7 @@ namespace SalesSystem.Catalog.Domain.Entities
         public void DebitStock(int quantity)
         {
             if (quantity < 0) quantity *= -1;
-            AssertionConcern.EnsureTrue(HasStock(quantity), "Insufficient  stock");
+            AssertionConcern.EnsureTrue(HasStock(quantity), "Insufficient stock");
             QuantityInStock -= quantity;
         }
 
