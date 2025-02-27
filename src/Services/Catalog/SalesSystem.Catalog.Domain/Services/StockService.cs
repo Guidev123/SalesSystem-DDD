@@ -1,10 +1,13 @@
-﻿using SalesSystem.Catalog.Domain.Interfaces.Repositories;
+﻿using SalesSystem.Catalog.Domain.Events;
+using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
+using SalesSystem.SharedKernel.EventBus;
 
 namespace SalesSystem.Catalog.Domain.Services
 {
-    public sealed class StockService(IProductRepository productRepository) : IStockService
+    public sealed class StockService(IProductRepository productRepository, IMediatorHandler eventBus) : IStockService
     {
+        private readonly IMediatorHandler _eventBus = eventBus; 
         private readonly IProductRepository _productRepository = productRepository;
 
         public async Task<bool> AddStockAsync(Guid productId, int quantity)
@@ -13,8 +16,8 @@ namespace SalesSystem.Catalog.Domain.Services
             if (product is null) return false;
 
             product.AddStock(quantity);
-            _productRepository.Update(product);
 
+            _productRepository.Update(product);
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
@@ -26,8 +29,11 @@ namespace SalesSystem.Catalog.Domain.Services
             if(!product.HasStock(quantity)) return false;
 
             product.DebitStock(quantity);
-            _productRepository.Update(product);
 
+            if (product.QuantityInStock < 10)
+                await _eventBus.PublishEventAsync(new ProductLowQuantityInStockEvent(product.QuantityInStock, product.Id));
+
+            _productRepository.Update(product);
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
