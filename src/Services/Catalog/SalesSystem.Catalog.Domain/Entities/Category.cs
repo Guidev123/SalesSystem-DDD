@@ -10,9 +10,11 @@ namespace SalesSystem.Catalog.Domain.Entities
             Code = code;
             Validate();
         }
+        protected Category() { }
 
-        public string Name { get; }
+        public string Name { get; } = string.Empty;
         public int Code { get; }
+        public List<Product> Products { get; private set; } = [];
 
         public override string ToString() => $"{Name}-{Code}";
 

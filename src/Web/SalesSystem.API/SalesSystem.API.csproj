@@ -8,10 +8,22 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\Catalog\SalesSystem.Catalog.Infrastructure\SalesSystem.Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\Invoices\SalesSystem.Invoices.Infrastructure\SalesSystem.Invoices.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\Payments\SalesSystem.Payments.Infrastructure\SalesSystem.Payments.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\Register\SalesSystem.Register.Infrastructure\SalesSystem.Register.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\Sales\SalesSystem.Sales.Infrastructure\SalesSystem.Sales.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
