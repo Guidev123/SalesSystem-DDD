@@ -5,12 +5,12 @@ namespace SalesSystem.SharedKernel.Responses
     public class Response<TData>
     {
         [JsonIgnore]
+        private readonly int _code;
+
         public const int DEFAULT_SUCCESS_STATUS_CODE = 200;
         public const int DEFAULT_ERROR_STATUS_CODE = 400;
         public const string DEFAULT_ERROR_MESSAGE = "Invalid Operation.";
         public const string DEFAULT_SUCCESS_MESSAGE = "Valid Operation.";
-
-        private readonly int _code;
 
         [JsonConstructor]
         public Response() => _code = DEFAULT_SUCCESS_STATUS_CODE;
