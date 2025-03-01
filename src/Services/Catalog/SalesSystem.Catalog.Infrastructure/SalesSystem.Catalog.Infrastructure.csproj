@@ -11,6 +11,8 @@
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>

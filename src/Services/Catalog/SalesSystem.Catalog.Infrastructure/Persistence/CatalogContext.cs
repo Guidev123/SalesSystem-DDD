@@ -18,13 +18,13 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence
                 .Where(p => p.ClrType == typeof(string)
                 && p.GetColumnType() == null);
 
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogContext).Assembly);
+
             foreach (var item in properties)
             {
                 item.SetColumnType("VARCHAR(160)");
                 item.SetIsUnicode(false);
             }
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogContext).Assembly);
         }
 
         public async Task<bool> CommitAsync()
