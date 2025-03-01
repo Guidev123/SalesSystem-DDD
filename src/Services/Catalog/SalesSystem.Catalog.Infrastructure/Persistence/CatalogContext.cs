@@ -14,9 +14,9 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var properties = modelBuilder.Model.GetEntityTypes()
-                       .SelectMany(p => p.GetProperties())
-                       .Where(p => p.ClrType == typeof(string)
-                       && p.GetColumnType() == null);
+                .SelectMany(p => p.GetProperties())
+                .Where(p => p.ClrType == typeof(string)
+                && p.GetColumnType() == null);
 
             foreach (var item in properties)
             {
