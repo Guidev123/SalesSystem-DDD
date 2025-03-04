@@ -13,9 +13,9 @@ namespace SalesSystem.SharedKernel.Responses
         public const string DEFAULT_SUCCESS_MESSAGE = "Valid Operation.";
 
         [JsonConstructor]
-        public Response() => _code = DEFAULT_SUCCESS_STATUS_CODE;
+        protected Response() => _code = DEFAULT_SUCCESS_STATUS_CODE;
 
-        public Response(
+        protected Response(
             TData? data,
             int code = DEFAULT_SUCCESS_STATUS_CODE,
             string? message = null,
