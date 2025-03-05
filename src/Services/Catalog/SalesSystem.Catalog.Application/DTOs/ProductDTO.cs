@@ -3,6 +3,6 @@
     public record ProductDTO(
         Guid Id, string Name, string Description, string Image,
         decimal Price, int QuantityInStock, decimal Height,
-        decimal Width, decimal Depth, IEnumerable<CategoryDTO> Categories
+        decimal Width, decimal Depth, CategoryDTO Category
         );
 }

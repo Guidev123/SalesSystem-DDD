@@ -12,7 +12,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Repositories
         public IUnitOfWork UnitOfWork => _context;
 
         public async Task<IEnumerable<Product>> GetAllAsync(int pageNumber, int pageSize)
-            => await _context.Products.AsNoTracking().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            => await _context.Products.AsNoTrackingWithIdentityResolution().Include(x => x.Category).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync() => await _context.Categories.AsNoTracking().ToListAsync();
 

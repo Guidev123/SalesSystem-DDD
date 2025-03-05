@@ -1,5 +1,6 @@
 ﻿using SalesSystem.API.Middlewares;
 using SalesSystem.SharedKernel.EventBus;
+using SalesSystem.SharedKernel.Notifications;
 using System.Reflection;
 
 namespace SalesSystem.API.Configuration
@@ -11,6 +12,7 @@ namespace SalesSystem.API.Configuration
             builder.AddMediatRBus();
             builder.AddHandlers();
             builder.AddCustomMiddlewares();
+            builder.AddNotifications();
         }
 
         public static void AddMediatRBus(this WebApplicationBuilder builder)
@@ -23,5 +25,8 @@ namespace SalesSystem.API.Configuration
         {
             builder.Services.AddTransient<GlobalExceptionMiddleware>();
         }
+
+        public static void AddNotifications(this WebApplicationBuilder builder)
+            => builder.Services.AddScoped<INotificator, Notificator>();
     }
 }
