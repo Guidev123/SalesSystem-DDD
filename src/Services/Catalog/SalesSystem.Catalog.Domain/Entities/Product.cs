@@ -48,6 +48,18 @@ namespace SalesSystem.Catalog.Domain.Entities
             Description = description;
         }
 
+        public void UpdatePrice(decimal price)
+        {
+            AssertionConcern.EnsureGreaterThan(Price, 0, "The field 'Price' must be greater than $0. Please provide a valid price.");
+            Price = price;
+        }
+
+        public void UpdateImage(string imageUrl)
+        {
+            AssertionConcern.EnsureNotEmpty(ImageUrl, "The field 'ImageUrl' cannot be empty. Please provide a valid image URL.");
+            ImageUrl = imageUrl;
+        }
+
         public void DebitStock(int quantity)
         {
             if (quantity < 0) quantity *= -1;

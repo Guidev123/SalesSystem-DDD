@@ -6,7 +6,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
     {
         public CreateProductValidation()
         {
-            
+
         }
     }
 }
