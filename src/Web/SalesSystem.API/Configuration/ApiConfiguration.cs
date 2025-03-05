@@ -7,12 +7,16 @@ namespace SalesSystem.API.Configuration
 {
     public static class ApiConfiguration
     {
+        public const int DEFAULT_PAGE_NUMBER = 1;
+        public const int DEFAULT_PAGE_SIZE = 15;
+
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
             builder.AddMediatRBus();
             builder.AddHandlers();
             builder.AddCustomMiddlewares();
             builder.AddNotifications();
+            builder.Services.AddSwaggerConfig();
         }
 
         public static void AddMediatRBus(this WebApplicationBuilder builder)

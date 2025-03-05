@@ -5,7 +5,7 @@ namespace SalesSystem.SharedKernel.Responses
     public class Response<TData>
     {
         [JsonIgnore]
-        private readonly int _code;
+        public readonly int Code;
 
         public const int DEFAULT_SUCCESS_STATUS_CODE = 200;
         public const int DEFAULT_ERROR_STATUS_CODE = 400;
@@ -13,7 +13,7 @@ namespace SalesSystem.SharedKernel.Responses
         public const string DEFAULT_SUCCESS_MESSAGE = "Valid Operation.";
 
         [JsonConstructor]
-        protected Response() => _code = DEFAULT_SUCCESS_STATUS_CODE;
+        protected Response() => Code = DEFAULT_SUCCESS_STATUS_CODE;
 
         protected Response(
             TData? data,
@@ -24,13 +24,13 @@ namespace SalesSystem.SharedKernel.Responses
             Data = data;
             Message = message;
             Errors = errors;
-            _code = code;
+            Code = code;
         }
 
         public TData? Data { get; set; }
         public string? Message { get; set; }
         public List<string>? Errors { get; set; }
-        public bool IsSuccess => _code is >= 200 and <= 299;
+        public bool IsSuccess => Code is >= 200 and <= 299;
 
         public static Response<TData> Success(TData? data, int code = DEFAULT_SUCCESS_STATUS_CODE, string? message = DEFAULT_SUCCESS_MESSAGE)
             => new(data, code, message);
