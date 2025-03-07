@@ -20,7 +20,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
             if (!validate.IsValid)
             {
                 GetValidationErrors(validate);
-                return Response<UpdateProductResponse>.Success(null);
+                return Response<UpdateProductResponse>.Failure(_notificator.GetNotifications());
             }
 
             var product = await _productRepository.GetByIdAsync(request.Id);

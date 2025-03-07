@@ -20,7 +20,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
             if (!validate.IsValid)
             {
                 GetValidationErrors(validate);
-                return Response<CreateProductResponse>.Success(null);
+                return Response<CreateProductResponse>.Failure(_notificator.GetNotifications());
             }
 
             var product = request.MapToEntity();
