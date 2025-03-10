@@ -4,15 +4,15 @@ using SalesSystem.SharedKernel.Data;
 
 namespace SalesSystem.Catalog.Infrastructure.Persistence
 {
-    public class CatalogContext : DbContext, IUnitOfWork
+    public class CatalogContext(DbContextOptions<CatalogContext> options) : DbContext(options), IUnitOfWork
     {
-        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options) { }
-
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("catalog");
+
             var properties = modelBuilder.Model.GetEntityTypes()
                 .SelectMany(p => p.GetProperties())
                 .Where(p => p.ClrType == typeof(string)

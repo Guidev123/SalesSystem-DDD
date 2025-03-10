@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
+namespace SalesSystem.Catalog.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -11,8 +11,12 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "catalog");
+
             migrationBuilder.CreateTable(
                 name: "Categories",
+                schema: "catalog",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -26,6 +30,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Products",
+                schema: "catalog",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -47,6 +52,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
+                        principalSchema: "catalog",
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -54,6 +60,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
+                schema: "catalog",
                 table: "Products",
                 column: "CategoryId");
         }
@@ -62,10 +69,12 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Products",
+                schema: "catalog");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Categories",
+                schema: "catalog");
         }
     }
 }

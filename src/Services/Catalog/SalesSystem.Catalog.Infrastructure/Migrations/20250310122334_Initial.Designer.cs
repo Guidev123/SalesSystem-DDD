@@ -3,20 +3,24 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SalesSystem.Catalog.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
+namespace SalesSystem.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20250310122334_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("catalog")
                 .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -38,7 +42,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories", "catalog");
                 });
 
             modelBuilder.Entity("SalesSystem.Catalog.Domain.Entities.Product", b =>
@@ -81,7 +85,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products", "catalog");
                 });
 
             modelBuilder.Entity("SalesSystem.Catalog.Domain.Entities.Product", b =>
@@ -111,7 +115,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("Products");
+                            b1.ToTable("Products", "catalog");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");
