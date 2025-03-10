@@ -16,7 +16,7 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.AddStock
         {
             if(!await _stockService.AddStockAsync(request.Id, request.Quantity))
             {
-                _notificator.HandleNotification(new("Fail to add quantity."));
+                _notificator.HandleNotification(new($"Fail to add {request.Quantity} products to stock."));
                 return Response<AddStockResponse>.Failure(_notificator.GetNotifications());
             }
 
