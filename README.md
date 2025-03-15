@@ -6,7 +6,8 @@
 # Sales System
 
 
-This repository contains a modular monolithic sales system, designed with well-defined bounded contexts, including:
+This repository contains a modular monolithic sales system built with .NET and SQL Server, following Clean Architecture and Domain-Driven Design (DDD) principles to ensure scalability, maintainability, and separation of concerns.
+
 
 - 📦 Catalog – Manages product listings and details.
 - 💳 Payments – Handles payment processing and transactions.
