@@ -2,5 +2,9 @@
 {
     public enum EOrderStatus
     {
+        Created,
+        Canceled,
+        Refunded,
+        Paid
     }
 }
