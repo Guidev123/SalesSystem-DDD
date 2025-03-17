@@ -150,6 +150,8 @@ namespace SalesSystem.Sales.Domain.Entities
 
         public void CancelOrder() => Status = EOrderStatus.Canceled;
 
+        public void DraftOrder() => Status = EOrderStatus.Draft;
+
         public override void Validate()
         {
             AssertionConcern.EnsureNotEmpty(Code, "The order code cannot be empty.");
@@ -158,6 +160,17 @@ namespace SalesSystem.Sales.Domain.Entities
             AssertionConcern.EnsureGreaterThan(Price, 0, "The price must be greater than zero.");
             AssertionConcern.EnsureNotNull(CreatedAt, "The order creation date cannot be null.");
             AssertionConcern.EnsureNotNull(Status, "The order status cannot be null.");
+        }
+
+        public static class OrderFactory
+        {
+            public static Order NewDraftOrder(Guid customerId)
+            {
+                var order = new Order { CustomerId = customerId };
+
+                order.DraftOrder();
+                return order;
+            }
         }
     }
 }

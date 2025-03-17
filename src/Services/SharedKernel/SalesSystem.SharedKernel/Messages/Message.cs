@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.SharedKernel.Messages
 {
-    public abstract class Message
+    public abstract record Message
     {
         protected Message() => MessageType = GetType().Name;
 
