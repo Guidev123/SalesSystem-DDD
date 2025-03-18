@@ -1,7 +1,7 @@
 ﻿using SalesSystem.Catalog.Domain.Events;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
-using SalesSystem.SharedKernel.EventBus;
+using SalesSystem.SharedKernel.Communication.Mediator;
 
 namespace SalesSystem.Catalog.Domain.Services
 {

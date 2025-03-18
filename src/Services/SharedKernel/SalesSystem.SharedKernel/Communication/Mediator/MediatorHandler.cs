@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using SalesSystem.SharedKernel.Messages;
+
 using SalesSystem.SharedKernel.Responses;
 
-namespace SalesSystem.SharedKernel.EventBus
+namespace SalesSystem.SharedKernel.Communication.Mediator
 {
     public sealed class MediatorHandler(IMediator mediator) : IMediatorHandler
     {

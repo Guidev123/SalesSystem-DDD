@@ -1,4 +1,4 @@
-﻿using SalesSystem.SharedKernel.DomainObjects;
+﻿using SalesSystem.SharedKernel.Messages.CommonMessages.DomainEvents;
 
 namespace SalesSystem.Catalog.Domain.Events
 {

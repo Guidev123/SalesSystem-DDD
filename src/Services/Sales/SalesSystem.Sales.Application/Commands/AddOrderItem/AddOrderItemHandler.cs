@@ -2,16 +2,19 @@
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Sales.Application.Commands.AddOrderItem
 {
     public sealed class AddOrderItemHandler(INotificator notificator,
-                                            IOrderRepository orderRepository)
+                                            IOrderRepository orderRepository,
+                                            IMediatorHandler mediator)
                                           : IRequestHandler<AddOrderItemCommand, Response<Guid>>
     {
         private readonly INotificator _notificator = notificator;
+        private readonly IMediatorHandler _mediator = mediator;
         private readonly IOrderRepository _orderRepository = orderRepository;
 
         public async Task<Response<Guid>> Handle(AddOrderItemCommand request, CancellationToken cancellationToken)

@@ -6,7 +6,7 @@ using SalesSystem.Catalog.Application.Queries.Categories.GetAll;
 using SalesSystem.Catalog.Application.Queries.Products.GetAll;
 using SalesSystem.Catalog.Application.Queries.Products.GetByCategory;
 using SalesSystem.Catalog.Application.Queries.Products.GetById;
-using SalesSystem.SharedKernel.EventBus;
+using SalesSystem.SharedKernel.Communication.Mediator;
 
 namespace SalesSystem.API.Controllers
 {

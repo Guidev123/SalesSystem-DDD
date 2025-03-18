@@ -1,6 +1,6 @@
 ﻿using SalesSystem.SharedKernel.Messages;
 
-namespace SalesSystem.SharedKernel.DomainObjects
+namespace SalesSystem.SharedKernel.Messages.CommonMessages.DomainEvents
 {
     public abstract record DomainEvent : Event
     {

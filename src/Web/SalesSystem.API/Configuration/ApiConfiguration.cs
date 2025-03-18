@@ -1,5 +1,5 @@
 ﻿using SalesSystem.API.Middlewares;
-using SalesSystem.SharedKernel.EventBus;
+using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using System.Reflection;
 
