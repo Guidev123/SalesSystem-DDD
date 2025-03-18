@@ -1,7 +1,6 @@
-﻿using MediatR;
-using SalesSystem.SharedKernel.Responses;
+﻿using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Application.Queries.Products.GetById
 {
-    public record GetProductByIdQuery(Guid Id) : IRequest<Response<GetProductByIdResponse>>;
+    public record GetProductByIdQuery(Guid Id) : IQuery<GetProductByIdResponse>;
 }

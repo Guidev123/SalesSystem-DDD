@@ -1,12 +1,14 @@
 ﻿using FluentValidation.Results;
-using MediatR;
-using SalesSystem.SharedKernel.Responses;
+using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Application.Commands.Products.Update
 {
-    public record UpdateProductCommand(Guid Id, string? Description, string? Image, decimal? Price) : IRequest<Response<UpdateProductResponse>>
+    public record UpdateProductCommand(Guid Id, string? Description, string? Image, decimal? Price) : Command<UpdateProductResponse>
     {
-        public ValidationResult Validate(UpdateProductCommand command)
-            => new UpdateProductValidation().Validate(command);
+        public override bool IsValid()
+        {
+            SetValidationResult(new UpdateProductValidation().Validate(this));
+            return ValidationResult.IsValid;
+        }
     }
 }

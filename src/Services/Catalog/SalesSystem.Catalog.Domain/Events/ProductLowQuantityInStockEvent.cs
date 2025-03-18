@@ -2,7 +2,7 @@
 
 namespace SalesSystem.Catalog.Domain.Events
 {
-    public class ProductLowQuantityInStockEvent : DomainEvent
+    public record ProductLowQuantityInStockEvent : DomainEvent
     {
         public ProductLowQuantityInStockEvent(int currentQuantityInStock, Guid aggregateId)
             : base(aggregateId) => CurrentQuantityInStock = currentQuantityInStock;

@@ -16,12 +16,8 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
 
         public async Task<Response<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var validate = request.Validate(request);
-            if (!validate.IsValid)
-            {
-                GetValidationErrors(validate);
-                return Response<CreateProductResponse>.Failure(_notificator.GetNotifications());
-            }
+            if (!request.IsValid())
+                return Response<CreateProductResponse>.Failure(request.GetErrorMessages());
 
             var product = request.MapToEntity();
             _productRepository.Create(product);
@@ -33,12 +29,6 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
             }
 
             return Response<CreateProductResponse>.Success(new(product.Id));
-        }
-
-        private void GetValidationErrors(ValidationResult validationResult)
-        {
-            foreach (var error in validationResult.Errors)
-                _notificator.HandleNotification(new(error.ErrorMessage));
         }
     }
 }

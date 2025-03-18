@@ -1,7 +1,6 @@
-﻿using MediatR;
-using SalesSystem.SharedKernel.Responses;
+﻿using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
 {
-    public record GetAllProductsQuery(int PageNumber, int PageSize) : IRequest<PagedResponse<GetAllProductsResponse>>;
+    public record GetAllProductsQuery(int PageNumber, int PageSize) : IPagedQuery<GetAllProductsResponse>;
 }

@@ -16,12 +16,8 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
 
         public async Task<Response<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var validate = request.Validate(request);
-            if (!validate.IsValid)
-            {
-                GetValidationErrors(validate);
-                return Response<UpdateProductResponse>.Failure(_notificator.GetNotifications());
-            }
+            if (!request.IsValid())
+                return Response<UpdateProductResponse>.Failure(request.GetErrorMessages());
 
             var product = await _productRepository.GetByIdAsync(request.Id);
             if(product is null)

@@ -1,7 +1,13 @@
-﻿using MediatR;
-using SalesSystem.SharedKernel.Responses;
+﻿using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Application.Commands.Stock.DebitStock
 {
-    public record DebitStockCommand(Guid Id, int Quantity) : IRequest<Response<DebitStockResponse>>;
+    public record DebitStockCommand(Guid Id, int Quantity) : Command<DebitStockResponse>
+    {
+        public override bool IsValid()
+        {
+            SetValidationResult(new DebitStockValidation().Validate(this));
+            return ValidationResult.IsValid;
+        }
+    }
 }

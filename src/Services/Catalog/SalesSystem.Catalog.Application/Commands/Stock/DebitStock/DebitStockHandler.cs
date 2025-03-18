@@ -14,6 +14,9 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.DebitStock
 
         public async Task<Response<DebitStockResponse>> Handle(DebitStockCommand request, CancellationToken cancellationToken)
         {
+            if (!request.IsValid())
+                return Response<DebitStockResponse>.Failure(request.GetErrorMessages());
+
             if (!await _stockService.DebitStockAsync(request.Id, request.Quantity))
             {
                 _notificator.HandleNotification(new("Fail to debit quantity."));

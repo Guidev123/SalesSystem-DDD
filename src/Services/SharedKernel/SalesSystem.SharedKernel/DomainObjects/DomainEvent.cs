@@ -2,7 +2,7 @@
 
 namespace SalesSystem.SharedKernel.DomainObjects
 {
-    public abstract class DomainEvent : Event
+    public abstract record DomainEvent : Event
     {
         protected DomainEvent(Guid aggregateId) => AggregateId = aggregateId;
     }
