@@ -1,0 +1,21 @@
+﻿using SalesSystem.SharedKernel.Messages;
+
+namespace SalesSystem.Sales.Application.Events
+{
+    public record OrderUpdatedEvent : Event
+    {
+        public OrderUpdatedEvent(Guid orderId,
+                                 Guid customerId,
+                                 decimal totalPrice)
+        {
+            AggregateId = orderId;
+            OrderId = orderId;
+            CustomerId = customerId;
+            TotalPrice = totalPrice;
+        }
+
+        public Guid OrderId { get; }
+        public Guid CustomerId { get; }
+        public decimal TotalPrice { get; }
+    }
+}

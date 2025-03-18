@@ -12,14 +12,14 @@ namespace SalesSystem.API.Configuration
 
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
-            builder.AddMediatRBus();
+            builder.AddConfigureMediator();
             builder.AddHandlers();
             builder.AddCustomMiddlewares();
             builder.AddNotifications();
             builder.Services.AddSwaggerConfig();
         }
 
-        public static void AddMediatRBus(this WebApplicationBuilder builder)
+        public static void AddConfigureMediator(this WebApplicationBuilder builder)
             => builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
 
         public static void AddHandlers(this WebApplicationBuilder builder)

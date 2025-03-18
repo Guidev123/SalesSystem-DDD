@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SalesSystem.Sales.Application.Commands.AddOrderItem
+namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
     public sealed class AddOrderItemValidation : AbstractValidator<AddOrderItemCommand>
     {

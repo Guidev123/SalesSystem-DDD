@@ -5,7 +5,7 @@ namespace SalesSystem.Sales.Domain.Entities
 {
     public class Voucher : Entity
     {
-        public Voucher(string code, decimal? percentual, decimal? value, int quantity, EVoucherType type, DateTime? appliedAt, DateTime expiresAt)
+        public Voucher(string code, decimal? percentual, decimal? value, int quantity, EVoucherType type, DateTime expiresAt)
         {
             Code = code;
             Percentual = percentual;
@@ -13,7 +13,6 @@ namespace SalesSystem.Sales.Domain.Entities
             Quantity = quantity;
             Type = type;
             CreatedAt = DateTime.Now;
-            AppliedAt = appliedAt;
             ExpiresAt = expiresAt;
             IsActive = true;
             Used = false;
@@ -27,7 +26,6 @@ namespace SalesSystem.Sales.Domain.Entities
         public int Quantity { get; private set; }
         public EVoucherType Type { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public DateTime? AppliedAt { get; private set; }
         public DateTime ExpiresAt { get; private set; }
         public bool IsActive { get; private set; }
         public bool Used { get; private set; }

@@ -12,9 +12,9 @@ namespace SalesSystem.Sales.Domain.Repositories
         void Update(Order order);
         Task<OrderItem?> GetItemByIdAsync(Guid id);
         Task<OrderItem?> GetItemByOrderIdAsync(Guid orderId, Guid itemId);
-        void CreateItem(OrderItem item);
+        void AddOrderItem(OrderItem item);
         void UpdateItem(OrderItem item);    
-        void DeleteItemById(Guid id);
+        void DeleteItem(OrderItem item);
         Task<Voucher?> GetVoucherByCodeAsync(string code);
     }
 }

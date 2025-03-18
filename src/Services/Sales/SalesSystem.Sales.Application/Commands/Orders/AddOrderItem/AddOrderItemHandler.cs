@@ -1,20 +1,18 @@
 ﻿using MediatR;
+using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
-using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
-namespace SalesSystem.Sales.Application.Commands.AddOrderItem
+namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
     public sealed class AddOrderItemHandler(INotificator notificator,
-                                            IOrderRepository orderRepository,
-                                            IMediatorHandler mediator)
+                                            IOrderRepository orderRepository)
                                           : IRequestHandler<AddOrderItemCommand, Response<Guid>>
     {
         private readonly INotificator _notificator = notificator;
-        private readonly IMediatorHandler _mediator = mediator;
         private readonly IOrderRepository _orderRepository = orderRepository;
 
         public async Task<Response<Guid>> Handle(AddOrderItemCommand request, CancellationToken cancellationToken)
@@ -26,15 +24,15 @@ namespace SalesSystem.Sales.Application.Commands.AddOrderItem
             var orderItem = request.MapOrderItemToEntity();
 
             var response = order is null
-                ? HandleDraftOrder(request.CustomerId, orderItem)
-                : HandleExistentOrder(order, orderItem);
+                ? HandleDraftOrder(request.CustomerId, orderItem, request.UnitPrice, request.Quantity)
+                : HandleExistentOrder(order, orderItem, request.UnitPrice, request.Quantity);
 
             return response.IsSuccess
                 ? await PersistDataAsync(orderItem.Id)
                 : Response<Guid>.Failure(_notificator.GetNotifications());
         }
 
-        private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem)
+        private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem, decimal unitPrice, int quantity)
         {
             var existentOrder = GetExistentOrderItem(order, orderItem.Id);
             if (existentOrder is null)
@@ -45,18 +43,26 @@ namespace SalesSystem.Sales.Application.Commands.AddOrderItem
 
             order.AddItem(orderItem);
 
-            if (order.ItemAlreadyExists(orderItem)) _orderRepository.UpdateItem(existentOrder);
-            else _orderRepository.CreateItem(orderItem);
+            if (order.ItemAlreadyExists(orderItem))
+                _orderRepository.UpdateItem(existentOrder);
+            else
+                _orderRepository.AddOrderItem(orderItem);
+
+            order.AddEvent(new OrderUpdatedEvent(order.Id, order.CustomerId, order.Price));
+            CreateOrderItemAddedEvent(order, orderItem.ProductId, unitPrice, quantity, orderItem.ProductName);
 
             return Response<Order>.Success(order);
         }
 
-        private Response<Order> HandleDraftOrder(Guid customerId, OrderItem orderItem)
+        private Response<Order> HandleDraftOrder(Guid customerId, OrderItem orderItem, decimal unitPrice, int quantity)
         {
             var order = Order.OrderFactory.NewDraftOrder(customerId);
             order.AddItem(orderItem);
 
             _orderRepository.Create(order);
+
+            order.AddEvent(new DraftOrderStartedEvent(customerId, order.Id));
+            CreateOrderItemAddedEvent(order, orderItem.ProductId, unitPrice, quantity, orderItem.ProductName);
 
             return Response<Order>.Success(order);
         }
@@ -74,5 +80,8 @@ namespace SalesSystem.Sales.Application.Commands.AddOrderItem
 
         private static OrderItem? GetExistentOrderItem(Order order, Guid orderItemId)
             => order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
+
+        private static void CreateOrderItemAddedEvent(Order order, Guid productId, decimal unitPrice, int quantity, string productName)
+            => order.AddEvent(new OrderItemAddedEvent(order.Id, order.CustomerId, productId, unitPrice, quantity, productName));
     }
 }

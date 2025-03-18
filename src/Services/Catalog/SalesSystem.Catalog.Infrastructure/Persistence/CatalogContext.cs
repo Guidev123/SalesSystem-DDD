@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesSystem.Catalog.Domain.Entities;
 using SalesSystem.SharedKernel.Data;
+using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Infrastructure.Persistence
 {
@@ -11,6 +12,8 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Ignore<Event>();
+
             modelBuilder.HasDefaultSchema("catalog");
 
             var properties = modelBuilder.Model.GetEntityTypes()

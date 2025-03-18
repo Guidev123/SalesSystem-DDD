@@ -1,6 +1,6 @@
 ﻿using SalesSystem.SharedKernel.Messages;
 
-namespace SalesSystem.Sales.Application.Commands.AddOrderItem
+namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
     public record AddOrderItemCommand : Command<Guid>
     {
