@@ -10,15 +10,15 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
     public sealed class AddOrderItemHandler(INotificator notificator,
                                             IOrderRepository orderRepository)
-                                          : IRequestHandler<AddOrderItemCommand, Response<Guid>>
+                                          : IRequestHandler<AddOrderItemCommand, Response<AddOrderItemResponse>>
     {
         private readonly INotificator _notificator = notificator;
         private readonly IOrderRepository _orderRepository = orderRepository;
 
-        public async Task<Response<Guid>> Handle(AddOrderItemCommand request, CancellationToken cancellationToken)
+        public async Task<Response<AddOrderItemResponse>> Handle(AddOrderItemCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
-                return Response<Guid>.Failure(request.GetErrorMessages());
+                return Response<AddOrderItemResponse>.Failure(request.GetErrorMessages());
 
             var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
             var orderItem = request.MapOrderItemToEntity();
@@ -29,7 +29,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
             return response.IsSuccess
                 ? await PersistDataAsync(orderItem.Id)
-                : Response<Guid>.Failure(_notificator.GetNotifications());
+                : Response<AddOrderItemResponse>.Failure(_notificator.GetNotifications());
         }
 
         private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem, decimal unitPrice, int quantity)
@@ -48,7 +48,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             else
                 _orderRepository.AddOrderItem(orderItem);
 
-            order.AddEvent(new OrderUpdatedEvent(order.Id, order.CustomerId, order.Price));
+            order.AddEvent(new UpdatedOrderItemEvent(order.Id, order.CustomerId, order.Price, quantity));
             CreateOrderItemAddedEvent(order, orderItem.ProductId, unitPrice, quantity, orderItem.ProductName);
 
             return Response<Order>.Success(order);
@@ -67,21 +67,21 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             return Response<Order>.Success(order);
         }
 
-        private async Task<Response<Guid>> PersistDataAsync(Guid orderItemId)
+        private async Task<Response<AddOrderItemResponse>> PersistDataAsync(Guid orderItemId)
         {
             if (await _orderRepository.UnitOfWork.CommitAsync())
             {
                 _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<Guid>.Failure(_notificator.GetNotifications());
+                return Response<AddOrderItemResponse>.Failure(_notificator.GetNotifications());
             }
 
-            return Response<Guid>.Success(orderItemId);
+            return Response<AddOrderItemResponse>.Success(new(orderItemId));
         }
 
         private static OrderItem? GetExistentOrderItem(Order order, Guid orderItemId)
             => order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
 
         private static void CreateOrderItemAddedEvent(Order order, Guid productId, decimal unitPrice, int quantity, string productName)
-            => order.AddEvent(new OrderItemAddedEvent(order.Id, order.CustomerId, productId, unitPrice, quantity, productName));
+            => order.AddEvent(new AddedOrderItemEvent(order.Id, order.CustomerId, productId, unitPrice, quantity, productName));
     }
 }

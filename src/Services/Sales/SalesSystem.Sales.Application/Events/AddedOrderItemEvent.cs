@@ -2,9 +2,9 @@
 
 namespace SalesSystem.Sales.Application.Events
 {
-    public record OrderItemAddedEvent : Event
+    public record AddedOrderItemEvent : Event
     {
-        public OrderItemAddedEvent(Guid orderId,
+        public AddedOrderItemEvent(Guid orderId,
                                    Guid customerId,
                                    Guid productId,
                                    decimal unitPrice,

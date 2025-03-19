@@ -2,20 +2,18 @@
 
 namespace SalesSystem.Sales.Application.Events
 {
-    public record OrderUpdatedEvent : Event
+    public record RemovedOrderItemEvent : Event
     {
-        public OrderUpdatedEvent(Guid orderId,
-                                 Guid customerId,
-                                 decimal totalPrice)
+        public RemovedOrderItemEvent(Guid orderId, Guid customerId, Guid productId)
         {
             AggregateId = orderId;
             OrderId = orderId;
             CustomerId = customerId;
-            TotalPrice = totalPrice;
+            ProductId = productId;
         }
 
         public Guid OrderId { get; }
         public Guid CustomerId { get; }
-        public decimal TotalPrice { get; }
+        public Guid ProductId { get; }
     }
 }

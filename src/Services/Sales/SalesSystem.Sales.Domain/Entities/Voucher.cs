@@ -1,4 +1,6 @@
-﻿using SalesSystem.Sales.Domain.Enums;
+﻿using FluentValidation.Results;
+using SalesSystem.Sales.Domain.Entities.Validations;
+using SalesSystem.Sales.Domain.Enums;
 using SalesSystem.SharedKernel.DomainObjects;
 
 namespace SalesSystem.Sales.Domain.Entities
@@ -43,6 +45,15 @@ namespace SalesSystem.Sales.Domain.Entities
 
             if (!Percentual.HasValue && !Value.HasValue)
                 throw new DomainException("A voucher must have either a percentual or a value discount.");
+        }
+
+        internal ValidationResult IsValidToApply()
+            => new VoucherValidation().Validate(this);
+
+        internal void DebitVoucherQuantity()
+        {
+            Used = true;
+            Quantity -= 1;
         }
     }
 }

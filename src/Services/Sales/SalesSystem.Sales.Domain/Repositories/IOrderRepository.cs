@@ -14,7 +14,8 @@ namespace SalesSystem.Sales.Domain.Repositories
         Task<OrderItem?> GetItemByOrderIdAsync(Guid orderId, Guid itemId);
         void AddOrderItem(OrderItem item);
         void UpdateItem(OrderItem item);    
-        void DeleteItem(OrderItem item);
+        void RemoveItem(OrderItem item);
         Task<Voucher?> GetVoucherByCodeAsync(string code);
+        void UpdateVoucher(Voucher voucher);    
     }
 }

@@ -1,4 +1,5 @@
-﻿using SalesSystem.Sales.Domain.Enums;
+﻿using FluentValidation.Results;
+using SalesSystem.Sales.Domain.Enums;
 using SalesSystem.SharedKernel.DomainObjects;
 
 namespace SalesSystem.Sales.Domain.Entities
@@ -51,12 +52,19 @@ namespace SalesSystem.Sales.Domain.Entities
             CalculateOrderPrice();
         }
 
-        public void ApplyVoucher(Voucher voucher)
+        public ValidationResult ApplyVoucher(Voucher voucher)
         {
+            var validation = voucher.IsValidToApply();
+            if(!validation.IsValid) return validation;
+
             AssertionConcern.EnsureNotNull(voucher, "Cannot use a non-existent voucher.");
             Voucher = voucher;
             VoucherIsUsed = true;
             CalculateTotalPriceDiscount();
+
+            voucher.DebitVoucherQuantity();
+
+            return validation;
         }
 
         public void CalculateOrderPrice()
@@ -117,6 +125,8 @@ namespace SalesSystem.Sales.Domain.Entities
 
         public void RemoveItem(OrderItem item)
         {
+            item.Validate();
+
             var existentItem = GetExistentItem(item);
             _orderItems.Remove(existentItem);
 
@@ -125,6 +135,8 @@ namespace SalesSystem.Sales.Domain.Entities
 
         public void UpdateItem(OrderItem item)
         {
+            item.Validate();
+
             item.AssociateOrder(Id);
 
             var existentItem = GetExistentItem(item);
@@ -140,6 +152,8 @@ namespace SalesSystem.Sales.Domain.Entities
 
         public void UpdateUnities(OrderItem item, int quantity)
         {
+            item.Validate();
+
             item.UpdateUnities(quantity);
             UpdateItem(item);
         }

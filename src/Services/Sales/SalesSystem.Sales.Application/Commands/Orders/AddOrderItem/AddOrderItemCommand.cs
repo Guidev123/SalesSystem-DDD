@@ -2,10 +2,11 @@
 
 namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
-    public record AddOrderItemCommand : Command<Guid>
+    public record AddOrderItemCommand : Command<AddOrderItemResponse>
     {
         public AddOrderItemCommand(Guid customerId, Guid productId, string name, int quantity, decimal unitPrice)
         {
+            AggregateId = customerId;
             CustomerId = customerId;
             ProductId = productId;
             Name = name;
@@ -13,11 +14,11 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             UnitPrice = unitPrice;
         }
 
-        public Guid CustomerId { get; private set; }
-        public Guid ProductId { get; private set; }
-        public string Name { get; private set; } = string.Empty;
-        public int Quantity { get; private set; }
-        public decimal UnitPrice { get; private set; }
+        public Guid CustomerId { get; }
+        public Guid ProductId { get; }
+        public string Name { get; } = string.Empty;
+        public int Quantity { get; }
+        public decimal UnitPrice { get; }
 
         public override bool IsValid()
         {

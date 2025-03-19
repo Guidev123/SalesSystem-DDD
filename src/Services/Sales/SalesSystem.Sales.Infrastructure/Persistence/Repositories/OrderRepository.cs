@@ -15,7 +15,7 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
         public void Create(Order order)
             => context.Orders.Add(order);
 
-        public void DeleteItem(OrderItem item)
+        public void RemoveItem(OrderItem item)
             => context.OrderItems.Remove(item);
 
         public async Task<IEnumerable<Order>> GetAllByCutomerIdAsync(int pageSize, int pageNumber, Guid customerId)
@@ -45,6 +45,9 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
 
         public void UpdateItem(OrderItem item)
             => context.OrderItems.Update(item);
+
+        public void UpdateVoucher(Voucher voucher)
+            => context.Vouchers.Update(voucher);    
 
         public void Dispose()
         {
