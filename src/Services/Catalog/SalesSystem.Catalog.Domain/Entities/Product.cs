@@ -18,7 +18,8 @@ namespace SalesSystem.Catalog.Domain.Entities
             Validate();
         }
 
-        protected Product() { }
+        protected Product()
+        { }
 
         public string Name { get; } = string.Empty;
         public string Description { get; private set; } = string.Empty;
@@ -73,7 +74,7 @@ namespace SalesSystem.Catalog.Domain.Entities
             QuantityInStock += quantity;
         }
 
-        public bool HasStock(int quantity) => QuantityInStock >= quantity;  
+        public bool HasStock(int quantity) => QuantityInStock >= quantity;
 
         public override void Validate()
         {

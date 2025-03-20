@@ -13,7 +13,7 @@ namespace SalesSystem.API.Middlewares
             }
             catch (Exception ex)
             {
-                var problemDetails = new 
+                var problemDetails = new
                 {
                     Message = "Invalid Operation",
                     IsSuccess = false,

@@ -18,5 +18,4 @@ namespace SalesSystem.Sales.Application.Events
         public Guid CustomerId { get; }
         public decimal TotalPrice { get; }
     }
-
 }

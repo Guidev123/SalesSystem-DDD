@@ -15,8 +15,11 @@ namespace SalesSystem.SharedKernel.DomainObjects
         public IReadOnlyCollection<Event> Events => _events.AsReadOnly();
 
         public void AddEvent(Event @event) => _events.Add(@event);
+
         public void RemoveEvent(Event @event) => _events.Remove(@event);
+
         public void PurgeEvents() => _events.Clear();
+
         public override bool Equals(object? obj)
         {
             var compareTo = obj as Entity;

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SalesSystem.Catalog.Application.Commands.Products.Update;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;

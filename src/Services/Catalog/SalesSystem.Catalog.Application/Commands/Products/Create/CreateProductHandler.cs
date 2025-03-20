@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using MediatR;
+﻿using MediatR;
 using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -22,7 +21,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
             var product = request.MapToEntity();
             _productRepository.Create(product);
 
-            if(!await _productRepository.UnitOfWork.CommitAsync())
+            if (!await _productRepository.UnitOfWork.CommitAsync())
             {
                 _notificator.HandleNotification(new("Fail to persist data."));
                 return Response<CreateProductResponse>.Failure(_notificator.GetNotifications());

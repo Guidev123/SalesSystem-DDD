@@ -16,7 +16,7 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetById
         public async Task<Response<GetProductByIdResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.Id);
-            if(product is null)
+            if (product is null)
             {
                 _notificator.HandleNotification(new("Product not found"));
                 return PagedResponse<GetProductByIdResponse>.Failure(_notificator.GetNotifications());

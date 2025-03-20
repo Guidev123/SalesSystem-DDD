@@ -15,7 +15,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
         public Guid CustomerId { get; }
         public Guid OrderId { get; }
         public Guid ProductId { get; }
-            
+
         public override bool IsValid()
         {
             SetValidationResult(new RemoveOrderItemValidation().Validate(this));

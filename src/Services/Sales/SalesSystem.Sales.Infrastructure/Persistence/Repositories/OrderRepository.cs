@@ -29,7 +29,7 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
 
         public async Task<Order?> GetDraftOrderByCustomerIdAsync(Guid orderId)
             => await context.Orders.AsNoTrackingWithIdentityResolution().Include(x => x.OrderItems)
-            .Include(x => x.Voucher).FirstOrDefaultAsync(x => x.Id ==  orderId);
+            .Include(x => x.Voucher).FirstOrDefaultAsync(x => x.Id == orderId);
 
         public async Task<OrderItem?> GetItemByIdAsync(Guid id)
             => await context.OrderItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
@@ -47,7 +47,7 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
             => context.OrderItems.Update(item);
 
         public void UpdateVoucher(Voucher voucher)
-            => context.Vouchers.Update(voucher);    
+            => context.Vouchers.Update(voucher);
 
         public void Dispose()
         {

@@ -21,7 +21,9 @@ namespace SalesSystem.Sales.Domain.Entities
             Validate();
         }
 
-        protected Voucher() { } 
+        protected Voucher()
+        { }
+
         public string Code { get; private set; } = string.Empty;
         public decimal? Percentual { get; private set; }
         public decimal? Value { get; private set; }

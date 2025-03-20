@@ -21,14 +21,14 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 
             var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
 
-            if(order is null)
+            if (order is null)
             {
                 _notificator.HandleNotification(new("Order not foud."));
                 return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
             }
 
             var orderItemResult = await GetOrderItemAsync(order, request.ProductId).ConfigureAwait(false);
-            if(!orderItemResult.IsSuccess || orderItemResult.Data is null)
+            if (!orderItemResult.IsSuccess || orderItemResult.Data is null)
                 return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
 
             order.UpdateUnities(orderItemResult.Data, request.Quantity);
@@ -53,7 +53,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
             _orderRepository.UpdateItem(item);
             _orderRepository.Update(order);
 
-            if(!await _orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
+            if (!await _orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
             {
                 _notificator.HandleNotification(new("Fail to persist data."));
                 return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications());

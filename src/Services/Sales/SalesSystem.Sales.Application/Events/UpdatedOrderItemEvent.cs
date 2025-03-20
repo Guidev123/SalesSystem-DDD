@@ -21,5 +21,4 @@ namespace SalesSystem.Sales.Application.Events
         public decimal TotalPrice { get; }
         public int Quantity { get; }
     }
-
 }

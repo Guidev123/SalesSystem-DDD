@@ -20,6 +20,5 @@ namespace SalesSystem.Sales.Infrastructure
 
         public static void AddRepositories(this IServiceCollection services)
             => services.AddScoped<IOrderRepository, OrderRepository>();
-
     }
 }

@@ -19,6 +19,7 @@ namespace SalesSystem.Sales.Domain.Entities
         }
 
         protected Order() => _orderItems = [];
+
         public string Code { get; private set; } = string.Empty;
         public Guid CustomerId { get; private set; }
         public Guid? VoucherId { get; private set; }
@@ -55,7 +56,7 @@ namespace SalesSystem.Sales.Domain.Entities
         public ValidationResult ApplyVoucher(Voucher voucher)
         {
             var validation = voucher.IsValidToApply();
-            if(!validation.IsValid) return validation;
+            if (!validation.IsValid) return validation;
 
             AssertionConcern.EnsureNotNull(voucher, "Cannot use a non-existent voucher.");
             Voucher = voucher;
@@ -88,6 +89,7 @@ namespace SalesSystem.Sales.Domain.Entities
                     AssertionConcern.EnsureGreaterThan(percentualVoucher, 0, "Percentual voucher discount must be greater than 0.");
                     ApplyPercentualVoucher(value, percentualVoucher);
                     return;
+
                 case EVoucherType.Value:
                     AssertionConcern.EnsureNotNull(valueVoucher, "Value voucher cannot be null.");
                     AssertionConcern.EnsureGreaterThan(valueVoucher, 0, "Value voucher discount must be greater than 0.");

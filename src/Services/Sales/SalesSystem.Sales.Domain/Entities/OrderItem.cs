@@ -12,7 +12,9 @@ namespace SalesSystem.Sales.Domain.Entities
             UnitPrice = unitPrice;
             Validate();
         }
-        protected OrderItem() { }   
+
+        protected OrderItem()
+        { }
 
         public Guid OrderId { get; private set; }
         public Guid ProductId { get; private set; }
@@ -28,6 +30,7 @@ namespace SalesSystem.Sales.Domain.Entities
         }
 
         public decimal CalculatePrice() => Quantity * UnitPrice;
+
         internal void AddUnities(int quantity)
         {
             AssertionConcern.EnsureGreaterThan(quantity, 0, "Quantity must be greater than 0.");

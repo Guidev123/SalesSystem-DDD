@@ -7,7 +7,7 @@ namespace SalesSystem.Catalog.Domain.Services
 {
     public sealed class StockService(IProductRepository productRepository, IMediatorHandler eventBus) : IStockService
     {
-        private readonly IMediatorHandler _eventBus = eventBus; 
+        private readonly IMediatorHandler _eventBus = eventBus;
         private readonly IProductRepository _productRepository = productRepository;
 
         public async Task<bool> AddStockAsync(Guid productId, int quantity)
@@ -24,9 +24,9 @@ namespace SalesSystem.Catalog.Domain.Services
         public async Task<bool> DebitStockAsync(Guid productId, int quantity)
         {
             var product = await _productRepository.GetByIdAsync(productId);
-            if(product is null) return false;
+            if (product is null) return false;
 
-            if(!product.HasStock(quantity)) return false;
+            if (!product.HasStock(quantity)) return false;
 
             product.DebitStock(quantity);
 

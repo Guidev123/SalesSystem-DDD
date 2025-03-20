@@ -2,7 +2,7 @@
 
 namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
 {
-    public sealed class RemoveOrderItemValidation : AbstractValidator<RemoveOrderItemCommand> 
+    public sealed class RemoveOrderItemValidation : AbstractValidator<RemoveOrderItemCommand>
     {
         public RemoveOrderItemValidation()
         {

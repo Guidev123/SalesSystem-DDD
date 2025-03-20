@@ -20,7 +20,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
                 return Response<UpdateProductResponse>.Failure(request.GetErrorMessages());
 
             var product = await _productRepository.GetByIdAsync(request.Id);
-            if(product is null)
+            if (product is null)
             {
                 _notificator.HandleNotification(new("Product not found."));
                 return Response<UpdateProductResponse>.Failure(_notificator.GetNotifications(), code: 404);
@@ -47,9 +47,9 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
 
         private static void UpdateProduct(UpdateProductCommand command, Product product)
         {
-            if(command.Image is not null) product.UpdateImage(command.Image);
-            if(command.Price != 0 && command.Price != null) product.UpdatePrice((decimal)command.Price);
-            if(command.Description is not null) product.UpdateDescription(command.Description);
+            if (command.Image is not null) product.UpdateImage(command.Image);
+            if (command.Price != 0 && command.Price != null) product.UpdatePrice((decimal)command.Price);
+            if (command.Description is not null) product.UpdateDescription(command.Description);
         }
     }
 }

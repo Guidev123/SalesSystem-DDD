@@ -10,7 +10,9 @@ namespace SalesSystem.Catalog.Domain.Entities
             Code = code;
             Validate();
         }
-        protected Category() { }
+
+        protected Category()
+        { }
 
         public string Name { get; } = string.Empty;
         public int Code { get; }

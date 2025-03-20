@@ -3,5 +3,6 @@ using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.SharedKernel.Messages
 {
-    public interface IPagedQuery<T> : IRequest<PagedResponse<T>> { }
+    public interface IPagedQuery<T> : IRequest<PagedResponse<T>>
+    { }
 }

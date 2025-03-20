@@ -29,7 +29,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
 
             var voucher = await _orderRepository.GetVoucherByCodeAsync(order.Code).ConfigureAwait(false);
 
-            if(voucher is null)
+            if (voucher is null)
             {
                 _notificator.HandleNotification(new("Voucher not found."));
                 return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications(), code: 404);

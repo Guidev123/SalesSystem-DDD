@@ -12,10 +12,11 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
     {
         private readonly INotificator _notificator = notificator;
         private readonly IProductRepository _productRepository = productRepository;
+
         public async Task<PagedResponse<GetAllProductsResponse>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await _productRepository.GetAllAsync(request.PageNumber, request.PageSize);
-            if(products is null)
+            if (products is null)
             {
                 _notificator.HandleNotification(new("Products not found"));
                 return PagedResponse<GetAllProductsResponse>.Failure(_notificator.GetNotifications());

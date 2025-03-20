@@ -1,6 +1,4 @@
-﻿using MediatR;
-using SalesSystem.SharedKernel.Messages;
-using SalesSystem.SharedKernel.Responses;
+﻿using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
 {

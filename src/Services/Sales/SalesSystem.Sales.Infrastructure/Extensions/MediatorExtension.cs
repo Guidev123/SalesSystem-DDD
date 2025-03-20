@@ -11,7 +11,7 @@ namespace SalesSystem.Sales.Infrastructure.Extensions
             var domainEntities = context.ChangeTracker.Entries<Entity>()
                 .Where(x => x.Entity.Events != null && x.Entity.Events.Count != 0);
 
-            var domainEvents = domainEntities.SelectMany(x => x.Entity.Events).ToList();    
+            var domainEvents = domainEntities.SelectMany(x => x.Entity.Events).ToList();
 
             domainEntities.ToList().ForEach(e => e.Entity.PurgeEvents());
 

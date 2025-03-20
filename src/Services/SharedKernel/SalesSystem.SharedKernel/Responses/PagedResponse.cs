@@ -5,7 +5,8 @@
         private const int DEFAULT_PAGE_SIZE = 10;
         private const int DEFAULT_PAGE = 1;
 
-        protected PagedResponse() { }
+        protected PagedResponse()
+        { }
 
         protected PagedResponse(
             TData? data,
@@ -38,7 +39,7 @@
             return new PagedResponse<TData>(data, totalCount, currentPage, pageSize, code, message);
         }
 
-        public static new PagedResponse<TData> Failure(
+        public new static PagedResponse<TData> Failure(
             List<string> errors,
             string? message = DEFAULT_ERROR_MESSAGE,
             int code = DEFAULT_ERROR_STATUS_CODE)

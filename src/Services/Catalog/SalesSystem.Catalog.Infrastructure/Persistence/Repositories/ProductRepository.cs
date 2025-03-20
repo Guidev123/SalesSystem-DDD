@@ -29,7 +29,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Repositories
         public void Update(Product product) => _context.Products.Update(product);
 
         public void UpdateCategory(Category category) => _context.Categories.Update(category);
-        
+
         public void Dispose()
         {
             _context.Dispose();

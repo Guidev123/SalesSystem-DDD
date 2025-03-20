@@ -17,7 +17,7 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerCart
         public async Task<Response<CartDTO>> Handle(GetCustomerCartQuery request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId).ConfigureAwait(false);
-            if(order is null)
+            if (order is null)
             {
                 _notificator.HandleNotification(new("Cart not found."));
                 return Response<CartDTO>.Failure(_notificator.GetNotifications(), code: 404);
