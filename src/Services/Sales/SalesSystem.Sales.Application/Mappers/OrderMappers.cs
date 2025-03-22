@@ -1,6 +1,7 @@
 ﻿using SalesSystem.Sales.Application.Commands.Orders.AddOrderItem;
 using SalesSystem.Sales.Application.DTOs;
 using SalesSystem.Sales.Domain.Entities;
+using SalesSystem.SharedKernel.Communication.DTOs;
 
 namespace SalesSystem.Sales.Application.Mappers
 {
@@ -17,5 +18,13 @@ namespace SalesSystem.Sales.Application.Mappers
 
         public static OrderDTO MapFromEntity(this Order order)
             => new(order.Code, order.Price, order.CreatedAt, nameof(order.Status));
+
+        public static OrderProductsListDTO MapFromEntityToOrderProductsListDTO(List<OrderItem> items, Guid orderId)
+        {
+            var listItems = new List<ItemDTO>();
+
+            items.ForEach(x => listItems.Add(new ItemDTO(x.Id, x.Quantity)));
+            return new OrderProductsListDTO(orderId, listItems);
+        }
     }
 }

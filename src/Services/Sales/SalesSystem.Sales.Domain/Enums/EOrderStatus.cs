@@ -4,6 +4,7 @@
     {
         Draft,
         Created,
+        Started,
         Canceled,
         Refunded,
         Paid

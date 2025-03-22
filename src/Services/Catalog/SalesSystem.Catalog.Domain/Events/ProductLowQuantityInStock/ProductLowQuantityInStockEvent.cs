@@ -1,6 +1,6 @@
 ﻿using SalesSystem.SharedKernel.Messages.CommonMessages.DomainEvents;
 
-namespace SalesSystem.Catalog.Domain.Events
+namespace SalesSystem.Catalog.Domain.Events.ProductLowQuantityInStock
 {
     public record ProductLowQuantityInStockEvent : DomainEvent
     {

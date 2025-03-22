@@ -163,6 +163,7 @@ namespace SalesSystem.Sales.Domain.Entities
         public void PayOrder() => Status = EOrderStatus.Paid;
 
         public void RefundOrder() => Status = EOrderStatus.Refunded;
+        public void StartOrder() => Status = EOrderStatus.Started;
 
         public void CancelOrder() => Status = EOrderStatus.Canceled;
 

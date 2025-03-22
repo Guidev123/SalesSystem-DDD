@@ -1,27 +1,51 @@
-﻿using SalesSystem.Catalog.Domain.Events;
+﻿using SalesSystem.Catalog.Domain.Events.ProductLowQuantityInStock;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
+using SalesSystem.SharedKernel.Communication.DTOs;
 using SalesSystem.SharedKernel.Communication.Mediator;
 
 namespace SalesSystem.Catalog.Domain.Services
 {
-    public sealed class StockService(IProductRepository productRepository, IMediatorHandler eventBus) : IStockService
+    public sealed class StockService(IProductRepository productRepository, IMediatorHandler mediatorHandler) : IStockService
     {
-        private readonly IMediatorHandler _eventBus = eventBus;
+        private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
         private readonly IProductRepository _productRepository = productRepository;
 
         public async Task<bool> AddStockAsync(Guid productId, int quantity)
         {
-            var product = await _productRepository.GetByIdAsync(productId);
-            if (product is null) return false;
+            if (!await AddStockItemAsync(productId, quantity)) return false;
 
-            product.AddStock(quantity);
+            return await _productRepository.UnitOfWork.CommitAsync();
+        }
 
-            _productRepository.Update(product);
+        public async Task<bool> AddListStockAsync(OrderProductsListDTO orderProductsList)
+        {
+            foreach (var orderProduct in orderProductsList.Items)
+            {
+                if (!await AddStockItemAsync(orderProduct.Id, orderProduct.Quantity)) return false;
+            }
+
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
         public async Task<bool> DebitStockAsync(Guid productId, int quantity)
+        {
+            if(!await DebitStockItemAsync(productId, quantity)) return false;
+
+            return await _productRepository.UnitOfWork.CommitAsync();
+        }
+
+        public async Task<bool> DebitListStockAsync(OrderProductsListDTO orderProductsList)
+        {
+            foreach (var orderProduct in orderProductsList.Items)
+            {
+                if (!await DebitStockItemAsync(orderProduct.Id, orderProduct.Quantity)) return false;
+            }
+
+            return await _productRepository.UnitOfWork.CommitAsync();
+        }
+
+        private async Task<bool> DebitStockItemAsync(Guid productId, int quantity)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             if (product is null) return false;
@@ -31,10 +55,21 @@ namespace SalesSystem.Catalog.Domain.Services
             product.DebitStock(quantity);
 
             if (product.QuantityInStock < 10)
-                await _eventBus.PublishEventAsync(new ProductLowQuantityInStockEvent(product.QuantityInStock, product.Id));
+                await _mediatorHandler.PublishEventAsync(new ProductLowQuantityInStockEvent(product.QuantityInStock, product.Id));
 
             _productRepository.Update(product);
-            return await _productRepository.UnitOfWork.CommitAsync();
+            return true;
+        }
+
+        private async Task<bool> AddStockItemAsync(Guid productId, int quantity)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product is null) return false;
+
+            product.AddStock(quantity);
+
+            _productRepository.Update(product);
+            return true;
         }
 
         public void Dispose()
