@@ -2,6 +2,5 @@
 {
     public abstract record IntegrationEvent : Event
     {
-
     }
 }
