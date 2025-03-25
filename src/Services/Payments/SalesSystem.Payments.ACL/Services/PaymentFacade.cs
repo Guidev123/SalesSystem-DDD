@@ -19,6 +19,7 @@ namespace SalesSystem.Payments.ACL.Services
 
             var stripeResponse = await _stripeService.CreateSessionAsync(order, new(apiKey, frontendUrl, stripeMode, paymentMethodTypes)).ConfigureAwait(false);
 
+            return Response<Transaction>.Success(default);
         }
     }
 }

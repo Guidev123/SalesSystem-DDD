@@ -1,9 +1,7 @@
 ﻿using MediatR;
-using SalesSystem.Sales.Application.Commands.Orders.AddOrderItem;
-using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Repositories;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Order;
+using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 

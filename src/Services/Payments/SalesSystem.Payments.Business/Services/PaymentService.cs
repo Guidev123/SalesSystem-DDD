@@ -37,7 +37,7 @@ namespace SalesSystem.Payments.Business.Services
             => new(paymentOrder.OrderId, paymentOrder.Total);
 
         private async Task<Response<Transaction>> ProcessPaymentAsync(Order order, Payment payment)
-            => await paymentFacade.MakePaymentAsync(order, payment).ConfigureAwait(false);
+            => await paymentFacade.MakePaymentAsync(order).ConfigureAwait(false);
 
         private bool IsPaymentSuccessful(Response<Transaction> transactionResponse)
             => transactionResponse.IsSuccess && transactionResponse.Data is not null;
