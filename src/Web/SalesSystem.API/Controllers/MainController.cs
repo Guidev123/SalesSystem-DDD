@@ -30,6 +30,7 @@ namespace SalesSystem.API.Controllers
         }
 
         private HttpContext GetHttpContext() => httpContextAccessor.HttpContext!;
+
         private string GetToken()
         {
             var authorizationHeader = GetHttpContext().Request.Headers.Authorization.ToString();
@@ -38,6 +39,16 @@ namespace SalesSystem.API.Controllers
                 return authorizationHeader["Bearer ".Length..].Trim();
 
             return string.Empty;
+        }
+
+        protected string GetUserEmail()
+        {
+            var token = GetToken();
+            if (string.IsNullOrEmpty(token)) return string.Empty;
+
+            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
+
+            return jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value ?? string.Empty;
         }
     }
 }

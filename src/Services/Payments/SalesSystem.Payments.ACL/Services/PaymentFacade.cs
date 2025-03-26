@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.Payments.ACL.Interfaces;
 using SalesSystem.Payments.Application.Commands.Payments.Checkout;
@@ -12,10 +12,10 @@ using Stripe;
 
 namespace SalesSystem.Payments.ACL.Services
 {
-    public sealed class PaymentFacade(IConfiguration configuration,
-                                      IStripeService stripeService,
+    public sealed class PaymentFacade(IStripeService stripeService,
                                       IHttpContextAccessor httpContext,
                                       IPaymentRepository paymentRepository,
+                                      IOptions<StripeSettings> stripeSettings,
                                       INotificator notificator)
                                     : IPaymentFacade
     {
@@ -38,6 +38,12 @@ namespace SalesSystem.Payments.ACL.Services
                 return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
 
             var payment = await paymentRepository.GetByCustomerIdAsync(Guid.Parse(charge.CustomerId));
+            if(payment is null)
+            {
+                notificator.HandleNotification(new("Payment not foud."));
+                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+            }
+
             var response = stripeService.ConfirmPaymentInternal(stripeEvent, charge, payment);
 
             if (!response.IsSuccess) return response;
@@ -61,14 +67,6 @@ namespace SalesSystem.Payments.ACL.Services
             return Response<CheckoutPaymentResponse>.Success(new(stripeResponse, command.OrderCode));
         }
 
-        private StripeSettings GetStripeProperties()
-        {
-            var apiKey = configuration["StripeSettings:ApiKey"] ?? string.Empty;
-            var frontendUrl = configuration["StripeSettings:FrontendUrl"] ?? string.Empty;
-            var stripeMode = configuration["StripeSettings:StripeMode"] ?? string.Empty;
-            var paymentMethodTypes = configuration["StripeSettings:PaymentMethodTypes"] ?? string.Empty;
-
-            return new(apiKey, frontendUrl, stripeMode, paymentMethodTypes);
-        }
+        private StripeSettings GetStripeProperties() => stripeSettings.Value;
     }
 }

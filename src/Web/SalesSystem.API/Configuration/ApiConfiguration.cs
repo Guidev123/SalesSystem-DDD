@@ -1,4 +1,5 @@
 ﻿using SalesSystem.API.Middlewares;
+using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using System.Reflection;
@@ -29,6 +30,11 @@ namespace SalesSystem.API.Configuration
         public static void AddCustomMiddlewares(this WebApplicationBuilder builder)
         {
             builder.Services.AddTransient<GlobalExceptionMiddleware>();
+        }
+
+        public static void AddModelConfig(this WebApplicationBuilder builder)
+        {
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection(nameof(StripeSettings)));
         }
 
         public static void AddNotifications(this WebApplicationBuilder builder)
