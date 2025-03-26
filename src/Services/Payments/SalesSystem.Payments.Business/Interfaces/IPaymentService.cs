@@ -6,6 +6,7 @@ namespace SalesSystem.Payments.Business.Interfaces
 {
     public interface IPaymentService 
     {
-        Task<Response<Transaction>> CheckoutOrderAsync(PaymentOrderDTO paymentOrder);
+        Task<Response<Transaction>> CheckoutOrderAsync(PaymentOrderDTO paymentOrder, CancellationToken cancellationToken);
+        Task ConfirmPaymentAsync(string webhookSecret, CancellationToken cancellationToken);
     }
 }

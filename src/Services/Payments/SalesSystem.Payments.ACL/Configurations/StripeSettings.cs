@@ -1,8 +1,8 @@
 ﻿namespace SalesSystem.Payments.ACL.Configurations
 {
-    public class StripeConfiguration
+    public class StripeSettings
     {
-        public StripeConfiguration(string apiKey, string frontendUrl, string stripeMode, string paymentMethodTypes)
+        public StripeSettings(string apiKey, string frontendUrl, string stripeMode, string paymentMethodTypes)
         {
             ApiKey = apiKey;
             FrontendUrl = frontendUrl;

@@ -5,6 +5,6 @@ namespace SalesSystem.Payments.ACL.Interfaces
 {
     public interface IStripeService
     {
-        Task<string?> CreateSessionAsync(Order order, StripeConfiguration stripeConfiguration);
+        Task<string?> CreateSessionAsync(Order order, StripeSettings stripeConfiguration);
     }
 }

@@ -10,6 +10,7 @@ namespace SalesSystem.Payments.Business.Models
             OrderId = orderId;
             PaymentId = paymentId;
             Total = total;
+            Status = ETransactionStatus.WaitingPayment;
             Validate();
         }
 
@@ -18,6 +19,12 @@ namespace SalesSystem.Payments.Business.Models
         public decimal Total { get; private set; }
         public ETransactionStatus Status { get; private set; }
         public string? ExternalReference { get; private set; }
+
+        public void SetAsPaid(string externalReference)
+        {
+            Status = ETransactionStatus.Paid;
+            ExternalReference = externalReference;
+        }
 
         public override void Validate()
         {

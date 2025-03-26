@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Stripe.net" Version="47.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\SharedKernel\SalesSystem.SharedKernel\SalesSystem.SharedKernel.csproj" />
   </ItemGroup>
 
