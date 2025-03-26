@@ -1,4 +1,4 @@
-﻿namespace SalesSystem.Payments.Business.Enums
+﻿namespace SalesSystem.Payments.Domain.Enums
 {
     public enum ETransactionStatus
     {

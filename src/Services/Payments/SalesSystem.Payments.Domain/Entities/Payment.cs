@@ -1,6 +1,7 @@
-﻿using SalesSystem.SharedKernel.DomainObjects;
+﻿using SalesSystem.Payments.Domain.Enums;
+using SalesSystem.SharedKernel.DomainObjects;
 
-namespace SalesSystem.Payments.Business.Models
+namespace SalesSystem.Payments.Domain.Entities
 {
     public class Payment : Entity, IAggregateRoot
     {
@@ -9,12 +10,13 @@ namespace SalesSystem.Payments.Business.Models
             OrderId = orderId;
             CustomerId = customerId;
             Amount = amount;
+            Status = nameof(ETransactionStatus.WaitingPayment);
             Validate();
         }
 
         public Guid OrderId { get; private set; }
         public Guid CustomerId { get; private set; }
-        public string? Status { get; private set; }
+        public string Status { get; private set; }
         public decimal Amount { get; private set; }
         public Transaction? Transaction { get; private set; }
 
@@ -28,7 +30,6 @@ namespace SalesSystem.Payments.Business.Models
             Status = status;
             Transaction?.SetAsPaid(externalReference);
         }
-
 
         public override void Validate()
         {

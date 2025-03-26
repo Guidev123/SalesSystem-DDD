@@ -17,6 +17,7 @@ namespace SalesSystem.API.Configuration
             builder.AddCustomMiddlewares();
             builder.AddNotifications();
             builder.Services.AddSwaggerConfig();
+            builder.Services.AddHttpContextAccessor();
         }
 
         public static void AddConfigureMediator(this WebApplicationBuilder builder)
