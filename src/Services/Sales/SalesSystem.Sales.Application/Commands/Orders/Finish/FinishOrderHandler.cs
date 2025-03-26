@@ -31,7 +31,6 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
             order.AddEvent(new FinishedOrderIntegrationEvent(request.OrderId));
 
             return await PersistDataAsync();
-
         }
 
         private async Task<Response<FinishOrderResponse>> PersistDataAsync()

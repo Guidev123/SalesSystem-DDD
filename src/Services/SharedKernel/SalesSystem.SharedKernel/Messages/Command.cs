@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using MediatR;
 using SalesSystem.SharedKernel.Responses;
+using System.Text.Json.Serialization;
 
 namespace SalesSystem.SharedKernel.Messages
 {
@@ -8,6 +9,7 @@ namespace SalesSystem.SharedKernel.Messages
     {
         protected Command() => Timestamp = DateTime.Now;
         public DateTime Timestamp { get; private set; }
+        [JsonIgnore]
         public ValidationResult ValidationResult { get; private set; } = null!;
 
         protected void SetValidationResult(ValidationResult validationResult)

@@ -2,7 +2,6 @@
 {
     public record CartDTO(
         Guid OrderId,
-        Guid CustomerId,
         decimal SubTotal,
         decimal TotalPrice,
         decimal TotalDiscount,

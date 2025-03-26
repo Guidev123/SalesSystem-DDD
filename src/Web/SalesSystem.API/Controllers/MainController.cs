@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesSystem.SharedKernel.Responses;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SalesSystem.API.Controllers
 {
     [ApiController]
-    public abstract class MainController : ControllerBase
+    public abstract class MainController(IHttpContextAccessor httpContextAccessor) : ControllerBase
     {
         protected IResult CustomResponse<T>(Response<T> response) => response.Code switch
         {
@@ -14,5 +15,29 @@ namespace SalesSystem.API.Controllers
             204 => TypedResults.NoContent(),
             _ => TypedResults.NotFound()
         };
+
+        protected Guid GetUserId()
+        {
+            var token = GetToken();
+            if (string.IsNullOrEmpty(token)) return Guid.Empty;
+
+            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
+
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (Guid.TryParse(userIdClaim, out var userId)) return userId;
+
+            return Guid.Empty;
+        }
+
+        private HttpContext GetHttpContext() => httpContextAccessor.HttpContext!;
+        private string GetToken()
+        {
+            var authorizationHeader = GetHttpContext().Request.Headers.Authorization.ToString();
+
+            if (authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                return authorizationHeader["Bearer ".Length..].Trim();
+
+            return string.Empty;
+        }
     }
 }
