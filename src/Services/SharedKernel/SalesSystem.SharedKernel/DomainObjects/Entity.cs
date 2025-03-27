@@ -9,7 +9,7 @@ namespace SalesSystem.SharedKernel.DomainObjects
             Id = Guid.NewGuid();
         }
 
-        public Guid Id { get; }
+        public Guid Id { get; protected set; }
 
         private readonly List<Event> _events = [];
         public IReadOnlyCollection<Event> Events => _events.AsReadOnly();

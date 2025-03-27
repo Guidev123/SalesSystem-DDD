@@ -14,6 +14,7 @@ namespace SalesSystem.API.Configuration
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
             builder.AddConfigureMediator();
+            builder.Services.AddJwtConfiguration(builder.Configuration);
             builder.AddHandlers();
             builder.AddCustomMiddlewares();
             builder.AddNotifications();
@@ -39,5 +40,17 @@ namespace SalesSystem.API.Configuration
 
         public static void AddNotifications(this WebApplicationBuilder builder)
             => builder.Services.AddScoped<INotificator, Notificator>();
+
+        public static void AddApiUsing(this WebApplication app)
+        {
+            app.UseSwaggerConfig();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+            app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
+            app.MapControllers();
+        }
     }
 }

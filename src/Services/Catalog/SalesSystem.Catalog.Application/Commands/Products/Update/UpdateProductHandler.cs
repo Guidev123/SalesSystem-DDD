@@ -38,13 +38,6 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
 
             return Response<UpdateProductResponse>.Success(null, code: 204);
         }
-
-        private void GetValidationErrors(ValidationResult validationResult)
-        {
-            foreach (var error in validationResult.Errors)
-                _notificator.HandleNotification(new(error.ErrorMessage));
-        }
-
         private static void UpdateProduct(UpdateProductCommand command, Product product)
         {
             if (command.Image is not null) product.UpdateImage(command.Image);

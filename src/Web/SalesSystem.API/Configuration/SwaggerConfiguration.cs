@@ -2,7 +2,7 @@
 
 namespace SalesSystem.API.Configuration
 {
-    public static class SwaggerConfig
+    public static class SwaggerConfiguration
     {
         public static void AddSwaggerConfig(this IServiceCollection services)
         {
@@ -17,7 +17,7 @@ namespace SalesSystem.API.Configuration
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "Enter the JWT token in this format: Bearer {your token}",
+                    Description = "Enter the JWT token in this format: Bearer <your token>",
                     Name = "Authorization",
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
