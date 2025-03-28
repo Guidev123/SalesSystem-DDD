@@ -8,9 +8,9 @@ namespace SalesSystem.Register.Application.Services
 {
     public interface IAuthenticationService
     {
-        Task<Response<UserDTO>> RegisterAsync(RegisterUserCommand command);
-        Task<Response<UserDTO>> SignInAsync(SignInUserCommand command);
-        Task<Response<UserDTO>> ResetPasswordAsync(ResetPasswordUserCommand command);
+        Task<Response<RegisterUserResponse>> RegisterAsync(RegisterUserCommand command);
+        Task<Response<SignInUserResponse>> SignInAsync(SignInUserCommand command);
+        Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command);
         Task<Response<UserDTO>> FindByUserEmailAsync(string email);
         Task<Response<UserDTO>> CheckPasswordAsync(UserDTO userDTO, string password);
         Task<Response<UserDTO>> DeleteAsync(UserDTO userDTO);

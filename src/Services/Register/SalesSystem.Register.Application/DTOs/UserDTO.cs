@@ -1,6 +1,4 @@
 ﻿namespace SalesSystem.Register.Application.DTOs
 {
-    public class UserDTO
-    {
-    }
+    public record UserDTO(Guid UserId);
 }
