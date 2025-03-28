@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\SalesSystem.EventSourcing\SalesSystem.EventSourcing.csproj" />
     <ProjectReference Include="..\..\Services\Catalog\SalesSystem.Catalog.Infrastructure\SalesSystem.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Services\Invoices\SalesSystem.Invoices.Infrastructure\SalesSystem.Invoices.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Services\Payments\SalesSystem.Payments.Infrastructure\SalesSystem.Payments.Infrastructure.csproj" />

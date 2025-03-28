@@ -1,4 +1,5 @@
 ﻿using SalesSystem.API.Middlewares;
+using SalesSystem.EventSourcing;
 using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;
@@ -18,6 +19,7 @@ namespace SalesSystem.API.Configuration
             builder.AddHandlers();
             builder.AddCustomMiddlewares();
             builder.AddNotifications();
+            builder.Services.AddEventStoreConfiguration();
             builder.Services.AddSwaggerConfig();
             builder.Services.AddHttpContextAccessor();
         }

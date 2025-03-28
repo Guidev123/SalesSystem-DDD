@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SalesSystem.EventSourcing;
 using SalesSystem.Sales.Domain.Entities;
-using SalesSystem.Sales.Infrastructure.Extensions;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Data;
 using SalesSystem.SharedKernel.Messages;
@@ -8,8 +8,9 @@ using System.Reflection;
 
 namespace SalesSystem.Sales.Infrastructure.Persistence
 {
-    public sealed class SalesDbContext(DbContextOptions<SalesDbContext> options, IMediatorHandler mediatorHandler)
-                      : DbContext(options), IUnitOfWork
+    public sealed class SalesDbContext(DbContextOptions<SalesDbContext> options,
+                                       IMediatorHandler mediatorHandler)
+                                     : DbContext(options), IUnitOfWork
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }

@@ -1,12 +1,12 @@
-﻿using SalesSystem.Sales.Infrastructure.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.DomainObjects;
 
-namespace SalesSystem.Sales.Infrastructure.Extensions
+namespace SalesSystem.EventSourcing
 {
     public static class MediatorExtension
     {
-        public static async Task PublishEventsAsync(this IMediatorHandler mediatorHandler, SalesDbContext context)
+        public static async Task PublishEventsAsync(this IMediatorHandler mediatorHandler, DbContext context)
         {
             var domainEntities = context.ChangeTracker.Entries<Entity>()
                 .Where(x => x.Entity.Events != null && x.Entity.Events.Count != 0);

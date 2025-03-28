@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\SalesSystem.EventSourcing\SalesSystem.EventSourcing.csproj" />
     <ProjectReference Include="..\SalesSystem.Sales.Application\SalesSystem.Sales.Application.csproj" />
   </ItemGroup>
 

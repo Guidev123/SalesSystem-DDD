@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SalesSystem.EventSourcing;
 using SalesSystem.Payments.Domain.Entities;
-using SalesSystem.Payments.Infrastructure.Extensions;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Data;
 using SalesSystem.SharedKernel.Messages;

@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesSystem.Catalog.Domain.Entities;
+using SalesSystem.EventSourcing;
+using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Data;
 using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Infrastructure.Persistence
 {
-    public class CatalogContext(DbContextOptions<CatalogContext> options) : DbContext(options), IUnitOfWork
+    public class CatalogContext(DbContextOptions<CatalogContext> options,
+                                IMediatorHandler mediatorHandler)
+                              : DbContext(options), IUnitOfWork
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -41,7 +45,10 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence
                     entry.Property("CreatedAt").IsModified = false;
             }
 
-            return await base.SaveChangesAsync() > 0;
+            var success = await SaveChangesAsync() > 0;
+            if (success) await mediatorHandler.PublishEventsAsync(this);
+
+            return success;
         }
     }
 }

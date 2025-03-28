@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\SalesSystem.EventSourcing\SalesSystem.EventSourcing.csproj" />
     <ProjectReference Include="..\SalesSystem.Register.Application\SalesSystem.Register.Application.csproj" />
   </ItemGroup>
 
