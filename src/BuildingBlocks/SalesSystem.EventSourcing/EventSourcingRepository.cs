@@ -38,7 +38,7 @@ namespace SalesSystem.EventSourcing
 
         public async Task SaveAsync<TEvent>(TEvent @event) where TEvent : Event =>
             await eventStoreService.GetStoreClientConnection().AppendToStreamAsync(@event.AggregateId.ToString(),
-                WrongExpectedVersion.ExpectedAnyFieldNumber, CreateEventData(@event));
+                StreamState.Any, CreateEventData(@event));
 
         private static IEnumerable<EventData> CreateEventData<TEvent>(TEvent @event) where TEvent : Event
         {
