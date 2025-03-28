@@ -10,8 +10,4 @@
     <ProjectReference Include="..\SalesSystem.Register.Domain\SalesSystem.Register.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
 </Project>
