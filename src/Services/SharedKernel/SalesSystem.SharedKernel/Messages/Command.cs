@@ -10,16 +10,16 @@ namespace SalesSystem.SharedKernel.Messages
         protected Command() => Timestamp = DateTime.Now;
         public DateTime Timestamp { get; private set; }
         [JsonIgnore]
-        public ValidationResult ValidationResult { get; private set; } = null!;
+        public ValidationResult? ValidationResult { get; private set; }
 
         protected void SetValidationResult(ValidationResult validationResult)
             => ValidationResult = validationResult;
 
         public List<string> GetErrorMessages()
-            => ValidationResult.Errors.Select(x => x.ErrorMessage).ToList();
+            => ValidationResult!.Errors.Select(x => x.ErrorMessage).ToList();
 
         public void AddError(string errorMessage)
-            => ValidationResult.Errors.Add(new ValidationFailure { ErrorMessage = errorMessage });
+            => ValidationResult!.Errors.Add(new ValidationFailure { ErrorMessage = errorMessage });
 
         public abstract bool IsValid();
     }

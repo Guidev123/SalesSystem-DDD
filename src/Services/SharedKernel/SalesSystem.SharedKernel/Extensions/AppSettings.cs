@@ -1,4 +1,4 @@
-﻿namespace SalesSystem.API.Extensions
+﻿namespace SalesSystem.SharedKernel.Extensions
 {
     public class AppSettings
     {

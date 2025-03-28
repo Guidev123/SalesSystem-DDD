@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SalesSystem.API.Configuration;
 using SalesSystem.Catalog.Application.Queries.Products.GetById;
 using SalesSystem.Sales.Application.Commands.Orders.AddOrderItem;
@@ -13,6 +14,7 @@ using SalesSystem.SharedKernel.Communication.Mediator;
 
 namespace SalesSystem.API.Controllers
 {
+    [Authorize]
     [Route("api/v1/sales")]
     public class SalesController(IMediatorHandler mediatorHandler,
                                  IHttpContextAccessor httpContextAccessor)

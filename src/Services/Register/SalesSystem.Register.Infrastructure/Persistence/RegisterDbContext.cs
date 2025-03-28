@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SalesSystem.Register.Domain.Entities;
+using SalesSystem.Register.Infrastructure.Models;
 using SalesSystem.SharedKernel.Data;
 using SalesSystem.SharedKernel.Messages;
 using System.Reflection;
@@ -8,7 +9,7 @@ using System.Reflection;
 namespace SalesSystem.Register.Infrastructure.Persistence
 {
     public sealed class RegisterDbContext(DbContextOptions<RegisterDbContext> options)
-                                        : IdentityDbContext(options), IUnitOfWork
+                                        : IdentityDbContext<User>(options), IUnitOfWork
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }

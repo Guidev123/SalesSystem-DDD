@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.Payments.Application.Commands.Payments.Checkout;
@@ -7,6 +8,7 @@ using SalesSystem.SharedKernel.Communication.Mediator;
 
 namespace SalesSystem.API.Controllers
 {
+    [Authorize]
     [Route("api/v1/payments")]
     public class PaymentsController(IMediatorHandler mediatorHandler,
                                     IOptions<StripeSettings> stripeSettings,

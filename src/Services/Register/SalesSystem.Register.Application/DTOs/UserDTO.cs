@@ -1,4 +1,4 @@
 ﻿namespace SalesSystem.Register.Application.DTOs
 {
-    public record UserDTO(Guid UserId);
+    public record UserDTO(Guid UserId, string Email);
 }

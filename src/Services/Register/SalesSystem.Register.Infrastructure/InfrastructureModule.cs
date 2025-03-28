@@ -45,6 +45,7 @@ namespace SalesSystem.Register.Infrastructure
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IJwtGeneratorService, JwtGeneratorService>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SalesSystem.API.Configuration;
 using SalesSystem.Catalog.Application.Commands.Products.Create;
 using SalesSystem.Catalog.Application.Commands.Products.Update;
@@ -31,10 +32,12 @@ namespace SalesSystem.API.Controllers
         public async Task<IResult> GetAllCategoriesAsync()
             => CustomResponse(await mediatorHandler.SendQuery(new GetAllCategoriesQuery()).ConfigureAwait(false));
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IResult> CreateAsync(CreateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IResult> UpdateAsync(UpdateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));

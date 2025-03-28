@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using SalesSystem.API.Extensions;
+using SalesSystem.SharedKernel.Extensions;
 using System.Text;
 
 namespace SalesSystem.API.Configuration
@@ -10,7 +10,7 @@ namespace SalesSystem.API.Configuration
         public static void AddJwtConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var appSettingsSection = configuration.GetSection("AppSettings");
+            var appSettingsSection = configuration.GetSection(nameof(AppSettings));
             services.Configure<AppSettings>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();

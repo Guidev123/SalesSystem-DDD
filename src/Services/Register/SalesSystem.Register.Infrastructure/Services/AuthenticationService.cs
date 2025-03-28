@@ -13,23 +13,20 @@ namespace SalesSystem.Register.Infrastructure.Services
 {
     public sealed class AuthenticationService(SignInManager<User> signInManager,
                                               INotificator notificator,
-                                              UserManager<User> userManager)
+                                              UserManager<User> userManager,
+                                              IJwtGeneratorService jwtGeneratorService)
                                             : IAuthenticationService
     {
         private readonly SignInManager<User> _signInManager = signInManager;
         private readonly UserManager<User> _userManager = userManager;
+        private readonly IJwtGeneratorService _jwtGeneratorService = jwtGeneratorService;
         private readonly INotificator _notificator = notificator;
-
-        public Task<Response<UserDTO>> FindByUserEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<Response<RegisterUserResponse>> RegisterAsync(RegisterUserCommand command)
         {
             var user = command.MapToUser();
 
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.CreateAsync(user, command.Password);
 
             if (!result.Succeeded)
             {
@@ -41,19 +38,44 @@ namespace SalesSystem.Register.Infrastructure.Services
                 return Response<RegisterUserResponse>.Failure(_notificator.GetNotifications());
             }
 
-            var userIdentity = await _userManager.FindByEmailAsync(command.Email);
-            if(userIdentity is null)
+            var userIdentity = await FindByUserEmailAsync(command.Email);
+            if(!userIdentity.IsSuccess || userIdentity.Data is null)
             {
                 _notificator.HandleNotification(new("Fail to create user."));
                 return Response<RegisterUserResponse>.Failure(_notificator.GetNotifications());
             }
 
-            return Response<RegisterUserResponse>.Success(new(Guid.Parse(userIdentity.Id)), code: 201);
+            return Response<RegisterUserResponse>.Success(new(userIdentity.Data.UserId), code: 201);
         }
 
-        public Task<Response<SignInUserResponse>> SignInAsync(SignInUserCommand command)
+        public async Task<Response<SignInUserResponse>> SignInAsync(SignInUserCommand command)
         {
-            throw new NotImplementedException();
+            var result = await _signInManager.PasswordSignInAsync(command.Email, command.Password, false, true);
+            if (!result.Succeeded)
+            {
+                _notificator.HandleNotification(new("Invalid user credentials."));
+                return Response<SignInUserResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            if (result.IsLockedOut)
+            {
+                _notificator.HandleNotification(new("You cannot SignIn now, try later."));
+                return Response<SignInUserResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            return Response<SignInUserResponse>.Success(await _jwtGeneratorService.JwtGenerator(command.Email));
+        }
+
+        public async Task<Response<UserDTO>> FindByUserEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            if(user is null)
+            {
+                _notificator.HandleNotification(new("User not found."));
+                return Response<UserDTO>.Failure(_notificator.GetNotifications());
+            }
+
+            return Response<UserDTO>.Success(new(Guid.Parse(user.Id), user.Email ?? string.Empty));
         }
 
         public Task<Response<UserDTO>> CheckPasswordAsync(UserDTO userDTO, string password)
@@ -66,12 +88,10 @@ namespace SalesSystem.Register.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-
         public Task<Response<string>> GeneratePasswordResetTokenAsync(UserDTO userDTO)
         {
             throw new NotImplementedException();
         }
-
 
         public Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command)
         {
