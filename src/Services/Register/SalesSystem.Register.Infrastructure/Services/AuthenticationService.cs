@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SalesSystem.Email;
+using SalesSystem.Email.Models;
 using SalesSystem.Register.Application.Commands.Authentication.Delete;
+using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
@@ -15,6 +18,7 @@ namespace SalesSystem.Register.Infrastructure.Services
     public sealed class AuthenticationService(SignInManager<User> signInManager,
                                               INotificator notificator,
                                               UserManager<User> userManager,
+                                              IEmailService emailService,
                                               IJwtGeneratorService jwtGeneratorService)
                                             : IAuthenticationService
     {
@@ -22,6 +26,7 @@ namespace SalesSystem.Register.Infrastructure.Services
         private readonly UserManager<User> _userManager = userManager;
         private readonly IJwtGeneratorService _jwtGeneratorService = jwtGeneratorService;
         private readonly INotificator _notificator = notificator;
+        private readonly IEmailService _emailService = emailService;
 
         public async Task<Response<RegisterUserResponse>> RegisterAsync(RegisterUserCommand command)
         {
@@ -79,11 +84,6 @@ namespace SalesSystem.Register.Infrastructure.Services
             return Response<UserDTO>.Success(new(Guid.Parse(user.Id), user.Email ?? string.Empty));
         }
 
-        public Task<Response<UserDTO>> CheckPasswordAsync(UserDTO userDTO, string password)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Response<DeleteUserResponse>> DeleteAsync(DeleteUserCommand command)
         {
             var user = await _userManager.FindByEmailAsync(command.Email);
@@ -107,14 +107,44 @@ namespace SalesSystem.Register.Infrastructure.Services
             return Response<DeleteUserResponse>.Success(new(Guid.Parse(user.Id)), code: 204);
         }
 
-        public Task<Response<string>> GeneratePasswordResetTokenAsync(UserDTO userDTO)
+        public async Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(command.Email);
+            if(user is null)
+            {
+                _notificator.HandleNotification(new("User not found."));
+                return Response<ResetPasswordUserResponse>.Failure(_notificator.GetNotifications(), code: 404);
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, command.Token, command.Password);
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    _notificator.HandleNotification(new(item.Description));
+                }
+
+                return Response<ResetPasswordUserResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            return Response<ResetPasswordUserResponse>.Success(default, code: 204);
         }
 
-        public Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command)
+        public async Task<Response<ForgetPasswordUserResponse>> GeneratePasswordResetTokenAsync(ForgetPasswordUserCommand command)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(command.Email);
+            if (user is null)
+            {
+                _notificator.HandleNotification(new("User not found."));
+                return Response<ForgetPasswordUserResponse>.Failure(_notificator.GetNotifications(), code: 404);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            
+            var message = new EmailMessage(command.Email, "Token to reset password.", token);
+            await _emailService.SendAsync(message);
+
+            return Response<ForgetPasswordUserResponse>.Success(default, code: 204);
         }
     }
 }

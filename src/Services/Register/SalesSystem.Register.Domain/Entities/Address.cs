@@ -34,25 +34,25 @@ namespace SalesSystem.Register.Domain.Entities
         public override void Validate()
         {
             AssertionConcern.EnsureNotEmpty(Street, "Street cannot be empty.");
-            AssertionConcern.EnsureLengthInRange(Street, 3, 100, "Street must be between 3 and 100 characters.");
+            AssertionConcern.EnsureLengthInRange(Street, 5, 100, "Street must be between 5 and 100 characters.");
 
             AssertionConcern.EnsureNotEmpty(Number, "Number cannot be empty.");
-            AssertionConcern.EnsureMaxLength(Number, 10, "Number cannot exceed 10 characters.");
+            AssertionConcern.EnsureMatchesPattern(@"^\d+$", Number, "Number must be a valid number.");
 
-            AssertionConcern.EnsureLengthInRange(AdditionalInfo, 0, 100, "Additional info cannot exceed 100 characters.");
+            AssertionConcern.EnsureMaxLength(AdditionalInfo, 200, "Additional info must be up to 200 characters.");
 
             AssertionConcern.EnsureNotEmpty(Neighborhood, "Neighborhood cannot be empty.");
             AssertionConcern.EnsureLengthInRange(Neighborhood, 3, 100, "Neighborhood must be between 3 and 100 characters.");
 
-            AssertionConcern.EnsureMatchesPattern(@"^\d{8}$", ZipCode, "Zip code must contain exactly 8 digits.");
-
-            AssertionConcern.EnsureNotEmpty(City, "City cannot be empty.");
-            AssertionConcern.EnsureLengthInRange(City, 2, 100, "City must be between 2 and 100 characters.");
+            AssertionConcern.EnsureNotEmpty(ZipCode, "Zip code cannot be empty.");
+            AssertionConcern.EnsureMatchesPattern(@"^\d{5}-\d{3}$", ZipCode, "Zip code must be in the format 00000-000.");
 
             AssertionConcern.EnsureNotEmpty(State, "State cannot be empty.");
             AssertionConcern.EnsureLengthInRange(State, 2, 2, "State must have exactly 2 characters.");
 
-            AssertionConcern.EnsureDifferent(Guid.Empty, CustomerId, "Customer Id cannot be empty.s");
+            AssertionConcern.EnsureNotEmpty(City, "City cannot be empty.");
+            AssertionConcern.EnsureLengthInRange(City, 3, 100, "City must be between 3 and 100 characters.");
+
         }
     }
 }

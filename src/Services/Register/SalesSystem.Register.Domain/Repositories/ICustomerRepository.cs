@@ -9,6 +9,8 @@ namespace SalesSystem.Register.Domain.Repositories
 
         Task<Customer?> GetCustomerAddressByIdAsync(Guid id);
 
+        Task<Address?> GetAddressByCustomerIdAsync(Guid customerId);
+
         Task<Customer?> GetByEmailAsync(string email);
 
         Task<bool> AlreadyExists(string document);

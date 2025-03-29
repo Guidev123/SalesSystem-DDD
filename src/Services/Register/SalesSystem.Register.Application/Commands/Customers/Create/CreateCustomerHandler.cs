@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SalesSystem.Register.Application.Events;
+using SalesSystem.Register.Application.Mappers;
 using SalesSystem.Register.Domain.Entities;
 using SalesSystem.Register.Domain.Repositories;
 using SalesSystem.SharedKernel.Communication.Mediator;
@@ -17,11 +18,11 @@ namespace SalesSystem.Register.Application.Commands.Customers.Create
         {
             if (!request.IsValid())
             {
-                await mediator.PublishEventAsync(new CustomerCreationFailedEvent(request.Id, request.Email));
+                await HandleErrorToCreateCustomer(request);
                 return Response<CreateCustomerResponse>.Failure(request.GetErrorMessages());
             }
 
-            var customer = new Customer(request.Id, request.Name, request.Email, request.Document, request.BirthDate);
+            var customer = request.MapToCustomer();
 
             customerRepository.Create(customer);
 
@@ -32,6 +33,15 @@ namespace SalesSystem.Register.Application.Commands.Customers.Create
             }
 
             return Response<CreateCustomerResponse>.Success(new(customer.Id), code: 201);
+        }
+
+        private async Task HandleErrorToCreateCustomer(CreateCustomerCommand command)
+        {
+            await mediator.PublishEventAsync(new CustomerCreationFailedEvent(command.Id, command.Email));
+            foreach (var item in command.GetErrorMessages())
+            {
+                notificator.HandleNotification(new(item));
+            }
         }
     }
 }

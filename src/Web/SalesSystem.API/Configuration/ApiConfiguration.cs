@@ -1,8 +1,11 @@
 ﻿using SalesSystem.API.Middlewares;
+using SalesSystem.Email;
+using SalesSystem.Email.Models;
 using SalesSystem.EventSourcing;
 using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;
+using SendGrid.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace SalesSystem.API.Configuration
@@ -20,12 +23,22 @@ namespace SalesSystem.API.Configuration
             builder.AddCustomMiddlewares();
             builder.AddNotifications();
             builder.Services.AddEventStoreConfiguration();
+            builder.AddEmailServices();
             builder.Services.AddSwaggerConfig();
             builder.Services.AddHttpContextAccessor();
         }
 
         public static void AddConfigureMediator(this WebApplicationBuilder builder)
             => builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
+
+        public static void AddEmailServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddSendGrid(x =>
+            {
+                x.ApiKey = builder.Configuration.GetValue<string>("EmailSettings:ApiKey");
+            });
+            builder.Services.AddScoped<IEmailService, EmailService>();
+        }
 
         public static void AddHandlers(this WebApplicationBuilder builder)
             => builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies([.. Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "SalesSystem.*.dll").Select(Assembly.LoadFrom)]));
@@ -38,6 +51,7 @@ namespace SalesSystem.API.Configuration
         public static void AddModelConfig(this WebApplicationBuilder builder)
         {
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection(nameof(StripeSettings)));
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(nameof(EmailSettings)));
         }
 
         public static void AddNotifications(this WebApplicationBuilder builder)
