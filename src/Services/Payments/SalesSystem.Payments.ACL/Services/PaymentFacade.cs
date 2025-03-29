@@ -38,7 +38,7 @@ namespace SalesSystem.Payments.ACL.Services
                 return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
 
             var payment = await paymentRepository.GetByCustomerIdAsync(Guid.Parse(charge.CustomerId));
-            if(payment is null)
+            if (payment is null)
             {
                 notificator.HandleNotification(new("Payment not foud."));
                 return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());

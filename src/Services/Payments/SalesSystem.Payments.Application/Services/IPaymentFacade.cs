@@ -7,6 +7,7 @@ namespace SalesSystem.Payments.Application.Services
     public interface IPaymentFacade
     {
         Task<Response<CheckoutPaymentResponse>> MakeCheckoutAsync(CheckoutPaymentCommand command);
+
         Task<Response<ConfirmPaymentResponse>> ConfirmPaymentAsync(string webhookSecret);
     }
 }

@@ -10,6 +10,7 @@ namespace SalesSystem.Payments.ACL.Interfaces
     public interface IStripeService
     {
         Task<string?> CreateSessionAsync(CheckoutPaymentCommand command, StripeSettings stripeConfiguration);
+
         Response<ConfirmPaymentResponse> ConfirmPaymentInternal(Event stripeEvent, Charge charge, Payment payment);
     }
 }

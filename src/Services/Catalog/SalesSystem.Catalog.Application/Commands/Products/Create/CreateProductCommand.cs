@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using SalesSystem.SharedKernel.Messages;
+﻿using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Catalog.Application.Commands.Products.Create
 {

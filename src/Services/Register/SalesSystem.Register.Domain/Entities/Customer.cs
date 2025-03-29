@@ -19,7 +19,8 @@ namespace SalesSystem.Register.Domain.Entities
             Validate();
         }
 
-        private Customer() { }
+        private Customer()
+        { }
 
         public string Name { get; private set; } = string.Empty;
         public Email Email { get; private set; } = null!;
@@ -32,7 +33,7 @@ namespace SalesSystem.Register.Domain.Entities
 
         public void ChangeEmail(string email)
         {
-             Email = new(email);
+            Email = new(email);
         }
 
         public void SetAddress(Address address)

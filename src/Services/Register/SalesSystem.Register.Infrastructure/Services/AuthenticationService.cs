@@ -40,7 +40,7 @@ namespace SalesSystem.Register.Infrastructure.Services
             }
 
             var userIdentity = await FindByUserEmailAsync(command.Email);
-            if(!userIdentity.IsSuccess || userIdentity.Data is null)
+            if (!userIdentity.IsSuccess || userIdentity.Data is null)
             {
                 _notificator.HandleNotification(new("Fail to create user."));
                 return Response<RegisterUserResponse>.Failure(_notificator.GetNotifications());
@@ -70,7 +70,7 @@ namespace SalesSystem.Register.Infrastructure.Services
         public async Task<Response<UserDTO>> FindByUserEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-            if(user is null)
+            if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
                 return Response<UserDTO>.Failure(_notificator.GetNotifications());
@@ -87,7 +87,7 @@ namespace SalesSystem.Register.Infrastructure.Services
         public async Task<Response<DeleteUserResponse>> DeleteAsync(DeleteUserCommand command)
         {
             var user = await _userManager.FindByEmailAsync(command.Email);
-            if(user is null)
+            if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
                 return Response<DeleteUserResponse>.Failure(_notificator.GetNotifications());

@@ -25,7 +25,7 @@ namespace SalesSystem.Register.Application.Commands.Customers.Create
 
             customerRepository.Create(customer);
 
-            if(!await customerRepository.UnitOfWork.CommitAsync())
+            if (!await customerRepository.UnitOfWork.CommitAsync())
             {
                 notificator.HandleNotification(new("Fail to persist data."));
                 await mediator.PublishEventAsync(new CustomerCreationFailedEvent(request.Id, request.Email));

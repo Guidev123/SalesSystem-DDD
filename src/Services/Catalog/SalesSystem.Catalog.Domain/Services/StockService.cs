@@ -30,7 +30,7 @@ namespace SalesSystem.Catalog.Domain.Services
 
         public async Task<bool> DebitStockAsync(Guid productId, int quantity)
         {
-            if(!await DebitStockItemAsync(productId, quantity)) return false;
+            if (!await DebitStockItemAsync(productId, quantity)) return false;
 
             return await _productRepository.UnitOfWork.CommitAsync();
         }

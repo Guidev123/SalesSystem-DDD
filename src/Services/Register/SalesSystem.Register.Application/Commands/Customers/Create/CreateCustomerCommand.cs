@@ -1,6 +1,4 @@
-﻿using SalesSystem.Register.Domain.Entities;
-using SalesSystem.Register.Domain.ValueObjects;
-using SalesSystem.SharedKernel.Messages;
+﻿using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.Register.Application.Commands.Customers.Create
 {

@@ -19,7 +19,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
                 return Response<FinishOrderResponse>.Failure(request.GetErrorMessages());
 
             var order = await _orderRepository.GetByIdAsync(request.OrderId).ConfigureAwait(false);
-            if(order is null)
+            if (order is null)
             {
                 _notificator.HandleNotification(new("Order not found."));
                 return Response<FinishOrderResponse>.Failure(_notificator.GetNotifications(), code: 404);

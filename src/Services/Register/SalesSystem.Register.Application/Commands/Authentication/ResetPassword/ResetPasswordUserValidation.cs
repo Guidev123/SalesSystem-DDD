@@ -6,7 +6,6 @@ namespace SalesSystem.Register.Application.Commands.Authentication.ResetPassword
     {
         public ResetPasswordUserValidation()
         {
-            
         }
     }
 }

@@ -32,6 +32,7 @@ namespace SalesSystem.Payments.Infrastructure
             services.AddScoped<IPaymentFacade, PaymentFacade>();
             services.AddScoped<IStripeService, StripeService>();
         }
+
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IPaymentRepository, PaymentRepository>();

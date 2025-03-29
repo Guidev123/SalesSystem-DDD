@@ -11,7 +11,7 @@ namespace SalesSystem.Register.Domain.ValueObjects
             Address = address;
             Validate();
         }
-      
+
         public override void Validate()
         {
             AssertionConcern.EnsureMatchesPattern(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", Address, "Invalid email format.");

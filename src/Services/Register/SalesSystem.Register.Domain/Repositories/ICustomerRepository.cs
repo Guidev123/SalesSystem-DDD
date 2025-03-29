@@ -17,6 +17,6 @@ namespace SalesSystem.Register.Domain.Repositories
 
         void Update(Customer customer);
 
-        void CreateAddress(Address address);    
+        void CreateAddress(Address address);
     }
 }

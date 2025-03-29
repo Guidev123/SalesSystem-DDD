@@ -27,7 +27,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
                     .When(x => !string.IsNullOrEmpty(x.Password))
                     .NotEmpty().WithMessage("The password field cannot be empty.")
                     .MinimumLength(8).WithMessage("The password must be at least 8 characters long.");
-           
+
             RuleFor(x => x.BirthDate)
                 .NotEmpty().WithMessage("The {PropertyName} field cannot be empty.")
                 .Must(IsValidAge).WithMessage("You need to be over 16 years old.");

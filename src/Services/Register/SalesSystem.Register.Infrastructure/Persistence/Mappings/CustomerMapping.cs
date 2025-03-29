@@ -10,7 +10,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Mappings
         {
             builder.ToTable("Customers");
 
-            builder.HasKey(x => x.Id); 
+            builder.HasKey(x => x.Id);
 
             builder.OwnsOne(x => x.Email, email =>
             {

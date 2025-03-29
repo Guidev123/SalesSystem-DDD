@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SalesSystem.Sales.Application.Commands.Orders.Finish;
 using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.Communication.DTOs;
 using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders;

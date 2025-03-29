@@ -18,5 +18,4 @@ namespace SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Ord
         public decimal Total { get; }
         public OrderProductsListDTO OrderProductsList { get; }
     }
-
 }

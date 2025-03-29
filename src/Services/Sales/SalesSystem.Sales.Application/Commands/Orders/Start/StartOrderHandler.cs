@@ -20,7 +20,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Start
                 return Response<StartOrderResponse>.Failure(request.GetErrorMessages());
 
             var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
-            if(order is null)
+            if (order is null)
             {
                 _notificator.HandleNotification(new("Order not found."));
                 return Response<StartOrderResponse>.Failure(_notificator.GetNotifications());

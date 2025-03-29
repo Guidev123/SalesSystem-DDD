@@ -24,7 +24,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
         public Guid CustomerId { get; private set; }
         public List<ProductDTO> Products { get; } = [];
 
-        public void SetCustomerCredentials(Guid customerId,  string customerEmail)
+        public void SetCustomerCredentials(Guid customerId, string customerEmail)
         {
             CustomerEmail = customerEmail;
             CustomerId = customerId;

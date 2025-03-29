@@ -14,7 +14,7 @@ namespace SalesSystem.SharedKernel.Communication.Mediator
         {
             await mediator.Publish(@event);
 
-            if(!@event.GetType().BaseType!.Name.Equals(nameof(DomainEvent)))
+            if (!@event.GetType().BaseType!.Name.Equals(nameof(DomainEvent)))
                 await eventSourcingRepository.SaveAsync(@event);
         }
 

@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using MediatR;
+﻿using MediatR;
 using SalesSystem.Catalog.Domain.Entities;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -38,6 +37,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
 
             return Response<UpdateProductResponse>.Success(null, code: 204);
         }
+
         private static void UpdateProduct(UpdateProductCommand command, Product product)
         {
             if (command.Image is not null) product.UpdateImage(command.Image);

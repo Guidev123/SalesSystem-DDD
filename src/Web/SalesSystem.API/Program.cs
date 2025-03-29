@@ -1,5 +1,4 @@
 using SalesSystem.API.Configuration;
-using SalesSystem.API.Middlewares;
 using SalesSystem.Catalog.Infrastructure;
 using SalesSystem.Payments.Infrastructure;
 using SalesSystem.Register.Infrastructure;

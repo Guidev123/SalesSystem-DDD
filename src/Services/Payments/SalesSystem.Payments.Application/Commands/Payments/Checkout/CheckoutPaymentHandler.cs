@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SalesSystem.Payments.Application.Services;
-using SalesSystem.Payments.Domain.Entities;
 using SalesSystem.Payments.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
@@ -27,7 +26,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
 
             paymentRepository.Create(new(request.OrderId, request.CustomerId, request.Value));
 
-            if(!await paymentRepository.UnitOfWork.CommitAsync())
+            if (!await paymentRepository.UnitOfWork.CommitAsync())
             {
                 notificator.HandleNotification(new("Fail to persist payment data."));
                 return Response<CheckoutPaymentResponse>.Failure(notificator.GetNotifications());

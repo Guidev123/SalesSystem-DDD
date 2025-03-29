@@ -1,5 +1,4 @@
 ﻿using SalesSystem.Register.Application.Commands.Authentication.Register;
-using SalesSystem.Register.Application.Commands.Authentication.SignIn;
 using SalesSystem.Register.Infrastructure.Models;
 
 namespace SalesSystem.Register.Infrastructure.Mappers

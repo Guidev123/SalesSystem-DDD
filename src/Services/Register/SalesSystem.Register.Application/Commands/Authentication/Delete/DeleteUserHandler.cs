@@ -9,7 +9,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Delete
     {
         public async Task<Response<DeleteUserResponse>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            if(!request.IsValid())
+            if (!request.IsValid())
                 return Response<DeleteUserResponse>.Failure(request.GetErrorMessages());
 
             return await authenticationService.DeleteAsync(request);

@@ -51,7 +51,7 @@ namespace SalesSystem.API.Configuration
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.MapControllers();
         }
     }

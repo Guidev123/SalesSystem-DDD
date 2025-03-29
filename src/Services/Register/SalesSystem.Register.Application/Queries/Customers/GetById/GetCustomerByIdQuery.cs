@@ -5,6 +5,5 @@ namespace SalesSystem.Register.Application.Queries.Customers.GetById
 {
     public record GetCustomerByIdQuery : IQuery<CustomerDTO>
     {
-
     }
 }
