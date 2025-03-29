@@ -13,6 +13,7 @@ namespace SalesSystem.Payments.ACL.Services
 {
     public sealed class StripeService(INotificator notificator) : IStripeService
     {
+        private const string STRIPE_SUCCEEEDED_CHARGE_EVENT = "charge.succeeded";
         public async Task<string?> CreateSessionAsync(CheckoutPaymentCommand command, StripeSettings stripeConfiguration)
         {
             var client = new StripeClient(stripeConfiguration.ApiKey);
@@ -58,7 +59,7 @@ namespace SalesSystem.Payments.ACL.Services
         {
             try
             {
-                if (stripeEvent.Type.Equals("charge.succeeded", StringComparison.OrdinalIgnoreCase)
+                if (stripeEvent.Type.Equals(STRIPE_SUCCEEEDED_CHARGE_EVENT, StringComparison.OrdinalIgnoreCase)
                     && charge.Metadata.TryGetValue("order", out var orderNumber))
                 {
                     var transaction = new Transaction(payment.OrderId, payment.Id, payment.Amount, orderNumber);
