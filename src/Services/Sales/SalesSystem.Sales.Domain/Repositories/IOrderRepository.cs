@@ -9,7 +9,7 @@ namespace SalesSystem.Sales.Domain.Repositories
 
         Task<IEnumerable<Order>> GetAllByCutomerIdAsync(int pageSize, int pageNumber, Guid customerId);
 
-        Task<Order?> GetDraftOrderByCustomerIdAsync(Guid orderId);
+        Task<Order?> GetDraftOrderByCustomerIdAsync(Guid customerId);
 
         void Create(Order order);
 

@@ -24,7 +24,7 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
             if (!orders.Any())
             {
                 _notificator.HandleNotification(new("Orders not found."));
-                return PagedResponse<IEnumerable<OrderDTO>>.Failure(_notificator.GetNotifications());
+                return PagedResponse<IEnumerable<OrderDTO>>.Failure(_notificator.GetNotifications(), code: 404);
             }
 
             return PagedResponse<IEnumerable<OrderDTO>>.Success(orders.Select(x => x.MapFromEntity()), orders.Count(),

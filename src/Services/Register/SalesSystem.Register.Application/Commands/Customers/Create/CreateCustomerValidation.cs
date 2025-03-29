@@ -9,19 +9,19 @@ namespace SalesSystem.Register.Application.Commands.Customers.Create
         {
             RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Customer id invalid");
+                .WithMessage("Customer id invalid.");
 
             RuleFor(c => c.Name)
                 .NotEmpty()
-                .WithMessage("Name can not be empty");
+                .WithMessage("Name can not be empty.");
 
             RuleFor(c => c.Document)
                 .Must(DocumentIsValid)
-                .WithMessage("Invalid Document");
+                .WithMessage("Invalid Document.");
 
             RuleFor(c => c.Email)
                 .EmailAddress()
-                .WithMessage("Invalid E-mail");
+                .WithMessage("Invalid E-mail.");
 
             RuleFor(x => x.BirthDate)
                 .NotEmpty().WithMessage("The {PropertyName} field cannot be empty.")

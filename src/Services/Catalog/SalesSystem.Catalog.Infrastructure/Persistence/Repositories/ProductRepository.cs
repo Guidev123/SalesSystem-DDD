@@ -20,7 +20,9 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Repositories
             => await _context.Products.AsNoTrackingWithIdentityResolution().Include(x => x.Category)
             .Where(x => x.Category.Code == code).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
-        public async Task<Product?> GetByIdAsync(Guid id) => await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+        public async Task<Product?> GetByIdAsync(Guid id)
+            => await _context.Products.AsNoTrackingWithIdentityResolution()
+            .Include(x => x.Category).FirstOrDefaultAsync(p => p.Id == id);
 
         public void Create(Product product) => _context.Products.Add(product);
 

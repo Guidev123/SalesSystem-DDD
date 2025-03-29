@@ -27,18 +27,18 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
             => await context.Orders.AsNoTrackingWithIdentityResolution().Include(x => x.OrderItems)
             .Include(x => x.Voucher).FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task<Order?> GetDraftOrderByCustomerIdAsync(Guid orderId)
+        public async Task<Order?> GetDraftOrderByCustomerIdAsync(Guid customerId)
             => await context.Orders.AsNoTrackingWithIdentityResolution().Include(x => x.OrderItems)
-            .Include(x => x.Voucher).FirstOrDefaultAsync(x => x.Id == orderId);
+            .Include(x => x.Voucher).FirstOrDefaultAsync(x => x.CustomerId == customerId);
 
         public async Task<OrderItem?> GetItemByIdAsync(Guid id)
             => await context.OrderItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
         public async Task<OrderItem?> GetItemByOrderIdAsync(Guid orderId, Guid itemId)
-            => await context.OrderItems.AsNoTracking().Where(x => x.OrderId == orderId).FirstOrDefaultAsync(x => x.Id == itemId);
+            => await context.OrderItems.AsNoTracking().Where(x => x.OrderId == orderId).FirstOrDefaultAsync(x => x.ProductId == itemId);
 
         public async Task<Voucher?> GetVoucherByCodeAsync(string code)
-            => await context.Vouchers.AsNoTracking().FirstOrDefaultAsync(x => x.Code.Equals(code, StringComparison.OrdinalIgnoreCase));
+            => await context.Vouchers.AsNoTracking().FirstOrDefaultAsync(x => x.Code == code);
 
         public void Update(Order order)
             => context.Orders.Update(order);

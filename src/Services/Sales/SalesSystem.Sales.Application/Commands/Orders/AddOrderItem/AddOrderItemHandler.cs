@@ -28,25 +28,23 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
                 : HandleExistentOrder(order, orderItem, request.UnitPrice, request.Quantity);
 
             return response.IsSuccess
-                ? await PersistDataAsync(orderItem.Id)
+                ? await PersistDataAsync(request.ProductId)
                 : Response<AddOrderItemResponse>.Failure(_notificator.GetNotifications());
         }
 
         private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem, decimal unitPrice, int quantity)
         {
-            var existentOrder = GetExistentOrderItem(order, orderItem.Id);
-            if (existentOrder is null)
-            {
-                _notificator.HandleNotification(new("Fail to get order item."));
-                return Response<Order>.Failure(_notificator.GetNotifications());
-            }
+            var existentOrder = GetExistentOrderItem(order, orderItem.ProductId);
+            var existentOrderItem = order.ItemAlreadyExists(orderItem); 
 
             order.AddItem(orderItem);
 
-            if (order.ItemAlreadyExists(orderItem))
-                _orderRepository.UpdateItem(existentOrder);
+            if (existentOrderItem)
+                _orderRepository.UpdateItem(existentOrder!);
             else
                 _orderRepository.AddOrderItem(orderItem);
+
+            _orderRepository.Update(order);
 
             order.AddEvent(new UpdatedOrderItemEvent(order.Id, order.CustomerId, order.Price, quantity));
             CreateOrderItemAddedEvent(order, orderItem.ProductId, unitPrice, quantity, orderItem.ProductName);
@@ -67,19 +65,19 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             return Response<Order>.Success(order);
         }
 
-        private async Task<Response<AddOrderItemResponse>> PersistDataAsync(Guid orderItemId)
+        private async Task<Response<AddOrderItemResponse>> PersistDataAsync(Guid productId)
         {
-            if (await _orderRepository.UnitOfWork.CommitAsync())
+            if (!await _orderRepository.UnitOfWork.CommitAsync())
             {
                 _notificator.HandleNotification(new("Fail to persist data."));
                 return Response<AddOrderItemResponse>.Failure(_notificator.GetNotifications());
             }
 
-            return Response<AddOrderItemResponse>.Success(new(orderItemId));
+            return Response<AddOrderItemResponse>.Success(new(productId));
         }
 
         private static OrderItem? GetExistentOrderItem(Order order, Guid orderItemId)
-            => order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
+            => order.OrderItems.FirstOrDefault(oi => oi.ProductId == orderItemId);
 
         private static void CreateOrderItemAddedEvent(Order order, Guid productId, decimal unitPrice, int quantity, string productName)
             => order.AddEvent(new AddedOrderItemEvent(order.Id, order.CustomerId, productId, unitPrice, quantity, productName));

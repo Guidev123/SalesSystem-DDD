@@ -27,7 +27,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
                 return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications(), code: 404);
             }
 
-            var voucher = await _orderRepository.GetVoucherByCodeAsync(order.Code).ConfigureAwait(false);
+            var voucher = await _orderRepository.GetVoucherByCodeAsync(request.VoucherCode).ConfigureAwait(false);
 
             if (voucher is null)
             {

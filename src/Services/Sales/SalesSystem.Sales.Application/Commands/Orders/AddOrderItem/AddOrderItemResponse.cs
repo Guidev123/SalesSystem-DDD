@@ -1,4 +1,4 @@
 ﻿namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
-    public record AddOrderItemResponse(Guid OrderId);
+    public record AddOrderItemResponse(Guid ProductId);
 }

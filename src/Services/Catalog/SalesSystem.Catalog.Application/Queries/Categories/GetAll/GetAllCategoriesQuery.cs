@@ -2,5 +2,5 @@
 
 namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
 {
-    public record GetAllCategoriesQuery() : IPagedQuery<GetAllCategoriesResponse>;
+    public record GetAllCategoriesQuery() : IQuery<GetAllCategoriesResponse>;
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SalesSystem.Register.Domain.ValueObjects;
 using System.Text.RegularExpressions;
 
 namespace SalesSystem.Register.Application.Commands.Authentication.Register
@@ -23,6 +24,10 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
                 .Must(HasDigit).WithMessage("The password must contain at least one digit.")
                 .Must(HasSpecialCharacter).WithMessage("The password must contain at least one special character (!@#$%^&* etc.).");
 
+            RuleFor(c => c.Document)
+                .Must(DocumentIsValid)
+                .WithMessage("Invalid Document.");
+
             RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("The passwords do not match")
                     .When(x => !string.IsNullOrEmpty(x.Password))
                     .NotEmpty().WithMessage("The password field cannot be empty.")
@@ -34,11 +39,9 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
         }
 
         private static bool HasUpperCase(string password) => password.Any(char.IsUpper);
-
+        private static bool DocumentIsValid(string cpf) => Document.IsValid(cpf);
         private static bool HasLowerCase(string password) => password.Any(char.IsLower);
-
         private static bool HasDigit(string password) => password.Any(char.IsDigit);
-
         private static bool IsValidAge(DateTime birthDate)
         {
             var today = DateTime.Today;

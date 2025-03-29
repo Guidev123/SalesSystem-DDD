@@ -7,6 +7,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
         public UpdateOrderItemCommand(Guid orderId, Guid productId, int quantity)
         {
             AggregateId = orderId;
+            OrderId = orderId;
             ProductId = productId;
             Quantity = quantity;
         }

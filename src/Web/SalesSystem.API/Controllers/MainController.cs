@@ -13,7 +13,7 @@ namespace SalesSystem.API.Controllers
             400 => TypedResults.BadRequest(response),
             201 => TypedResults.Created(string.Empty, response),
             204 => TypedResults.NoContent(),
-            _ => TypedResults.NotFound()
+            _ => TypedResults.NotFound(response)
         };
 
         protected Guid GetUserId()
