@@ -11,9 +11,9 @@ namespace SalesSystem.Register.Domain.ValueObjects
             Number = number;
             Validate();
         }
-        public string JustNumbers(string input) => new(input.Where(char.IsDigit).ToArray());
+        public static string JustNumbers(string input) => new(input.Where(char.IsDigit).ToArray());
 
-        public bool CpfIsValid(string number)
+        public static bool CpfIsValid(string number)
         {
             number = JustNumbers(number);
 
