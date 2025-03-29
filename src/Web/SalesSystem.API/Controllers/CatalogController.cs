@@ -8,6 +8,7 @@ using SalesSystem.Catalog.Application.Queries.Products.GetAll;
 using SalesSystem.Catalog.Application.Queries.Products.GetByCategory;
 using SalesSystem.Catalog.Application.Queries.Products.GetById;
 using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Enums;
 
 namespace SalesSystem.API.Controllers
 {
@@ -32,12 +33,12 @@ namespace SalesSystem.API.Controllers
         public async Task<IResult> GetAllCategoriesAsync()
             => CustomResponse(await mediatorHandler.SendQuery(new GetAllCategoriesQuery()).ConfigureAwait(false));
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPost]
         public async Task<IResult> CreateAsync(CreateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPut]
         public async Task<IResult> UpdateAsync(UpdateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));
