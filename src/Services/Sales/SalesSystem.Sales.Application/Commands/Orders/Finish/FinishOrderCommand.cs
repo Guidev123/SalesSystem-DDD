@@ -16,7 +16,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
         public override bool IsValid()
         {
             SetValidationResult(new FinishOrderValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

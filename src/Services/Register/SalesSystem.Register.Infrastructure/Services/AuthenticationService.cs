@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SalesSystem.Register.Application.Commands.Authentication.Delete;
 using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
@@ -83,9 +84,27 @@ namespace SalesSystem.Register.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<UserDTO>> DeleteAsync(UserDTO userDTO)
+        public async Task<Response<DeleteUserResponse>> DeleteAsync(DeleteUserCommand command)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(command.Email);
+            if(user is null)
+            {
+                _notificator.HandleNotification(new("User not found."));
+                return Response<DeleteUserResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            var delete = await _userManager.DeleteAsync(user);
+            if (!delete.Succeeded)
+            {
+                foreach (var item in delete.Errors)
+                {
+                    _notificator.HandleNotification(new(item.Description));
+                }
+
+                return Response<DeleteUserResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            return Response<DeleteUserResponse>.Success(new(Guid.Parse(user.Id)), code: 204);
         }
 
         public Task<Response<string>> GeneratePasswordResetTokenAsync(UserDTO userDTO)

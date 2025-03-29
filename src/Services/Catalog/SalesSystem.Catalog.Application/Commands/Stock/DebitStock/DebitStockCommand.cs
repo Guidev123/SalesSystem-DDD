@@ -7,7 +7,7 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.DebitStock
         public override bool IsValid()
         {
             SetValidationResult(new DebitStockValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

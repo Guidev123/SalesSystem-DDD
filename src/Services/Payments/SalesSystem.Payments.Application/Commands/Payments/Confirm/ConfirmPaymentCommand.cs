@@ -15,7 +15,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Confirm
         public override bool IsValid()
         {
             SetValidationResult(new ConfirmPaymentValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

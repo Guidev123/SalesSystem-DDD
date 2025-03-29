@@ -23,7 +23,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
         public override bool IsValid()
         {
             SetValidationResult(new ApplyVoucherValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

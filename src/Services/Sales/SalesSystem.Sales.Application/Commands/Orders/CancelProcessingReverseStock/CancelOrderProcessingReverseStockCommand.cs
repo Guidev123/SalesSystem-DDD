@@ -16,7 +16,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
         public override bool IsValid()
         {
             SetValidationResult(new CancelOrderProcessingReverseStockValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

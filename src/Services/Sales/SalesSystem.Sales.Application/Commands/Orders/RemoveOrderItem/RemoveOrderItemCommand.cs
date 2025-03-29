@@ -23,7 +23,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
         public override bool IsValid()
         {
             SetValidationResult(new RemoveOrderItemValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

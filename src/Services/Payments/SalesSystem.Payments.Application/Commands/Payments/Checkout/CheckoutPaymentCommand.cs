@@ -33,7 +33,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
         public override bool IsValid()
         {
             SetValidationResult(new CheckoutPaymentValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

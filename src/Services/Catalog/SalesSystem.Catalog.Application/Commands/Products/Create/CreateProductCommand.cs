@@ -10,7 +10,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
         public override bool IsValid()
         {
             SetValidationResult(new CreateProductValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

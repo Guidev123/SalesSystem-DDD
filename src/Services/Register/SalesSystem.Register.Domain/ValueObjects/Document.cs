@@ -13,7 +13,7 @@ namespace SalesSystem.Register.Domain.ValueObjects
         }
         public static string JustNumbers(string input) => new(input.Where(char.IsDigit).ToArray());
 
-        public static bool CpfIsValid(string number)
+        public static bool IsValid(string number)
         {
             number = JustNumbers(number);
 
@@ -68,7 +68,7 @@ namespace SalesSystem.Register.Domain.ValueObjects
         }
         public override void Validate()
         {
-            AssertionConcern.EnsureTrue(CpfIsValid(Number), "Document is not valid.");
+            AssertionConcern.EnsureTrue(IsValid(Number), "Document is not valid.");
         }
     }
 }

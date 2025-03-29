@@ -8,7 +8,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
         public override bool IsValid()
         {
             SetValidationResult(new UpdateProductValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

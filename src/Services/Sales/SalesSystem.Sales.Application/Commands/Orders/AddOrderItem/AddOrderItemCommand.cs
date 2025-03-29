@@ -27,7 +27,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
         public override bool IsValid()
         {
             SetValidationResult(new AddOrderItemValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }

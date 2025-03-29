@@ -1,24 +1,33 @@
 ﻿using MediatR;
+using SalesSystem.Register.Application.Events;
 using SalesSystem.Register.Application.Services;
 using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Register.Application.Commands.Authentication.Register
 {
     public sealed class RegisterUserHandler(IAuthenticationService authenticationService,
-                                            IMediatorHandler mediator)
-                                          : IRequestHandler<RegisterUserCommand, Response<RegisterUserResponse>>
+                                                INotificator notificator,
+                                                IMediatorHandler mediator)
+                                              : IRequestHandler<RegisterUserCommand, Response<RegisterUserResponse>>
     {
         public async Task<Response<RegisterUserResponse>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
-                Response<RegisterUserResponse>.Failure(request.GetErrorMessages());
+                return Response<RegisterUserResponse>.Failure(request.GetErrorMessages());
 
-           var result =  await authenticationService.RegisterAsync(request).ConfigureAwait(false);
+            var result = await authenticationService.RegisterAsync(request).ConfigureAwait(false);
+            if (!result.IsSuccess || result.Data is null)
+            {
+                notificator.HandleNotification(new("User not found."));
+                return Response<RegisterUserResponse>.Failure(notificator.GetNotifications());
+            }
 
-            va
-
-            return result;
+            await mediator.PublishEventAsync(new UserCreatedEvent(result.Data.Id, request.Name, request.Email, request.Document, request.BirthDate));
+            return notificator.HasNotifications()
+                ? Response<RegisterUserResponse>.Failure(notificator.GetNotifications())
+                : Response<RegisterUserResponse>.Success(new(result.Data.Id));
         }
     }
 }

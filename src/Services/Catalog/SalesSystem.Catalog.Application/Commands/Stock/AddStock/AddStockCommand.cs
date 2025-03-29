@@ -7,7 +7,7 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.AddStock
         public override bool IsValid()
         {
             SetValidationResult(new AddStockValidation().Validate(this));
-            return ValidationResult.IsValid;
+            return ValidationResult!.IsValid;
         }
     }
 }
