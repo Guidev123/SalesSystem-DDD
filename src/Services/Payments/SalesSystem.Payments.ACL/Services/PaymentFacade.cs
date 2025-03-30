@@ -22,7 +22,7 @@ namespace SalesSystem.Payments.ACL.Services
         public async Task<Response<ConfirmPaymentResponse>> ConfirmPaymentAsync(string webhookSecret)
         {
             var context = httpContext.HttpContext;
-            if (context == null)
+            if (context is null)
             {
                 notificator.HandleNotification(new("HttpContext is null."));
                 return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());

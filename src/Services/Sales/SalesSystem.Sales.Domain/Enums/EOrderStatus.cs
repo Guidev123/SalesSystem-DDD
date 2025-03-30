@@ -3,7 +3,6 @@
     public enum EOrderStatus
     {
         Draft,
-        Created,
         Started,
         Canceled,
         Refunded,

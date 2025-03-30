@@ -22,6 +22,9 @@ namespace SalesSystem.Payments.ACL.Services
         {
             stripeConfiguration = stripeSettings.Value;
 
+            var totalProductsValue = command.Products.Sum(product => product.Value * product.Quantity);
+            var discount = totalProductsValue - command.Value;
+
             var client = new StripeClient(stripeConfiguration.ApiKey);
 
             var options = new SessionCreateOptions
@@ -51,10 +54,28 @@ namespace SalesSystem.Payments.ACL.Services
                     },
                     Quantity = product.Quantity
                 }).ToList(),
+
                 Mode = stripeConfiguration.StripeMode,
                 SuccessUrl = $"{stripeConfiguration.FrontendUrl}/orders/{command.OrderCode}/confirm",
                 CancelUrl = $"{stripeConfiguration.FrontendUrl}/orders/{command.OrderCode}/cancel",
             };
+
+            if (discount > 0)
+            {
+                options.LineItems.Add(new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        Currency = "BRL",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = "Discount",
+                        },
+                        UnitAmount = (int)Math.Round(-discount * 100, 2)
+                    },
+                    Quantity = 1
+                });
+            }
 
             var service = new SessionService(client);
             var session = await service.CreateAsync(options);
@@ -90,6 +111,7 @@ namespace SalesSystem.Payments.ACL.Services
                     if (!charge.Metadata.TryGetValue("order", out var orderNumber) || string.IsNullOrEmpty(orderNumber))
                     {
                         notificator.HandleNotification(new("Order number not found in metadata."));
+                        payment.SetAsFailed();
                         payment.AddEvent(new PaymentFailedIntegrationEvent(payment.OrderId, payment.CustomerId));
                         return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
                     }
@@ -107,6 +129,7 @@ namespace SalesSystem.Payments.ACL.Services
                 }
                 else
                 {
+                    payment.SetAsFailed();
                     payment.AddEvent(new PaymentFailedIntegrationEvent(payment.OrderId, payment.CustomerId));
                     notificator.HandleNotification(new($"Unhandled Stripe event type: {stripeEvent.Type}"));
                     return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
@@ -114,6 +137,7 @@ namespace SalesSystem.Payments.ACL.Services
             }
             catch (Exception ex)
             {
+                payment.SetAsFailed();
                 payment.AddEvent(new PaymentFailedIntegrationEvent(payment.OrderId, payment.CustomerId));
                 notificator.HandleNotification(new($"Payment processing error: {ex.Message}"));
                 return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());

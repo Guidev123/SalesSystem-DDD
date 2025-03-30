@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SalesSystem.Payments.Application.Mappers;
 using SalesSystem.Payments.Application.Services;
 using SalesSystem.Payments.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -24,7 +25,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
                 return Response<CheckoutPaymentResponse>.Failure(notificator.GetNotifications());
             }
 
-            paymentRepository.Create(new(request.OrderId, request.CustomerId, request.Value));
+            paymentRepository.Create(request.MapToPayment());
 
             if (!await paymentRepository.UnitOfWork.CommitAsync())
             {

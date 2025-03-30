@@ -31,6 +31,8 @@ namespace SalesSystem.Payments.Domain.Entities
             Transaction?.SetAsPaid(externalReference);
         }
 
+        public void SetAsFailed() => Status = nameof(ETransactionStatus.Failed);
+
         public override void Validate()
         {
             AssertionConcern.EnsureGreaterThan(Amount, 0, "Amount must be greater than 0.");

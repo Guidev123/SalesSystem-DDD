@@ -19,7 +19,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
             if (!request.IsValid())
                 return Response<UpdateOrderItemResponse>.Failure(request.GetErrorMessages());
 
-            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.OrderId);
+            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
 
             if (order is null)
             {

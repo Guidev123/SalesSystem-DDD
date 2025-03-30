@@ -5,6 +5,7 @@ using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
+using static SalesSystem.Sales.Domain.Entities.Order;
 
 namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
@@ -34,13 +35,13 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
         private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem, decimal unitPrice, int quantity)
         {
-            var existentOrder = GetExistentOrderItem(order, orderItem.ProductId);
-            var existentOrderItem = order.ItemAlreadyExists(orderItem); 
+            var existentOrderItem = GetExistentOrderItem(order, orderItem.ProductId);
+            var orderItemAlreadyExists = order.ItemAlreadyExists(orderItem); 
 
             order.AddItem(orderItem);
 
-            if (existentOrderItem)
-                _orderRepository.UpdateItem(existentOrder!);
+            if (orderItemAlreadyExists)
+                _orderRepository.UpdateItem(existentOrderItem!);
             else
                 _orderRepository.AddOrderItem(orderItem);
 
@@ -54,7 +55,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
         private Response<Order> HandleDraftOrder(Guid customerId, OrderItem orderItem, decimal unitPrice, int quantity)
         {
-            var order = Order.OrderFactory.NewDraftOrder(customerId);
+            var order = OrderFactory.NewDraftOrder(customerId);
             order.AddItem(orderItem);
 
             _orderRepository.Create(order);

@@ -11,7 +11,7 @@ namespace SalesSystem.API.Controllers
                                          IEventSourcingRepository eventSourcingRepository)
                                        : MainController(httpContextAccessor)
     {
-        [Authorize(Roles = nameof(EUserRoles.Admin))]
+        //[Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpGet]
         public async Task<IResult> GetAggregateHistoryAsync(Guid aggregateId)
         {

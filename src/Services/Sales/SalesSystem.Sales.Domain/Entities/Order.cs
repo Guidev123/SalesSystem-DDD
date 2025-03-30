@@ -6,15 +6,11 @@ namespace SalesSystem.Sales.Domain.Entities
 {
     public class Order : Entity, IAggregateRoot
     {
-        public Order(Guid customerId, bool voucherIsUsed, decimal discount, decimal price)
+        private Order(Guid customerId)
         {
-            Code = Guid.NewGuid().ToString("N");
             CustomerId = customerId;
-            VoucherIsUsed = voucherIsUsed;
-            Discount = discount;
-            Price = price;
+            Code = Guid.NewGuid().ToString("N");
             CreatedAt = DateTime.Now;
-            Status = EOrderStatus.Created;
             Validate();
         }
 
@@ -174,8 +170,6 @@ namespace SalesSystem.Sales.Domain.Entities
         {
             AssertionConcern.EnsureNotEmpty(Code, "The order code cannot be empty.");
             AssertionConcern.EnsureNotNull(CustomerId, "The customer ID cannot be null.");
-            AssertionConcern.EnsureInRange(Discount, 0, Price, "The discount cannot be greater than the total price.");
-            AssertionConcern.EnsureGreaterThan(Price, 0, "The price must be greater than zero.");
             AssertionConcern.EnsureNotNull(CreatedAt, "The order creation date cannot be null.");
             AssertionConcern.EnsureNotNull(Status, "The order status cannot be null.");
         }
@@ -184,12 +178,10 @@ namespace SalesSystem.Sales.Domain.Entities
         {
             public static Order NewDraftOrder(Guid customerId)
             {
-                var order = new Order
-                {
-                    CustomerId = customerId
-                };
+                var order = new Order(customerId);
 
                 order.DraftOrder();
+
                 return order;
             }
         }

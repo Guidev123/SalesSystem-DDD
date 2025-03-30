@@ -4,7 +4,6 @@
     {
         Paid,
         Failed,
-        WaitingPayment,
-        CheckoutPayment,
+        WaitingPayment
     }
 }

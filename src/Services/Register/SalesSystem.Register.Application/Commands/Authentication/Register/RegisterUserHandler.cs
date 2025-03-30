@@ -27,7 +27,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
             await mediator.PublishEventAsync(new UserCreatedEvent(result.Data.Id, request.Name, request.Email, request.Document, request.BirthDate));
             return notificator.HasNotifications()
                 ? Response<RegisterUserResponse>.Failure(notificator.GetNotifications())
-                : Response<RegisterUserResponse>.Success(new(result.Data.Id));
+                : Response<RegisterUserResponse>.Success(new(result.Data.Id), code: 201);
         }
     }
 }
