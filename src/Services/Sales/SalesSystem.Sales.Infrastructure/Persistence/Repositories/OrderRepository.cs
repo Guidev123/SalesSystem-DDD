@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesSystem.Sales.Domain.Entities;
+using SalesSystem.Sales.Domain.Enums;
 using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.Data;
 
@@ -29,7 +30,7 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
 
         public async Task<Order?> GetDraftOrderByCustomerIdAsync(Guid customerId)
             => await context.Orders.AsNoTrackingWithIdentityResolution().Include(x => x.OrderItems)
-            .Include(x => x.Voucher).FirstOrDefaultAsync(x => x.CustomerId == customerId);
+            .Include(x => x.Voucher).Where(x => x.Status == EOrderStatus.Draft).FirstOrDefaultAsync(x => x.CustomerId == customerId);
 
         public async Task<OrderItem?> GetItemByIdAsync(Guid id)
             => await context.OrderItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);

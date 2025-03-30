@@ -51,10 +51,11 @@ namespace SalesSystem.Sales.Domain.Entities
 
         public ValidationResult ApplyVoucher(Voucher voucher)
         {
+            AssertionConcern.EnsureNotNull(voucher, "Cannot use a non-existent voucher.");
+
             var validation = voucher.IsValidToApply();
             if (!validation.IsValid) return validation;
 
-            AssertionConcern.EnsureNotNull(voucher, "Cannot use a non-existent voucher.");
             Voucher = voucher;
             VoucherIsUsed = true;
             CalculateTotalPriceDiscount();

@@ -62,19 +62,20 @@ namespace SalesSystem.Payments.ACL.Services
 
             if (discount > 0)
             {
-                options.LineItems.Add(new SessionLineItemOptions
+                var couponService = new CouponService(client);
+                var couponOptions = new CouponCreateOptions
                 {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        Currency = "BRL",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = "Discount",
-                        },
-                        UnitAmount = (int)Math.Round(-discount * 100, 2)
-                    },
-                    Quantity = 1
-                });
+                    AmountOff = (long)(discount * 100),
+                    Currency = "BRL",
+                    Duration = "once", 
+                    Name = "Voucher"
+                };
+                var coupon = await couponService.CreateAsync(couponOptions);
+
+                options.Discounts =
+                [
+                    new SessionDiscountOptions { Coupon = coupon.Id }
+                ];
             }
 
             var service = new SessionService(client);

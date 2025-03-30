@@ -33,7 +33,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
                 return Response<CheckoutPaymentResponse>.Failure(notificator.GetNotifications());
             }
 
-            return Response<CheckoutPaymentResponse>.Success(new(result.Data.SessionId, result.Data.OrderCode), code: 204);
+            return Response<CheckoutPaymentResponse>.Success(new(result.Data.SessionId, result.Data.OrderCode));
         }
     }
 }
