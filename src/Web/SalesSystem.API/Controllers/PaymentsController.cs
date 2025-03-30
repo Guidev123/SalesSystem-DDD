@@ -8,13 +8,13 @@ using SalesSystem.SharedKernel.Communication.Mediator;
 
 namespace SalesSystem.API.Controllers
 {
-    [Authorize]
     [Route("api/v1/payments")]
     public class PaymentsController(IMediatorHandler mediatorHandler,
                                     IOptions<StripeSettings> stripeSettings,
                                     IHttpContextAccessor httpContextAccessor)
                                   : MainController(httpContextAccessor)
     {
+        [Authorize]
         [HttpPost("checkout")]
         public async Task<IResult> CheckoutAsync(CheckoutPaymentCommand command)
         {

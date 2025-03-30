@@ -10,7 +10,7 @@ namespace SalesSystem.Payments.Domain.Entities
             OrderId = orderId;
             PaymentId = paymentId;
             Total = total;
-            Status = ETransactionStatus.WaitingPayment;
+            Status = ETransactionStatus.Paid;
             OrderCode = orderCode;
             Validate();
         }

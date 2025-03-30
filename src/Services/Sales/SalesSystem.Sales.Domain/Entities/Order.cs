@@ -184,7 +184,10 @@ namespace SalesSystem.Sales.Domain.Entities
         {
             public static Order NewDraftOrder(Guid customerId)
             {
-                var order = new Order { CustomerId = customerId };
+                var order = new Order
+                {
+                    CustomerId = customerId
+                };
 
                 order.DraftOrder();
                 return order;

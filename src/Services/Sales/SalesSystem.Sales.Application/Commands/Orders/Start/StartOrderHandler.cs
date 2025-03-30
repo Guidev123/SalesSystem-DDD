@@ -36,7 +36,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Start
 
         private async Task<Response<StartOrderResponse>> PersistDataAsync()
         {
-            if (await _orderRepository.UnitOfWork.CommitAsync())
+            if (!await _orderRepository.UnitOfWork.CommitAsync())
             {
                 _notificator.HandleNotification(new("Fail to persist data."));
                 return Response<StartOrderResponse>.Failure(_notificator.GetNotifications());

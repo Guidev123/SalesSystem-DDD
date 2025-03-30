@@ -17,6 +17,7 @@ namespace SalesSystem.API.Configuration
 
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
+            builder.AddModelConfig();
             builder.AddConfigureMediator();
             builder.Services.AddJwtConfiguration(builder.Configuration);
             builder.AddHandlers();

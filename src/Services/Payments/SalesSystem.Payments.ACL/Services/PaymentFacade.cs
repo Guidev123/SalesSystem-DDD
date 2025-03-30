@@ -22,35 +22,56 @@ namespace SalesSystem.Payments.ACL.Services
         public async Task<Response<ConfirmPaymentResponse>> ConfirmPaymentAsync(string webhookSecret)
         {
             var context = httpContext.HttpContext;
-
-            if (context is null)
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
-
-            var json = await new StreamReader(context.Request.Body).ReadToEndAsync();
-            var stripeEvent = EventUtility.ConstructEvent(
-                json,
-                context.Request.Headers["Stripe-Signature"],
-                webhookSecret,
-                throwOnApiVersionMismatch: false
-            );
-
-            if (stripeEvent.Data.Object is not Charge charge)
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
-
-            var payment = await paymentRepository.GetByCustomerIdAsync(Guid.Parse(charge.CustomerId));
-            if (payment is null)
+            if (context == null)
             {
-                notificator.HandleNotification(new("Payment not foud."));
+                notificator.HandleNotification(new("HttpContext is null."));
                 return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
             }
 
-            var response = stripeService.ConfirmPaymentInternal(stripeEvent, charge, payment);
+            try
+            {
+                var json = await new StreamReader(context.Request.Body).ReadToEndAsync();
+                var stripeEvent = EventUtility.ConstructEvent(
+                    json,
+                    context.Request.Headers["Stripe-Signature"],
+                    webhookSecret,
+                    throwOnApiVersionMismatch: false
+                );
 
-            if (!response.IsSuccess) return response;
+                if (stripeEvent is null)
+                {
+                    notificator.HandleNotification(new("Invalid Stripe event."));
+                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                }
 
-            return await paymentRepository.UnitOfWork.CommitAsync()
-                ? Response<ConfirmPaymentResponse>.Success(default)
-                : Response<ConfirmPaymentResponse>.Failure(["Fail to persist transaction data."]);
+                if (stripeEvent.Data.Object is not Charge charge)
+                {
+                    notificator.HandleNotification(new("Event data is not a Charge object."));
+                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                }
+
+                var response = await stripeService.ConfirmPaymentInternal(stripeEvent, charge);
+                if (!response.IsSuccess) return response;
+
+                var commitResult = await paymentRepository.UnitOfWork.CommitAsync();
+                if (!commitResult)
+                {
+                    notificator.HandleNotification(new("Failed to persist transaction data."));
+                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                }
+
+                return Response<ConfirmPaymentResponse>.Success(default);
+            }
+            catch (StripeException ex)
+            {
+                notificator.HandleNotification(new($"Stripe error: {ex.Message}"));
+                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+            }
+            catch (Exception ex)
+            {
+                notificator.HandleNotification(new($"Unexpected error: {ex.Message}"));
+                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+            }
         }
 
         public async Task<Response<CheckoutPaymentResponse>> MakeCheckoutAsync(CheckoutPaymentCommand command)
