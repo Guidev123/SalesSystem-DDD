@@ -33,12 +33,12 @@ namespace SalesSystem.API.Controllers
         public async Task<IResult> GetAllCategoriesAsync()
             => CustomResponse(await mediatorHandler.SendQuery(new GetAllCategoriesQuery()).ConfigureAwait(false));
 
-        //[Authorize(Roles = nameof(EUserRoles.Admin))]
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPost]
         public async Task<IResult> CreateAsync(CreateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));
 
-        //[Authorize(Roles = nameof(EUserRoles.Admin))]
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPut]
         public async Task<IResult> UpdateAsync(UpdateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));
