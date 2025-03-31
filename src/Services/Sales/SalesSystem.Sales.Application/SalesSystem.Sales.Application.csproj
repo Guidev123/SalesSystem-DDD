@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Vouchers\" />
     <Folder Include="Queries\Vouchers\" />
   </ItemGroup>
 

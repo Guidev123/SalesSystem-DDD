@@ -24,7 +24,9 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerCart
             }
 
             var cartItem = order.OrderItems.Select(x => x.MapOrderItemToCartItemDTO());
-            var cart = order.Voucher is not null ? order.MapOrderToCartDTO(cartItem, order.Voucher.Code) : order.MapOrderToCartDTO(cartItem);
+            var cart = order.Voucher is not null
+                ? order.MapOrderToCartDTO(cartItem, order.Voucher.Code)
+                : order.MapOrderToCartDTO(cartItem);
 
             return Response<CartDTO>.Success(cart);
         }
