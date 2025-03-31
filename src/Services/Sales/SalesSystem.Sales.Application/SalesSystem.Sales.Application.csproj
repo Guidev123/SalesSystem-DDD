@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Queries\Vouchers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SalesSystem.Sales.Domain\SalesSystem.Sales.Domain.csproj" />
   </ItemGroup>
 
