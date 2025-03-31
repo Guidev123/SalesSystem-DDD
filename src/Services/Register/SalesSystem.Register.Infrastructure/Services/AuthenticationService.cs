@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SalesSystem.Email;
 using SalesSystem.Email.Models;
+using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
+using SalesSystem.Register.Application.Commands.Authentication.CreateRole;
 using SalesSystem.Register.Application.Commands.Authentication.Delete;
 using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.Register;
@@ -10,6 +12,7 @@ using SalesSystem.Register.Application.DTOs;
 using SalesSystem.Register.Application.Services;
 using SalesSystem.Register.Infrastructure.Mappers;
 using SalesSystem.Register.Infrastructure.Models;
+using SalesSystem.SharedKernel.Enums;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -18,11 +21,13 @@ namespace SalesSystem.Register.Infrastructure.Services
     public sealed class AuthenticationService(SignInManager<User> signInManager,
                                               INotificator notificator,
                                               UserManager<User> userManager,
+                                              RoleManager<IdentityRole> roleManager,
                                               IEmailService emailService,
                                               IJwtGeneratorService jwtGeneratorService)
                                             : IAuthenticationService
     {
         private readonly SignInManager<User> _signInManager = signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly UserManager<User> _userManager = userManager;
         private readonly IJwtGeneratorService _jwtGeneratorService = jwtGeneratorService;
         private readonly INotificator _notificator = notificator;
@@ -106,11 +111,10 @@ namespace SalesSystem.Register.Infrastructure.Services
 
             return Response<DeleteUserResponse>.Success(new(Guid.Parse(user.Id)), code: 204);
         }
-
         public async Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command)
         {
             var user = await _userManager.FindByEmailAsync(command.Email);
-            if(user is null)
+            if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
                 return Response<ResetPasswordUserResponse>.Failure(_notificator.GetNotifications(), code: 404);
@@ -140,11 +144,82 @@ namespace SalesSystem.Register.Infrastructure.Services
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            
+
             var message = new EmailMessage(command.Email, "Token to reset password.", token);
             await _emailService.SendAsync(message);
 
             return Response<ForgetPasswordUserResponse>.Success(default, code: 204);
         }
+
+        public async Task<Response<AddUserRoleResponse>> AddRoleToUserAsync(AddUserRoleCommand command)
+        {
+            var roleIsValid = await RoleIsValidAsync(command.RoleName);
+            if (!roleIsValid)
+            {
+                _notificator.HandleNotification(new("Invalid role name."));
+                return Response<AddUserRoleResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            var user = await _userManager.FindByEmailAsync(command.Email);
+            if (user is null)
+            {
+                _notificator.HandleNotification(new("User not found."));
+                return Response<AddUserRoleResponse>.Failure(_notificator.GetNotifications(), code: 404);
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, command.RoleName);
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    _notificator.HandleNotification(new(item.Description));
+                }
+                return Response<AddUserRoleResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            return Response<AddUserRoleResponse>.Success(default, code: 204);
+        }
+
+        public async Task<Response<CreateRoleResponse>> CreateRoleAsync(CreateRoleCommand command)
+        {
+            if (!RoleIsInEnum(command.RoleName))
+            {
+                _notificator.HandleNotification(new("Invalid role name. Must be a valid role from enum UserRoles."));
+                return Response<CreateRoleResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            if (await _roleManager.RoleExistsAsync(command.RoleName))
+            {
+                _notificator.HandleNotification(new($"Role '{command.RoleName}' already exists."));
+                return Response<CreateRoleResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            var role = new IdentityRole(command.RoleName);
+            var result = await _roleManager.CreateAsync(role);
+
+            if (!result.Succeeded || role.Name is null)
+            {
+                foreach (var error in result.Errors)
+                {
+                    _notificator.HandleNotification(new(error.Description));
+                }
+                return Response<CreateRoleResponse>.Failure(_notificator.GetNotifications());
+            }
+
+            var roleResult = new CreateRoleResponse(Guid.Parse(role.Id));
+            return Response<CreateRoleResponse>.Success(roleResult, code: 201);
+        }
+
+        private async Task<bool> RoleIsValidAsync(string roleName)
+        {
+            var roleIsValid = RoleIsInEnum(roleName);
+
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+
+            return roleIsValid && roleExists;
+        }
+
+        private static bool RoleIsInEnum(string roleName) 
+            => Enum.GetNames<EUserRoles>().Any(name => name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
     }
 }

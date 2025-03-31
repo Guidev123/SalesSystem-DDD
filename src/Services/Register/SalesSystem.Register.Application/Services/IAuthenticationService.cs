@@ -1,4 +1,6 @@
-﻿using SalesSystem.Register.Application.Commands.Authentication.Delete;
+﻿using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
+using SalesSystem.Register.Application.Commands.Authentication.CreateRole;
+using SalesSystem.Register.Application.Commands.Authentication.Delete;
 using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
@@ -21,5 +23,9 @@ namespace SalesSystem.Register.Application.Services
         Task<Response<DeleteUserResponse>> DeleteAsync(DeleteUserCommand command);
 
         Task<Response<ForgetPasswordUserResponse>> GeneratePasswordResetTokenAsync(ForgetPasswordUserCommand command);
+
+        Task<Response<AddUserRoleResponse>> AddRoleToUserAsync(AddUserRoleCommand command);
+
+        Task<Response<CreateRoleResponse>> CreateRoleAsync(CreateRoleCommand command);
     }
 }

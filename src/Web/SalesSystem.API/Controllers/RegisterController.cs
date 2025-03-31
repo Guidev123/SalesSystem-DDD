@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
+using SalesSystem.Register.Application.Commands.Authentication.CreateRole;
 using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
 using SalesSystem.Register.Application.Commands.Customers.AddAddress;
 using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Enums;
 
 namespace SalesSystem.API.Controllers
 {
@@ -34,6 +38,16 @@ namespace SalesSystem.API.Controllers
 
         [HttpPut]
         public async Task<IResult> ResetPasswordAsync(ResetPasswordUserCommand command)
+            => CustomResponse(await mediator.SendCommand(command));
+
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
+        [HttpPost("roles")]
+        public async Task<IResult> CreateRoleAsync(CreateRoleCommand command)
+            => CustomResponse(await mediator.SendCommand(command));
+
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
+        [HttpPost("roles/user-role")]
+        public async Task<IResult> AddRoleToUserAsync(AddUserRoleCommand command)
             => CustomResponse(await mediator.SendCommand(command));
     }
 }
