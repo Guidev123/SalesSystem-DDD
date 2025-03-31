@@ -9,7 +9,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.CreateRole
     {
         public async Task<Response<CreateRoleResponse>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
-            if(!request.IsValid())
+            if (!request.IsValid())
                 return Response<CreateRoleResponse>.Failure(request.GetErrorMessages());
 
             return await authenticationService.CreateRoleAsync(request);

@@ -29,7 +29,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Repositories
 
         public async Task<Customer?> GetCustomerAddressByIdAsync(Guid id)
             => await context.Customers.AsNoTrackingWithIdentityResolution().Include(x => x.Address).FirstOrDefaultAsync(x => x.Id == id);
-       
+
         public async Task<Address?> GetAddressByCustomerIdAsync(Guid customerId)
             => await context.Addresses.AsNoTracking().FirstOrDefaultAsync(x => x.CustomerId == customerId);
 

@@ -18,6 +18,7 @@ namespace SalesSystem.Payments.ACL.Services
                                       IOptions<StripeSettings> stripeSettings) : IStripeService
     {
         private const string STRIPE_SUCCEEEDED_CHARGE_EVENT = "charge.succeeded";
+
         public async Task<string?> CreateSessionAsync(CheckoutPaymentCommand command, StripeSettings stripeConfiguration)
         {
             stripeConfiguration = stripeSettings.Value;
@@ -67,7 +68,7 @@ namespace SalesSystem.Payments.ACL.Services
                 {
                     AmountOff = (long)(discount * 100),
                     Currency = "BRL",
-                    Duration = "once", 
+                    Duration = "once",
                     Name = "Voucher"
                 };
                 var coupon = await couponService.CreateAsync(couponOptions);

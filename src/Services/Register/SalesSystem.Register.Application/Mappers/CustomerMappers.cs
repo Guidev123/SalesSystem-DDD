@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SalesSystem.Register.Application.Commands.Customers.AddAddress;
+﻿using SalesSystem.Register.Application.Commands.Customers.AddAddress;
 using SalesSystem.Register.Application.Commands.Customers.Create;
 using SalesSystem.Register.Application.DTOs;
 using SalesSystem.Register.Domain.Entities;

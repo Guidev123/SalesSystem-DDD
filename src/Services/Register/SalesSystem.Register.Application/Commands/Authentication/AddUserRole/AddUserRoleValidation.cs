@@ -2,7 +2,7 @@
 
 namespace SalesSystem.Register.Application.Commands.Authentication.AddUserRole
 {
-    public sealed class AddUserRoleValidation : AbstractValidator<AddUserRoleCommand>   
+    public sealed class AddUserRoleValidation : AbstractValidator<AddUserRoleCommand>
     {
         public AddUserRoleValidation()
         {

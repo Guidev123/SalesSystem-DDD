@@ -9,7 +9,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.AddUserRole
     {
         public async Task<Response<AddUserRoleResponse>> Handle(AddUserRoleCommand request, CancellationToken cancellationToken)
         {
-            if(!request.IsValid())
+            if (!request.IsValid())
                 return Response<AddUserRoleResponse>.Failure(request.GetErrorMessages());
 
             return await authenticationService.AddRoleToUserAsync(request);

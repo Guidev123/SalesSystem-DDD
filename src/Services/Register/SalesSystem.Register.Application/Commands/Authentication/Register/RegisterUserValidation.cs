@@ -39,9 +39,13 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
         }
 
         private static bool HasUpperCase(string password) => password.Any(char.IsUpper);
+
         private static bool DocumentIsValid(string cpf) => Document.IsValid(cpf);
+
         private static bool HasLowerCase(string password) => password.Any(char.IsLower);
+
         private static bool HasDigit(string password) => password.Any(char.IsDigit);
+
         private static bool IsValidAge(DateTime birthDate)
         {
             var today = DateTime.Today;

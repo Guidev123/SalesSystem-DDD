@@ -52,7 +52,6 @@ namespace SalesSystem.Register.Domain.Entities
 
             AssertionConcern.EnsureNotEmpty(City, "City cannot be empty.");
             AssertionConcern.EnsureLengthInRange(City, 3, 100, "City must be between 3 and 100 characters.");
-
         }
     }
 }

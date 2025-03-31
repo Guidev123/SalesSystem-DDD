@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SalesSystem.Payments.Application.Commands.Payments.Checkout;
+﻿using SalesSystem.Payments.Application.Commands.Payments.Checkout;
 using SalesSystem.Payments.Domain.Entities;
 
 namespace SalesSystem.Payments.Application.Mappers

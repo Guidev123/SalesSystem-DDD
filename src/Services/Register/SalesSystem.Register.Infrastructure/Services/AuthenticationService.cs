@@ -111,6 +111,7 @@ namespace SalesSystem.Register.Infrastructure.Services
 
             return Response<DeleteUserResponse>.Success(new(Guid.Parse(user.Id)), code: 204);
         }
+
         public async Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command)
         {
             var user = await _userManager.FindByEmailAsync(command.Email);
@@ -219,7 +220,7 @@ namespace SalesSystem.Register.Infrastructure.Services
             return roleIsValid && roleExists;
         }
 
-        private static bool RoleIsInEnum(string roleName) 
+        private static bool RoleIsInEnum(string roleName)
             => Enum.GetNames<EUserRoles>().Any(name => name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
     }
 }

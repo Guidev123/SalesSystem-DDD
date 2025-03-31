@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using SalesSystem.Register.Application.Events;
 using SalesSystem.Register.Application.Mappers;
-using SalesSystem.Register.Domain.Entities;
 using SalesSystem.Register.Domain.Repositories;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Notifications;

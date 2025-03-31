@@ -12,7 +12,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.AddUserRole
 
         public string Email { get; }
         public string RoleName { get; }
-        
+
         public override bool IsValid()
         {
             SetValidationResult(new AddUserRoleValidation().Validate(this));

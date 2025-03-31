@@ -19,7 +19,7 @@ namespace SalesSystem.Register.Application.Commands.Customers.AddAddress
             RuleFor(x => x.Number)
                 .NotEmpty().WithMessage("Number is required")
                 .Matches(@"^\d+$").WithMessage("Number must be a valid number");
-    
+
             RuleFor(x => x.AdditionalInfo)
                 .MaximumLength(200).WithMessage("Additional info must be up to 200 characters");
 

@@ -16,17 +16,17 @@ namespace SalesSystem.Register.Application.Commands.Customers.AddAddress
                 return Response<AddAddressResponse>.Failure(request.GetErrorMessages());
 
             var customer = await customerRepository.GetByIdAsync(request.CustomerId);
-            if(customer is null)
+            if (customer is null)
             {
                 notificator.HandleNotification(new("Customer not found."));
-                return Response<AddAddressResponse>.Failure(notificator.GetNotifications());    
+                return Response<AddAddressResponse>.Failure(notificator.GetNotifications());
             }
 
             var address = request.MapToAddress();
             customer.SetAddress(address);
-            
+
             customerRepository.CreateAddress(address);
-            if(!await customerRepository.UnitOfWork.CommitAsync())
+            if (!await customerRepository.UnitOfWork.CommitAsync())
             {
                 notificator.HandleNotification(new("Fail to persist data."));
                 return Response<AddAddressResponse>.Failure(notificator.GetNotifications());

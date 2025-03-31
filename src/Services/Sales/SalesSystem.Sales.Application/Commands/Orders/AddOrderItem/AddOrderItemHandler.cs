@@ -36,7 +36,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
         private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem, decimal unitPrice, int quantity)
         {
             var existentOrderItem = GetExistentOrderItem(order, orderItem.ProductId);
-            var orderItemAlreadyExists = order.ItemAlreadyExists(orderItem); 
+            var orderItemAlreadyExists = order.ItemAlreadyExists(orderItem);
 
             order.AddItem(orderItem);
 

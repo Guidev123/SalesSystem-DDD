@@ -5,7 +5,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.ForgetPasswor
     public record ForgetPasswordUserCommand : Command<ForgetPasswordUserResponse>
     {
         public ForgetPasswordUserCommand(string email) => Email = email;
-        
+
         public string Email { get; }
 
         public override bool IsValid()

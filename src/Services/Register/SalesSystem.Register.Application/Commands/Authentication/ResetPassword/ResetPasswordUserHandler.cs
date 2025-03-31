@@ -4,7 +4,7 @@ using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Register.Application.Commands.Authentication.ResetPassword
 {
-    public sealed class ResetPasswordUserHandler(IAuthenticationService authenticationService) 
+    public sealed class ResetPasswordUserHandler(IAuthenticationService authenticationService)
                                                : IRequestHandler<ResetPasswordUserCommand, Response<ResetPasswordUserResponse>>
     {
         public async Task<Response<ResetPasswordUserResponse>> Handle(ResetPasswordUserCommand request, CancellationToken cancellationToken)
