@@ -4,9 +4,14 @@ namespace SalesSystem.Register.Application.Commands.Authentication.ForgetPasswor
 {
     public record ForgetPasswordUserCommand : Command<ForgetPasswordUserResponse>
     {
-        public ForgetPasswordUserCommand(string email) => Email = email;
+        public ForgetPasswordUserCommand(string email, string clientUrlToResetPassword)
+        {
+            Email = email;
+            ClientUrlToResetPassword = clientUrlToResetPassword;
+        }
 
         public string Email { get; }
+        public string ClientUrlToResetPassword { get; private set; }
 
         public override bool IsValid()
         {

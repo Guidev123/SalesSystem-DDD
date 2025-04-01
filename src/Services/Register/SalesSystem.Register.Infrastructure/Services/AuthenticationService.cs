@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using SalesSystem.Email;
 using SalesSystem.Email.Models;
 using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
@@ -146,7 +148,15 @@ namespace SalesSystem.Register.Infrastructure.Services
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var message = new EmailMessage(command.Email, "Token to reset password.", token);
+            var param = new Dictionary<string, string?>
+            {
+                {"token", token },
+                {"email", command.Email}
+            };
+
+            var callback = QueryHelpers.AddQueryString(command.ClientUrlToResetPassword, param);
+
+            var message = new EmailMessage(command.Email, "Link to reset password.", callback);
             await _emailService.SendAsync(message);
 
             return Response<ForgetPasswordUserResponse>.Success(default, code: 204);
