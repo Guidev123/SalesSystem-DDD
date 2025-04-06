@@ -3,7 +3,7 @@
 </p>
 
 
-# Sales System
+# Sales System - Modular Monolith
 
 ## Technologies Used 🛠️
   - **Framework**: ASP.NET 9.0
