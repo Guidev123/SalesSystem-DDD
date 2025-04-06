@@ -18,6 +18,7 @@ namespace SalesSystem.API.Configuration
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
             builder.AddModelConfig();
+            builder.AddCorsConfig();
             builder.AddConfigureMediator();
             builder.Services.AddJwtConfiguration(builder.Configuration);
             builder.AddHandlers();
@@ -58,11 +59,26 @@ namespace SalesSystem.API.Configuration
         public static void AddNotifications(this WebApplicationBuilder builder)
             => builder.Services.AddScoped<INotificator, Notificator>();
 
+        public static void AddCorsConfig(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("Total", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+        }
+
         public static void AddApiUsing(this WebApplication app)
         {
             app.UseSwaggerConfig();
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseHttpsRedirection();
+
+            app.UseCors("Total");
 
             app.UseAuthentication();
             app.UseAuthorization();

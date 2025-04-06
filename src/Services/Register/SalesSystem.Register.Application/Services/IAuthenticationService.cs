@@ -20,6 +20,8 @@ namespace SalesSystem.Register.Application.Services
 
         Task<Response<UserDTO>> FindByUserEmailAsync(string email);
 
+        Task<Response<IReadOnlyCollection<string>>> FindRolesByUserIdAsync(Guid userId);
+
         Task<Response<DeleteUserResponse>> DeleteAsync(DeleteUserCommand command);
 
         Task<Response<ForgetPasswordUserResponse>> GeneratePasswordResetTokenAsync(ForgetPasswordUserCommand command);

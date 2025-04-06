@@ -7,6 +7,7 @@ using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
 using SalesSystem.Register.Application.Commands.Customers.AddAddress;
+using SalesSystem.Register.Application.Queries.Customers.GetById;
 using SalesSystem.SharedKernel.Communication.Mediator;
 using SalesSystem.SharedKernel.Enums;
 
@@ -17,6 +18,10 @@ namespace SalesSystem.API.Controllers
                                 IMediatorHandler mediator)
                               : MainController(httpContextAccessor)
     {
+        [HttpGet]
+        public async Task<IResult> GetByIdAsync()
+            => CustomResponse(await mediator.SendQuery(new GetCustomerByIdQuery(GetUserId())));
+
         [HttpPost]
         public async Task<IResult> RegisterAsync(RegisterUserCommand command)
             => CustomResponse(await mediator.SendCommand(command));

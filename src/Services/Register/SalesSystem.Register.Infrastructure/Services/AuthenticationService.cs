@@ -220,6 +220,18 @@ namespace SalesSystem.Register.Infrastructure.Services
             return Response<CreateRoleResponse>.Success(roleResult, code: 201);
         }
 
+        public async Task<Response<IReadOnlyCollection<string>>> FindRolesByUserIdAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if(user is null)
+            {
+                _notificator.HandleNotification(new("User not found."));
+                return Response<IReadOnlyCollection<string>>.Failure(_notificator.GetNotifications(), code: 404);
+            }
+
+            return Response<IReadOnlyCollection<string>>.Success([.. await _userManager.GetRolesAsync(user)]);
+        }
+
         private async Task<bool> RoleIsValidAsync(string roleName)
         {
             var roleIsValid = RoleIsInEnum(roleName);

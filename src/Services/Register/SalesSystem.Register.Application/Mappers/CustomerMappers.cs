@@ -19,5 +19,13 @@ namespace SalesSystem.Register.Application.Mappers
             => new(address.CustomerId, address.Street, address.Number,
                 address.AdditionalInfo, address.Neighborhood,
                 address.ZipCode, address.City, address.State);
+
+        public static CustomerDTO MapFromCustomer(this Customer customer, IReadOnlyCollection<string>? roles)
+        {
+            if(customer.Address is not null)
+                return new(customer.Id, customer.Email.Address, customer.Address.MapFromAddress(), roles);
+
+            return new(customer.Id, customer.Email.Address, null, roles);
+        }
     }
 }
