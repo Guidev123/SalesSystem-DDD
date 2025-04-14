@@ -1,4 +1,4 @@
-﻿using SalesSystem.SharedKernel.Messages;
+﻿using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 {

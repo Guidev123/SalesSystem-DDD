@@ -1,9 +1,10 @@
 ﻿using FluentValidation.Results;
 using MediatR;
+using SalesSystem.SharedKernel.Messages;
 using SalesSystem.SharedKernel.Responses;
 using System.Text.Json.Serialization;
 
-namespace SalesSystem.SharedKernel.Messages
+namespace SalesSystem.SharedKernel.Abstractions
 {
     public abstract record Command<T> : Message, IRequest<Response<T>>
     {

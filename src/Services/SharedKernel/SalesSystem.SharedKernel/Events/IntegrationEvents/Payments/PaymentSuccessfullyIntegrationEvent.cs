@@ -1,4 +1,6 @@
-﻿namespace SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Payments
+﻿using SalesSystem.SharedKernel.Events.IntegrationEvents;
+
+namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Payments
 {
     public record PaymentSuccessfullyIntegrationEvent : IntegrationEvent
     {

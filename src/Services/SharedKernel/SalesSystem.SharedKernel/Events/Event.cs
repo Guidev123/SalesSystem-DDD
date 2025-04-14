@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using SalesSystem.SharedKernel.Messages;
 
-namespace SalesSystem.SharedKernel.Messages
+namespace SalesSystem.SharedKernel.Events
 {
     public abstract record Event : Message, INotification
     {

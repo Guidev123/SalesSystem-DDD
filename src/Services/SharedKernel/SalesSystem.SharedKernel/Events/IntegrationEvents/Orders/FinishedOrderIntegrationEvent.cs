@@ -1,4 +1,6 @@
-﻿namespace SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders
+﻿using SalesSystem.SharedKernel.Events.IntegrationEvents;
+
+namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Orders
 {
     public record FinishedOrderIntegrationEvent : IntegrationEvent
     {

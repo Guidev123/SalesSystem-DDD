@@ -1,6 +1,6 @@
 ﻿using EventStore.Client;
 using SalesSystem.SharedKernel.Data.EventSourcing;
-using SalesSystem.SharedKernel.Messages;
+using SalesSystem.SharedKernel.Events;
 using System.Text;
 using System.Text.Json;
 

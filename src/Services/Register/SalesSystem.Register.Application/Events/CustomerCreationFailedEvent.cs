@@ -1,4 +1,4 @@
-﻿using SalesSystem.SharedKernel.Messages;
+﻿using SalesSystem.SharedKernel.Events;
 
 namespace SalesSystem.Register.Application.Events
 {

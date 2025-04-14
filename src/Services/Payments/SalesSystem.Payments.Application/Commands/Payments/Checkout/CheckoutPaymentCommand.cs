@@ -1,5 +1,5 @@
 ﻿using SalesSystem.Payments.Application.DTOs;
-using SalesSystem.SharedKernel.Messages;
+using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
 {

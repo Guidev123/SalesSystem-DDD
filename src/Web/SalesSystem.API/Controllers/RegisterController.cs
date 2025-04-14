@@ -8,7 +8,7 @@ using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
 using SalesSystem.Register.Application.Commands.Customers.AddAddress;
 using SalesSystem.Register.Application.Queries.Customers.GetById;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Enums;
 
 namespace SalesSystem.API.Controllers

@@ -1,5 +1,5 @@
 ﻿using SalesSystem.Register.Application.DTOs;
-using SalesSystem.SharedKernel.Messages;
+using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Register.Application.Queries.Customers.GetById
 {

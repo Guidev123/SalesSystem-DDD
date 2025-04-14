@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SalesSystem.Sales.Domain.Repositories;
-using SalesSystem.SharedKernel.Communication.DTOs;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders;
+using SalesSystem.SharedKernel.DTOs;
+using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 

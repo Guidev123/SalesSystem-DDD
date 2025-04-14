@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesSystem.EventSourcing;
 using SalesSystem.Payments.Domain.Entities;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Data;
-using SalesSystem.SharedKernel.Messages;
+using SalesSystem.SharedKernel.Events;
 
 namespace SalesSystem.Payments.Infrastructure.Persistence
 {

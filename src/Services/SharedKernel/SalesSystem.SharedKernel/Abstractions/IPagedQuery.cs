@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SalesSystem.SharedKernel.Responses;
 
-namespace SalesSystem.SharedKernel.Messages
+namespace SalesSystem.SharedKernel.Abstractions
 {
     public interface IPagedQuery<T> : IRequest<PagedResponse<T>>
     { }

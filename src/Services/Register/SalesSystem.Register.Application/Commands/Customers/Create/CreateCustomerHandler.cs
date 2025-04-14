@@ -2,7 +2,7 @@
 using SalesSystem.Register.Application.Events;
 using SalesSystem.Register.Application.Mappers;
 using SalesSystem.Register.Domain.Repositories;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 

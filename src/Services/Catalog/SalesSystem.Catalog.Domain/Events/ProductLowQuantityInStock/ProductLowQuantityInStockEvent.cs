@@ -1,4 +1,4 @@
-﻿using SalesSystem.SharedKernel.Messages.CommonMessages.DomainEvents;
+﻿using SalesSystem.SharedKernel.Events.DomainEvents;
 
 namespace SalesSystem.Catalog.Domain.Events.ProductLowQuantityInStock
 {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders;
+using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 
 namespace SalesSystem.Catalog.Domain.Events.CanceledOrder
 {

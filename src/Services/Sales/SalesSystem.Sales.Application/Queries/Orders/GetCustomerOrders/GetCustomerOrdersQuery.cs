@@ -1,5 +1,5 @@
 ﻿using SalesSystem.Sales.Application.DTOs;
-using SalesSystem.SharedKernel.Messages;
+using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
 {

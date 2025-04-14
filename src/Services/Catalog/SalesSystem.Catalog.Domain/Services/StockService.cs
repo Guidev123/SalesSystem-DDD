@@ -1,8 +1,8 @@
 ﻿using SalesSystem.Catalog.Domain.Events.ProductLowQuantityInStock;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
-using SalesSystem.SharedKernel.Communication.DTOs;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
+using SalesSystem.SharedKernel.DTOs;
 
 namespace SalesSystem.Catalog.Domain.Services
 {

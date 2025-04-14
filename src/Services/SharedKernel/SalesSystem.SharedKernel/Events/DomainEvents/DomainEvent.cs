@@ -1,4 +1,4 @@
-﻿namespace SalesSystem.SharedKernel.Messages.CommonMessages.DomainEvents
+﻿namespace SalesSystem.SharedKernel.Events.DomainEvents
 {
     public abstract record DomainEvent : Event
     {

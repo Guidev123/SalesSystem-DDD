@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Data.EventSourcing;
-using SalesSystem.SharedKernel.Messages;
-using SalesSystem.SharedKernel.Messages.CommonMessages.DomainEvents;
+using SalesSystem.SharedKernel.Events;
+using SalesSystem.SharedKernel.Events.DomainEvents;
 using SalesSystem.SharedKernel.Responses;
 
-namespace SalesSystem.SharedKernel.Communication.Mediator
+namespace SalesSystem.SharedKernel.Abstractions.Mediator
 {
     public sealed class MediatorHandler(IMediator mediator,
                                         IEventSourcingRepository eventSourcingRepository)

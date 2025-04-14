@@ -1,7 +1,8 @@
-﻿using SalesSystem.SharedKernel.Messages;
+﻿using SalesSystem.SharedKernel.Abstractions;
+using SalesSystem.SharedKernel.Events;
 using SalesSystem.SharedKernel.Responses;
 
-namespace SalesSystem.SharedKernel.Communication.Mediator
+namespace SalesSystem.SharedKernel.Abstractions.Mediator
 {
     public interface IMediatorHandler
     {

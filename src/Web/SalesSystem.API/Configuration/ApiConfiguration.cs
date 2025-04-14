@@ -3,7 +3,7 @@ using SalesSystem.Email;
 using SalesSystem.Email.Models;
 using SalesSystem.EventSourcing;
 using SalesSystem.Payments.ACL.Configurations;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SendGrid.Extensions.DependencyInjection;
 using System.Reflection;

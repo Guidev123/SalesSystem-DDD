@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesSystem.EventSourcing;
 using SalesSystem.Sales.Domain.Entities;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Data;
-using SalesSystem.SharedKernel.Messages;
+using SalesSystem.SharedKernel.Events;
 using System.Reflection;
 
 namespace SalesSystem.Sales.Infrastructure.Persistence

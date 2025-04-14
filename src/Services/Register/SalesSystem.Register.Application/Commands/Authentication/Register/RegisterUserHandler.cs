@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SalesSystem.Register.Application.Events;
 using SalesSystem.Register.Application.Services;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 

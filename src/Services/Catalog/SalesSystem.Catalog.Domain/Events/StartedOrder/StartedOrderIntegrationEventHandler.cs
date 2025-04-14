@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
-using SalesSystem.SharedKernel.Communication.Mediator;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
+using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 
 namespace SalesSystem.Catalog.Domain.Events.StartedOrder
 {

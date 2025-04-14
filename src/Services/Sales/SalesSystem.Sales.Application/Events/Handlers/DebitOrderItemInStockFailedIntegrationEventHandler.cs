@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SalesSystem.Sales.Application.Commands.Orders.CancelProcessing;
-using SalesSystem.SharedKernel.Communication.Mediator;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
+using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 
 namespace SalesSystem.Sales.Application.Events.Handlers
 {

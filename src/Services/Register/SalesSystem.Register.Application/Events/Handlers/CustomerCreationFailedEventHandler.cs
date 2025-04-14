@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SalesSystem.Register.Application.Commands.Authentication.Delete;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 
 namespace SalesSystem.Register.Application.Events.Handlers
 {

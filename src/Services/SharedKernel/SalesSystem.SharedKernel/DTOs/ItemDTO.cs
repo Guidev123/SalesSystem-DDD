@@ -1,4 +1,4 @@
-﻿namespace SalesSystem.SharedKernel.Communication.DTOs
+﻿namespace SalesSystem.SharedKernel.DTOs
 {
     public record ItemDTO(
         Guid Id,

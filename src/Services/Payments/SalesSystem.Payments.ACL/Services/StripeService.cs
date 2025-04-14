@@ -5,7 +5,7 @@ using SalesSystem.Payments.Application.Commands.Payments.Checkout;
 using SalesSystem.Payments.Application.Commands.Payments.Confirm;
 using SalesSystem.Payments.Domain.Entities;
 using SalesSystem.Payments.Domain.Repositories;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Payments;
+using SalesSystem.SharedKernel.Events.IntegrationEvents.Payments;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 using Stripe;

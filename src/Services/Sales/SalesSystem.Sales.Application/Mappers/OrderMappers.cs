@@ -1,7 +1,7 @@
 ﻿using SalesSystem.Sales.Application.Commands.Orders.AddOrderItem;
 using SalesSystem.Sales.Application.DTOs;
 using SalesSystem.Sales.Domain.Entities;
-using SalesSystem.SharedKernel.Communication.DTOs;
+using SalesSystem.SharedKernel.DTOs;
 
 namespace SalesSystem.Sales.Application.Mappers
 {

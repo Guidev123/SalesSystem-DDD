@@ -1,6 +1,7 @@
-﻿using SalesSystem.SharedKernel.Communication.DTOs;
+﻿using SalesSystem.SharedKernel.DTOs;
+using SalesSystem.SharedKernel.Events.IntegrationEvents;
 
-namespace SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Orders
+namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Orders
 {
     public record OrderProcessingCanceledIntegrationEvent : IntegrationEvent
     {

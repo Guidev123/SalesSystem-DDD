@@ -1,4 +1,4 @@
-﻿using SalesSystem.SharedKernel.Communication.DTOs;
+﻿using SalesSystem.SharedKernel.DTOs;
 
 namespace SalesSystem.Catalog.Domain.Interfaces.Services
 {

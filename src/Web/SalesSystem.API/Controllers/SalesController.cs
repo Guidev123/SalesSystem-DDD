@@ -11,7 +11,7 @@ using SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem;
 using SalesSystem.Sales.Application.DTOs;
 using SalesSystem.Sales.Application.Queries.Orders.GetCustomerCart;
 using SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.API.Controllers

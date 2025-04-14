@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.Payments.Application.Commands.Payments.Checkout;
 using SalesSystem.Payments.Application.Commands.Payments.Confirm;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 
 namespace SalesSystem.API.Controllers
 {

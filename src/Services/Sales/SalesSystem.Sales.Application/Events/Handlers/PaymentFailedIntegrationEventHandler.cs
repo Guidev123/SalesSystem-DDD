@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseStock;
-using SalesSystem.SharedKernel.Communication.Mediator;
-using SalesSystem.SharedKernel.Messages.CommonMessages.IntegrationEvents.Payments;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
+using SalesSystem.SharedKernel.Events.IntegrationEvents.Payments;
 
 namespace SalesSystem.Sales.Application.Events.Handlers
 {

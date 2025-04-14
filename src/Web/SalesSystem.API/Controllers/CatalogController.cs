@@ -7,7 +7,7 @@ using SalesSystem.Catalog.Application.Queries.Categories.GetAll;
 using SalesSystem.Catalog.Application.Queries.Products.GetAll;
 using SalesSystem.Catalog.Application.Queries.Products.GetByCategory;
 using SalesSystem.Catalog.Application.Queries.Products.GetById;
-using SalesSystem.SharedKernel.Communication.Mediator;
+using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Enums;
 
 namespace SalesSystem.API.Controllers
