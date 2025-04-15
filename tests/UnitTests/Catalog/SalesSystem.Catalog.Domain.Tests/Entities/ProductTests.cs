@@ -2,11 +2,12 @@
 using SalesSystem.Catalog.Domain.ValueObjects;
 using SalesSystem.SharedKernel.DomainObjects;
 
-namespace SalesSystem.Catalog.Domain.Tests
+namespace SalesSystem.Catalog.Domain.Tests.Entities
 {
     public class ProductTests
     {
-        [Fact]
+        [Fact(DisplayName = "Product validation")]
+        [Trait("Validations","Product Assertion Concern Validation")]
         public void Product_Validate_ValidationShouldThrowExceptions()
         {
             var ex = Assert.Throws<DomainException>(() =>
@@ -45,7 +46,8 @@ namespace SalesSystem.Catalog.Domain.Tests
             Assert.Equal("The field 'CategoryId' cannot be empty. Please provide a valid category ID.", ex.Message);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Dimensions validation")]
+        [Trait("Validations", "Dimensions Assertion Concern Validation")]
         public void Dimensions_Validate_ValidationShouldThrowExceptions()
         {
             var ex = Assert.Throws<DomainException>(() =>

@@ -10,6 +10,7 @@ namespace SalesSystem.Catalog.Domain.Services
     {
         private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
         private readonly IProductRepository _productRepository = productRepository;
+        private const int MIN_STOCK = 10;
 
         public async Task<bool> AddStockAsync(Guid productId, int quantity)
         {
@@ -54,7 +55,7 @@ namespace SalesSystem.Catalog.Domain.Services
 
             product.DebitStock(quantity);
 
-            if (product.QuantityInStock < 10)
+            if (product.QuantityInStock < MIN_STOCK)
                 await _mediatorHandler.PublishEventAsync(new ProductLowQuantityInStockEvent(product.QuantityInStock, product.Id));
 
             _productRepository.Update(product);
