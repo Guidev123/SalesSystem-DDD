@@ -63,8 +63,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesSystem.Payments.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesSystem.Email", "src\BuildingBlocks\SalesSystem.Email\SalesSystem.Email.csproj", "{6987B87F-3664-4A02-BBD7-65542894DC2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidR", "..\MidRProject\src\MidR\MidR.csproj", "{BBDC5136-F6B8-DF40-7A51-E6AE675694C7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,10 +141,6 @@ Global
 		{6987B87F-3664-4A02-BBD7-65542894DC2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6987B87F-3664-4A02-BBD7-65542894DC2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6987B87F-3664-4A02-BBD7-65542894DC2B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBDC5136-F6B8-DF40-7A51-E6AE675694C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBDC5136-F6B8-DF40-7A51-E6AE675694C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBDC5136-F6B8-DF40-7A51-E6AE675694C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBDC5136-F6B8-DF40-7A51-E6AE675694C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,7 +175,6 @@ Global
 		{8AED890D-0B82-485E-AD89-0F7926DB6FBF} = {8E5C26BA-97D8-4EC8-B462-A2362B0B2EA7}
 		{BEFFDC6A-B981-4412-BD34-F3087DF4ECFE} = {8E5C26BA-97D8-4EC8-B462-A2362B0B2EA7}
 		{6987B87F-3664-4A02-BBD7-65542894DC2B} = {387F47E5-1497-4AA1-B7B0-625975D8E9F3}
-		{BBDC5136-F6B8-DF40-7A51-E6AE675694C7} = {387F47E5-1497-4AA1-B7B0-625975D8E9F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {18F6D81E-CC41-4B96-A864-9187DB03F686}

@@ -4,7 +4,6 @@ using SalesSystem.Email;
 using SalesSystem.Email.Models;
 using SalesSystem.EventSourcing;
 using SalesSystem.Payments.ACL.Configurations;
-using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SendGrid.Extensions.DependencyInjection;
