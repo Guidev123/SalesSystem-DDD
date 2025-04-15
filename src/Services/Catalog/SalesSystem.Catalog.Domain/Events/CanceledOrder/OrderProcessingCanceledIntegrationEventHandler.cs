@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 
@@ -8,7 +8,7 @@ namespace SalesSystem.Catalog.Domain.Events.CanceledOrder
     {
         private readonly IStockService _stockService = stockService;
 
-        public async Task Handle(OrderProcessingCanceledIntegrationEvent notification, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(OrderProcessingCanceledIntegrationEvent notification, CancellationToken cancellationToken)
         {
             await _stockService.AddListStockAsync(notification.OrderProducts);
         }

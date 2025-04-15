@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
@@ -14,7 +14,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Start
         private readonly INotificator _notificator = notificator;
         private readonly IOrderRepository _orderRepository = orderRepository;
 
-        public async Task<Response<StartOrderResponse>> Handle(StartOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Response<StartOrderResponse>> ExecuteAsync(StartOrderCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<StartOrderResponse>.Failure(request.GetErrorMessages());

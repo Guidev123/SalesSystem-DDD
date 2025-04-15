@@ -13,10 +13,10 @@ using System.Text;
 namespace SalesSystem.Register.Infrastructure.Services
 {
     public sealed class JwtGeneratorService(UserManager<User> userManager,
-                                            IOptions<AppSettings> appSettings)
+                                            IOptions<JwtExtension> appSettings)
                                           : IJwtGeneratorService
     {
-        private readonly AppSettings appSettings = appSettings.Value;
+        private readonly JwtExtension appSettings = appSettings.Value;
 
         public async Task<SignInUserResponse> JwtGenerator(string email)
         {

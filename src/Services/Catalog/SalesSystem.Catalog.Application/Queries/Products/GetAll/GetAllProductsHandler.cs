@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -13,7 +13,7 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
         private readonly INotificator _notificator = notificator;
         private readonly IProductRepository _productRepository = productRepository;
 
-        public async Task<PagedResponse<GetAllProductsResponse>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<GetAllProductsResponse>> ExecuteAsync(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await _productRepository.GetAllAsync(request.PageNumber, request.PageSize);
             if (products is null)

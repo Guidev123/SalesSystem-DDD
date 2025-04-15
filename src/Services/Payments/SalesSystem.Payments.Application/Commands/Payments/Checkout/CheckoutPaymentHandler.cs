@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Payments.Application.Mappers;
 using SalesSystem.Payments.Application.Services;
 using SalesSystem.Payments.Domain.Repositories;
@@ -12,7 +12,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
                                                IPaymentRepository paymentRepository)
                                              : IRequestHandler<CheckoutPaymentCommand, Response<CheckoutPaymentResponse>>
     {
-        public async Task<Response<CheckoutPaymentResponse>> Handle(CheckoutPaymentCommand request, CancellationToken cancellationToken)
+        public async Task<Response<CheckoutPaymentResponse>> ExecuteAsync(CheckoutPaymentCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<CheckoutPaymentResponse>.Failure(request.GetErrorMessages());

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
@@ -14,7 +14,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
         private readonly INotificator _notificator = notificator;
         private readonly IOrderRepository _orderRepository = orderRepository;
 
-        public async Task<Response<ApplyVoucherResponse>> Handle(ApplyVoucherCommand request, CancellationToken cancellationToken)
+        public async Task<Response<ApplyVoucherResponse>> ExecuteAsync(ApplyVoucherCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<ApplyVoucherResponse>.Failure(request.GetErrorMessages());

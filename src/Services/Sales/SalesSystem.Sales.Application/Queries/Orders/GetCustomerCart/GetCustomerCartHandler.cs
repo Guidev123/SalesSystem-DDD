@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Application.DTOs;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Repositories;
@@ -14,7 +14,7 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerCart
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly INotificator _notificator = notificator;
 
-        public async Task<Response<CartDTO>> Handle(GetCustomerCartQuery request, CancellationToken cancellationToken)
+        public async Task<Response<CartDTO>> ExecuteAsync(GetCustomerCartQuery request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId).ConfigureAwait(false);
             if (order is null)

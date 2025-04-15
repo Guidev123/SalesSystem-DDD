@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Register.Application.DTOs;
 using SalesSystem.Register.Application.Mappers;
 using SalesSystem.Register.Domain.Repositories;
@@ -11,7 +11,7 @@ namespace SalesSystem.Register.Application.Queries.Customers.GetAddress
                                                     INotificator notificator)
                                                   : IRequestHandler<GetAddressByCustomerQuery, Response<AddressDTO>>
     {
-        public async Task<Response<AddressDTO>> Handle(GetAddressByCustomerQuery request, CancellationToken cancellationToken)
+        public async Task<Response<AddressDTO>> ExecuteAsync(GetAddressByCustomerQuery request, CancellationToken cancellationToken)
         {
             var customerAddress = await customerRepository.GetAddressByCustomerIdAsync(request.CustomerId);
             if (customerAddress is null)

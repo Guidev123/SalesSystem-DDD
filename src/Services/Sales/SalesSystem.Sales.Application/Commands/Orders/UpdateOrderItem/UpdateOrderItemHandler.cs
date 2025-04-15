@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
@@ -14,7 +14,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
         private readonly INotificator _notificator = notificator;
         private readonly IOrderRepository _orderRepository = orderRepository;
 
-        public async Task<Response<UpdateOrderItemResponse>> Handle(UpdateOrderItemCommand request, CancellationToken cancellationToken)
+        public async Task<Response<UpdateOrderItemResponse>> ExecuteAsync(UpdateOrderItemCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<UpdateOrderItemResponse>.Failure(request.GetErrorMessages());

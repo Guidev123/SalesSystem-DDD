@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Register.Application.Events;
 using SalesSystem.Register.Application.Mappers;
 using SalesSystem.Register.Domain.Repositories;
@@ -13,7 +13,7 @@ namespace SalesSystem.Register.Application.Commands.Customers.Create
                                               INotificator notificator)
                                             : IRequestHandler<CreateCustomerCommand, Response<CreateCustomerResponse>>
     {
-        public async Task<Response<CreateCustomerResponse>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<Response<CreateCustomerResponse>> ExecuteAsync(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
             {

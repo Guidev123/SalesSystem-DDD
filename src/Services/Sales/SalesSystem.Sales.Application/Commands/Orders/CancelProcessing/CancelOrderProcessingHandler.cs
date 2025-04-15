@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
@@ -12,7 +12,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessing
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly INotificator _notificator = notificator;
 
-        public async Task<Response<CancelOrderProcessingResponse>> Handle(CancelOrderProcessingCommand request, CancellationToken cancellationToken)
+        public async Task<Response<CancelOrderProcessingResponse>> ExecuteAsync(CancelOrderProcessingCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<CancelOrderProcessingResponse>.Failure(request.GetErrorMessages());

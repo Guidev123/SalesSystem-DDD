@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Register.Application.Events;
 using SalesSystem.Register.Application.Services;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
@@ -12,7 +12,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
                                                 IMediatorHandler mediator)
                                               : IRequestHandler<RegisterUserCommand, Response<RegisterUserResponse>>
     {
-        public async Task<Response<RegisterUserResponse>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<Response<RegisterUserResponse>> ExecuteAsync(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<RegisterUserResponse>.Failure(request.GetErrorMessages());

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -13,7 +13,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
         private readonly INotificator _notificator = notificator;
         private readonly IProductRepository _productRepository = productRepository;
 
-        public async Task<Response<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Response<CreateProductResponse>> ExecuteAsync(CreateProductCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<CreateProductResponse>.Failure(request.GetErrorMessages());

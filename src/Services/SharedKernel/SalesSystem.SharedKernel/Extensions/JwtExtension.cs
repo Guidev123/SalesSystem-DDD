@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.SharedKernel.Extensions
 {
-    public class AppSettings
+    public class JwtExtension
     {
         public string? Secret { get; set; }
         public int ExpiresAt { get; set; }

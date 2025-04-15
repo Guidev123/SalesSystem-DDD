@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Register.Application.DTOs;
 using SalesSystem.Register.Application.Mappers;
 using SalesSystem.Register.Application.Services;
@@ -13,8 +13,8 @@ namespace SalesSystem.Register.Application.Queries.Customers.GetById
                                                IAuthenticationService authenticationService)
                                              : IRequestHandler<GetCustomerByIdQuery, Response<CustomerDTO>>
     {
-        public async Task<Response<CustomerDTO>> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
-        {
+        public async Task<Response<CustomerDTO>> ExecuteAsync(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+        {   
             var customer = await customerRepository.GetCustomerAddressByIdAsync(request.CustomerId);
             if(customer is null)
             {

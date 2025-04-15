@@ -1,5 +1,4 @@
-﻿using SalesSystem.SharedKernel.Abstractions;
-using SalesSystem.SharedKernel.Events;
+﻿using SalesSystem.SharedKernel.Events;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.SharedKernel.Abstractions.Mediator

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Register.Application.Mappers;
 using SalesSystem.Register.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -10,7 +10,7 @@ namespace SalesSystem.Register.Application.Commands.Customers.AddAddress
                                           INotificator notificator)
                                         : IRequestHandler<AddAddressCommand, Response<AddAddressResponse>>
     {
-        public async Task<Response<AddAddressResponse>> Handle(AddAddressCommand request, CancellationToken cancellationToken)
+        public async Task<Response<AddAddressResponse>> ExecuteAsync(AddAddressCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<AddAddressResponse>.Failure(request.GetErrorMessages());

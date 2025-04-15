@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SalesSystem.SharedKernel.Abstractions;
+﻿using MidR.Interfaces;
 using SalesSystem.SharedKernel.Data.EventSourcing;
 using SalesSystem.SharedKernel.Events;
 using SalesSystem.SharedKernel.Events.DomainEvents;
@@ -13,16 +12,16 @@ namespace SalesSystem.SharedKernel.Abstractions.Mediator
     {
         public async Task PublishEventAsync<T>(T @event) where T : Event
         {
-            await mediator.Publish(@event);
+            await mediator.NotifyAsync(@event);
 
             if (!@event.GetType().BaseType!.Name.Equals(nameof(DomainEvent)))
                 await eventSourcingRepository.SaveAsync(@event);
         }
 
-        public async Task<Response<T>> SendCommand<T>(Command<T> command) => await mediator.Send(command);
+        public async Task<Response<T>> SendCommand<T>(Command<T> command) => await mediator.DispatchAsync(command);
 
-        public async Task<Response<T>> SendQuery<T>(IQuery<T> query) => await mediator.Send(query);
+        public async Task<Response<T>> SendQuery<T>(IQuery<T> query) => await mediator.DispatchAsync(query);
 
-        public async Task<PagedResponse<T>> SendQuery<T>(IPagedQuery<T> query) => await mediator.Send(query);
+        public async Task<PagedResponse<T>> SendQuery<T>(IPagedQuery<T> query) => await mediator.DispatchAsync(query);
     }
 }

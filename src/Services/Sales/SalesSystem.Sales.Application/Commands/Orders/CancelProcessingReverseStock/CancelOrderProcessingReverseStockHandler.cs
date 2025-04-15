@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.DTOs;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
@@ -14,7 +14,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly INotificator _notificator = notificator;
 
-        public async Task<Response<CancelOrderProcessingReverseStockResponse>> Handle(CancelOrderProcessingReverseStockCommand request, CancellationToken cancellationToken)
+        public async Task<Response<CancelOrderProcessingReverseStockResponse>> ExecuteAsync(CancelOrderProcessingReverseStockCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<CancelOrderProcessingReverseStockResponse>.Failure(request.GetErrorMessages());

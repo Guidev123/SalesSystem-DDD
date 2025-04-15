@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MidR.Interfaces;
+using SalesSystem.Register.Application;
 using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
 using SalesSystem.Register.Application.Commands.Authentication.CreateRole;
 using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
@@ -15,7 +17,8 @@ namespace SalesSystem.API.Controllers
 {
     [Route("api/v1/register")]
     public class RegisterController(IHttpContextAccessor httpContextAccessor,
-                                IMediatorHandler mediator)
+                                IMediatorHandler mediator,
+                                IMediator mediator1)
                               : MainController(httpContextAccessor)
     {
         [HttpGet]
@@ -24,7 +27,7 @@ namespace SalesSystem.API.Controllers
 
         [HttpPost]
         public async Task<IResult> RegisterAsync(RegisterUserCommand command)
-            => CustomResponse(await mediator.SendCommand(command));
+            => CustomResponse(await mediator1.DispatchAsync(command));
 
         [HttpPost("login")]
         public async Task<IResult> SignInAsync(SignInUserCommand command)

@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Results;
-using MediatR;
+using MidR.Interfaces;
 using SalesSystem.SharedKernel.Messages;
 using SalesSystem.SharedKernel.Responses;
 using System.Text.Json.Serialization;

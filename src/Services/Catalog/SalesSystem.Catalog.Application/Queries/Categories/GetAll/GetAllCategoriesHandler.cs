@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.SharedKernel.Notifications;
@@ -13,7 +13,7 @@ namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
         private readonly INotificator _notification = notification;
         private readonly IProductRepository _productRepository = productRepository;
 
-        public async Task<Response<GetAllCategoriesResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetAllCategoriesResponse>> ExecuteAsync(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             var categories = await _productRepository.GetAllCategoriesAsync();
             if (categories is null)

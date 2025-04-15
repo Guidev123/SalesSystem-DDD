@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.SharedKernel.Messages;
 
 namespace SalesSystem.SharedKernel.Events

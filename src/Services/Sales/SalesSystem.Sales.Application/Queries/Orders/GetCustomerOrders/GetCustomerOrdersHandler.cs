@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Sales.Application.DTOs;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Enums;
@@ -15,7 +15,7 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly INotificator _notificator = notificator;
 
-        public async Task<PagedResponse<IEnumerable<OrderDTO>>> Handle(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<IEnumerable<OrderDTO>>> ExecuteAsync(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
         {
             var orders = await _orderRepository.GetAllByCutomerIdAsync(request.pageSize, request.pageNumber, request.CustomerId).ConfigureAwait(false);
 

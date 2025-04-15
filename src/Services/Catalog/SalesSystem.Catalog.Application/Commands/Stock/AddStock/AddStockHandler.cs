@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
@@ -12,7 +12,7 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.AddStock
         private readonly INotificator _notificator = notificator;
         private readonly IStockService _stockService = stockService;
 
-        public async Task<Response<AddStockResponse>> Handle(AddStockCommand request, CancellationToken cancellationToken)
+        public async Task<Response<AddStockResponse>> ExecuteAsync(AddStockCommand request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
                 return Response<AddStockResponse>.Failure(request.GetErrorMessages());

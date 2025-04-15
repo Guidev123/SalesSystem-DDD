@@ -1,8 +1,10 @@
-﻿using SalesSystem.API.Middlewares;
+﻿using MidR.DependencyInjection;
+using SalesSystem.API.Middlewares;
 using SalesSystem.Email;
 using SalesSystem.Email.Models;
 using SalesSystem.EventSourcing;
 using SalesSystem.Payments.ACL.Configurations;
+using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SendGrid.Extensions.DependencyInjection;
@@ -14,6 +16,10 @@ namespace SalesSystem.API.Configuration
     {
         public const int DEFAULT_PAGE_NUMBER = 1;
         public const int DEFAULT_PAGE_SIZE = 15;
+        private const string HANDLERS_SALES_NAME = "SalesSystem.Sales.Application";
+        private const string HANDLERS_CATALOG_NAME = "SalesSystem.Catalog.Application";
+        private const string HANDLERS_REGISTER_NAME = "SalesSystem.Register.Application";
+        private const string HANDLERS_PAYMENTS_NAME = "SalesSystem.Payments.Application";
 
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
@@ -43,7 +49,14 @@ namespace SalesSystem.API.Configuration
         }
 
         public static void AddHandlers(this WebApplicationBuilder builder)
-            => builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies([.. Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "SalesSystem.*.dll").Select(Assembly.LoadFrom)]));
+        {
+            Assembly.Load(HANDLERS_SALES_NAME);
+            Assembly.Load(HANDLERS_CATALOG_NAME);
+            Assembly.Load(HANDLERS_REGISTER_NAME);
+            Assembly.Load(HANDLERS_PAYMENTS_NAME);
+
+            builder.Services.AddMidR(HANDLERS_SALES_NAME, HANDLERS_CATALOG_NAME, HANDLERS_REGISTER_NAME, HANDLERS_PAYMENTS_NAME);
+        }
 
         public static void AddCustomMiddlewares(this WebApplicationBuilder builder)
         {

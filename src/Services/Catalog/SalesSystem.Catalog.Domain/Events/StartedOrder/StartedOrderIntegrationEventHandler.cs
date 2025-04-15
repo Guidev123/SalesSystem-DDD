@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MidR.Interfaces;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
@@ -16,7 +16,7 @@ namespace SalesSystem.Catalog.Domain.Events.StartedOrder
             _mediatorHandler = mediatorHandler;
         }
 
-        public async Task Handle(StartedOrderIntegrationEvent notification, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(StartedOrderIntegrationEvent notification, CancellationToken cancellationToken)
         {
             var resultStock = await _stockService.DebitListStockAsync(notification.OrderProductsList).ConfigureAwait(false);
             if (resultStock)

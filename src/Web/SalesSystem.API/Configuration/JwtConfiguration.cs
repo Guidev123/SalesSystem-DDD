@@ -10,10 +10,10 @@ namespace SalesSystem.API.Configuration
         public static void AddJwtConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var appSettingsSection = configuration.GetSection(nameof(AppSettings));
-            services.Configure<AppSettings>(appSettingsSection);
+            var appSettingsSection = configuration.GetSection(nameof(JwtExtension));
+            services.Configure<JwtExtension>(appSettingsSection);
 
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            var appSettings = appSettingsSection.Get<JwtExtension>();
             var key = Encoding.ASCII.GetBytes(appSettings?.Secret ?? string.Empty);
 
             services.AddAuthentication(x =>
