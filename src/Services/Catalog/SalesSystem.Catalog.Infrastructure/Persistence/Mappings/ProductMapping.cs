@@ -24,6 +24,11 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Mappings
                 tf.Property(x => x.Depth).HasColumnName("Depth").HasColumnType("int").IsRequired();
                 tf.Property(x => x.Width).HasColumnName("Width").HasColumnType("int").IsRequired();
             });
+
+            builder.HasOne(x => x.Category)
+                       .WithMany()
+                       .HasForeignKey(x => x.CategoryId)
+                       .IsRequired();
         }
     }
 }

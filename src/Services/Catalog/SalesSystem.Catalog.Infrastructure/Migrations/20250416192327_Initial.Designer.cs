@@ -12,7 +12,7 @@ using SalesSystem.Catalog.Infrastructure.Persistence;
 namespace SalesSystem.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20250310122334_Initial")]
+    [Migration("20250416192327_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -91,7 +91,7 @@ namespace SalesSystem.Catalog.Infrastructure.Migrations
             modelBuilder.Entity("SalesSystem.Catalog.Domain.Entities.Product", b =>
                 {
                     b.HasOne("SalesSystem.Catalog.Domain.Entities.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -125,11 +125,6 @@ namespace SalesSystem.Catalog.Infrastructure.Migrations
 
                     b.Navigation("Dimensions")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SalesSystem.Catalog.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

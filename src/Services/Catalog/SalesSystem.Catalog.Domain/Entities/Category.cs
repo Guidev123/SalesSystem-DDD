@@ -16,14 +16,13 @@ namespace SalesSystem.Catalog.Domain.Entities
 
         public string Name { get; } = string.Empty;
         public int Code { get; }
-        public List<Product> Products { get; private set; } = [];
 
         public override string ToString() => $"{Name}-{Code}";
 
         public override void Validate()
         {
             AssertionConcern.EnsureNotEmpty(Name, "The field 'Name' cannot be empty. Please provide a valid product name.");
-            AssertionConcern.EnsureEqual(Code, 0, "The field 'Code' cannot be 0");
+            AssertionConcern.EnsureDifferent(Code, 0, "The field 'Code' cannot be 0");
         }
     }
 }

@@ -88,7 +88,7 @@ namespace SalesSystem.Catalog.Infrastructure.Migrations
             modelBuilder.Entity("SalesSystem.Catalog.Domain.Entities.Product", b =>
                 {
                     b.HasOne("SalesSystem.Catalog.Domain.Entities.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -122,11 +122,6 @@ namespace SalesSystem.Catalog.Infrastructure.Migrations
 
                     b.Navigation("Dimensions")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SalesSystem.Catalog.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
