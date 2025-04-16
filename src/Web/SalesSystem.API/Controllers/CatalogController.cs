@@ -30,8 +30,8 @@ namespace SalesSystem.API.Controllers
             => CustomResponse(await mediatorHandler.SendQuery(new GetProductsByCategoryQuery(pageNumber, pageSize, code)).ConfigureAwait(false));
 
         [HttpGet("category")]
-        public async Task<IResult> GetAllCategoriesAsync()
-            => CustomResponse(await mediatorHandler.SendQuery(new GetAllCategoriesQuery()).ConfigureAwait(false));
+        public async Task<IResult> GetAllCategoriesAsync(int pageNumber = ApiConfiguration.DEFAULT_PAGE_NUMBER, int pageSize = ApiConfiguration.DEFAULT_PAGE_SIZE)
+            => CustomResponse(await mediatorHandler.SendQuery(new GetAllCategoriesQuery(pageNumber, pageSize)).ConfigureAwait(false));
 
         [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPost]

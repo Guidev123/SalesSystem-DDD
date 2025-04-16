@@ -1,7 +1,7 @@
 ﻿using MidR.Interfaces;
+using SalesSystem.Catalog.Application.DTOs;
 using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Application.Storage;
-using SalesSystem.Catalog.Domain.Entities;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
@@ -16,10 +16,9 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
         public async Task<PagedResponse<GetAllProductsResponse>> ExecuteAsync(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var cacheKey = $"products_{request.PageNumber}_{request.PageSize}";
-            var cacheProduct = await cache.GetAsync<IEnumerable<Product>>(cacheKey);
+            var cacheProduct = await cache.GetAsync<IEnumerable<ProductDto>>(cacheKey);
             if (cacheProduct is not null)
-                return PagedResponse<GetAllProductsResponse>.Success(new(cacheProduct.Select(x => x.MapFromEntity())),
-                cacheProduct.Count(), request.PageNumber, request.PageSize);
+                return PagedResponse<GetAllProductsResponse>.Success(new(cacheProduct), cacheProduct.Count(), request.PageNumber, request.PageSize);
 
             var products = await productRepository.GetAllAsync(request.PageNumber, request.PageSize);
             if (products is null)
@@ -28,10 +27,11 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
                 return PagedResponse<GetAllProductsResponse>.Failure(notificator.GetNotifications());
             }
 
-            await cache.SetAsync(cacheKey, products);
+            var productsResult = products.Select(x => x.MapFromEntity());
 
-            return PagedResponse<GetAllProductsResponse>.Success(new(products.Select(x => x.MapFromEntity())),
-                products.Count(), request.PageNumber, request.PageSize);
+            await cache.SetAsync(cacheKey, productsResult);
+
+            return PagedResponse<GetAllProductsResponse>.Success(new(productsResult), productsResult.Count(), request.PageNumber, request.PageSize);
         }
     }
 }
