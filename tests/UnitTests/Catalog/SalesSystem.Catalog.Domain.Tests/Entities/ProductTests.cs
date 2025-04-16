@@ -1,4 +1,5 @@
-﻿using SalesSystem.Catalog.Domain.Entities;
+﻿using Bogus;
+using SalesSystem.Catalog.Domain.Entities;
 using SalesSystem.Catalog.Domain.ValueObjects;
 using SalesSystem.SharedKernel.DomainObjects;
 
@@ -70,6 +71,40 @@ namespace SalesSystem.Catalog.Domain.Tests.Entities
             });
 
             Assert.Equal("The 'Depth' field must be equal or greater than 1.", ex.Message);
+        }
+
+        [Fact(DisplayName = "Should throw if adding stock with quantity <= 0")]
+        [Trait("Domain", "Product")]
+        public void Product_AddStock_ShouldThrowIfInvalidQuantity()
+        {
+            var product = CreateValidProduct();
+
+            var ex = Assert.Throws<DomainException>(() => product.AddStock(0));
+            Assert.Equal("The 'Quantity' must be greater than 0", ex.Message);
+        }
+
+        [Fact(DisplayName = "Should return true if has enough stock")]
+        [Trait("Domain", "Product")]
+        public void Product_HasStock_ShouldReturnTrueIfEnough()
+        {
+            var product = CreateValidProduct();
+            product.AddStock(5);
+
+            Assert.True(product.HasStock(3));
+            Assert.False(product.HasStock(10));
+        }
+
+        private static Product CreateValidProduct()
+        {
+            var faker = new Faker();
+            return new Product(
+                faker.Commerce.ProductName(),
+                faker.Commerce.ProductDescription(),
+                faker.Random.Decimal(1, 1000),
+                faker.Internet.Url(),
+                Guid.NewGuid(),
+                new Dimensions(10, 10, 10)
+            );
         }
     }
 }
