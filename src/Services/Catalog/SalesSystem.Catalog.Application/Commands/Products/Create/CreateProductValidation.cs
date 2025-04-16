@@ -14,6 +14,9 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
                 .NotEmpty().WithMessage("Product description is required.")
                 .MaximumLength(500).WithMessage("Product description must not exceed 500 characters.");
 
+            RuleFor(p => p.Image)
+                .Must(IsBase64).WithMessage("Product image must be a valid Base64 string.");
+
             RuleFor(p => p.Price)
                 .GreaterThan(0).WithMessage("Product price must be greater than zero.");
 
@@ -31,6 +34,15 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
 
             RuleFor(p => p.CategoryId)
                 .NotEmpty().WithMessage("Category ID is required.");
+        }
+
+        private bool IsBase64(string base64)
+        {
+            if (string.IsNullOrWhiteSpace(base64))
+                return false;
+
+            Span<byte> buffer = new(new byte[base64.Length]);
+            return Convert.TryFromBase64String(base64, buffer, out _);
         }
     }
 }

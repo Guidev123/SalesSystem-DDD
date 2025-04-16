@@ -33,7 +33,7 @@ namespace SalesSystem.API.Controllers
         public async Task<IResult> GetAllCategoriesAsync(int pageNumber = ApiConfiguration.DEFAULT_PAGE_NUMBER, int pageSize = ApiConfiguration.DEFAULT_PAGE_SIZE)
             => CustomResponse(await mediatorHandler.SendQuery(new GetAllCategoriesQuery(pageNumber, pageSize)).ConfigureAwait(false));
 
-        //[Authorize(Roles = nameof(EUserRoles.Admin))]
+        [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPost]
         public async Task<IResult> CreateAsync(CreateProductCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command).ConfigureAwait(false));
