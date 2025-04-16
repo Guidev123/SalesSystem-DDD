@@ -8,7 +8,7 @@ namespace Catalog.UnitTests.Domain.Entities
     public class ProductTests
     {
         [Fact(DisplayName = "Product validation")]
-        [Trait("Validations","Product Assertion Concern Validation")]
+        [Trait("Catalog Domain", "Product Tests")]
         public void Product_Validate_ValidationShouldThrowExceptions()
         {
             var ex = Assert.Throws<DomainException>(() =>
@@ -48,7 +48,7 @@ namespace Catalog.UnitTests.Domain.Entities
         }
 
         [Fact(DisplayName = "Dimensions validation")]
-        [Trait("Validations", "Dimensions Assertion Concern Validation")]
+        [Trait("Catalog Domain", "Product Tests")]
         public void Dimensions_Validate_ValidationShouldThrowExceptions()
         {
             var ex = Assert.Throws<DomainException>(() =>
@@ -74,7 +74,7 @@ namespace Catalog.UnitTests.Domain.Entities
         }
 
         [Fact(DisplayName = "Should throw if adding stock with quantity <= 0")]
-        [Trait("Domain", "Product")]
+        [Trait("Catalog Domain", "Product Tests")]
         public void Product_AddStock_ShouldThrowIfInvalidQuantity()
         {
             var product = CreateValidProduct();
@@ -84,7 +84,7 @@ namespace Catalog.UnitTests.Domain.Entities
         }
 
         [Fact(DisplayName = "Should return true if has enough stock")]
-        [Trait("Domain", "Product")]
+        [Trait("Catalog Domain", "Product Tests")]
         public void Product_HasStock_ShouldReturnTrueIfEnough()
         {
             var product = CreateValidProduct();

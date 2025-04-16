@@ -25,8 +25,8 @@ namespace Catalog.UnitTests.Domain.Services
             _mediator = _mocker.GetMock<IMediatorHandler>();
         }
 
-        [Fact(DisplayName = "Add Stock Product With Success")]
-        [Trait("Domain Services", "Stock Service test for Insertion of a product")]
+        [Fact(DisplayName = "Add Stock Single Product With Success")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_AddStockAsync_ShouldReturnTrueIfProductIsValid()
         {
             // Arrange
@@ -53,8 +53,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(product), Times.Once);
         }
 
-        [Fact(DisplayName = "Add Stock Products With Success")]
-        [Trait("Domain Services", "Stock Service test for Insertions of products")]
+        [Fact(DisplayName = "Add Stock Many Products With Success")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_AddListStockAsync_ShouldReturnTrueIfProductIsValid()
         {
             // Arrange
@@ -79,8 +79,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(It.IsAny<Product>()), Times.Exactly(5));
         }
 
-        [Fact(DisplayName = "Add Stock Products With Fail")]
-        [Trait("Domain Services", "Stock Service test for Insertion of a product")]
+        [Fact(DisplayName = "Add Stock Many Products With Fail")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_AddStockAsync_ShouldReturnFalseIfProductIsNull()
         {
             // Arrange
@@ -107,9 +107,9 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(product), Times.Never);
         }
 
-        [Fact(DisplayName = "Add Stock Products With Fail")]
-        [Trait("Domain Services", "Stock Service test for Insertions of products")]
-        public async Task StockService_AddListStockAsync_ShouldReturnTrueIfProductIsNull()
+        [Fact(DisplayName = "Add Stock Many Products With Fail")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
+        public async Task StockService_AddListStockAsync_ShouldReturnFalseIfProductIsNull()
         {
             // Arrange
             var stockService = _mocker.CreateInstance<StockService>();
@@ -133,8 +133,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(It.IsAny<Product>()), Times.Never);
         }
 
-        [Fact(DisplayName = "Debit Stock Product With Success")]
-        [Trait("Domain Services", "Stock Service test for Debit of product")]
+        [Fact(DisplayName = "Debit Stock Single Product With Success")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_DebitStockAsync_ShouldReturnTrueIfIsSuccess()
         {
             // Arrange
@@ -159,8 +159,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(product), Times.Once);
         }
 
-        [Fact(DisplayName = "Debit Stock Products With Success")]
-        [Trait("Domain Services", "Stock Service test for Debit of products")]
+        [Fact(DisplayName = "Debit Stock Many Products With Success")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_DebitListStockAsync_ShouldReturnTrueIfIsSuccess()
         {
             // Arrange
@@ -188,8 +188,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(It.IsAny<Product>()), Times.Exactly(5));
         }
 
-        [Fact(DisplayName = "Debit Stock Products With Fail")]
-        [Trait("Domain Services", "Stock Service test for Debit of products")]
+        [Fact(DisplayName = "Debit Stock Many Products With Fail")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_DebitListStockAsync_ShouldReturnFalseIfQuantityInStockIsLowerThanDebitQuantity()
         {
             // Arrange
@@ -216,8 +216,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(It.IsAny<Product>()), Times.Never);
         }
 
-        [Fact(DisplayName = "Debit Stock Product With Fail")]
-        [Trait("Domain Services", "Stock Service test for Debit of product")]
+        [Fact(DisplayName = "Debit Stock Single Product With Fail")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_DebitStockAsync_ShouldReturnFalseIfQuantityInStockIsLowerThanDebitQuantity()
         {
             // Arrange
@@ -241,8 +241,8 @@ namespace Catalog.UnitTests.Domain.Services
             _productRepository.Verify(x => x.Update(product), Times.Never);
         }
 
-        [Fact(DisplayName = "Debit Stock Product With Success and Publish Notification")]
-        [Trait("Domain Services", "Stock Service test for Debit of product")]
+        [Fact(DisplayName = "Debit Stock Single Product With Success and Publish Notification")]
+        [Trait("Catalog Domain Services", "Stock Service Tests")]
         public async Task StockService_DebitStockAsync_ShouldReturnTrueAndPublishNotificationIfQuantityInStockIsLessThan10()
         {
             // Arrange
