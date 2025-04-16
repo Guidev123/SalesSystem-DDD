@@ -2,11 +2,11 @@
 using SalesSystem.Register.Domain.ValueObjects;
 using System.Text.RegularExpressions;
 
-namespace SalesSystem.Register.Application.Commands.Authentication.Register
+namespace SalesSystem.Register.Application.Commands.Authentication.SignUp
 {
-    public sealed class RegisterUserValidation : AbstractValidator<RegisterUserCommand>
+    public sealed class SignUpUserValidation : AbstractValidator<SignUpUserCommand>
     {
-        public RegisterUserValidation()
+        public SignUpUserValidation()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("The {PropertyName} field cannot be empty.")

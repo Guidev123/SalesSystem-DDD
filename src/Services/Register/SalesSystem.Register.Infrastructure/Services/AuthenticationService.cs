@@ -6,9 +6,9 @@ using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
 using SalesSystem.Register.Application.Commands.Authentication.CreateRole;
 using SalesSystem.Register.Application.Commands.Authentication.Delete;
 using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
-using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
+using SalesSystem.Register.Application.Commands.Authentication.SignUp;
 using SalesSystem.Register.Application.DTOs;
 using SalesSystem.Register.Application.Services;
 using SalesSystem.Register.Infrastructure.Mappers;
@@ -34,7 +34,7 @@ namespace SalesSystem.Register.Infrastructure.Services
         private readonly INotificator _notificator = notificator;
         private readonly IEmailService _emailService = emailService;
 
-        public async Task<Response<RegisterUserResponse>> RegisterAsync(RegisterUserCommand command)
+        public async Task<Response<SignUpUserResponse>> RegisterAsync(SignUpUserCommand command)
         {
             var user = command.MapToUser();
 
@@ -47,17 +47,17 @@ namespace SalesSystem.Register.Infrastructure.Services
                     _notificator.HandleNotification(new(item.Description));
                 }
 
-                return Response<RegisterUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<SignUpUserResponse>.Failure(_notificator.GetNotifications());
             }
 
             var userIdentity = await FindByUserEmailAsync(command.Email);
             if (!userIdentity.IsSuccess || userIdentity.Data is null)
             {
                 _notificator.HandleNotification(new("Fail to create user."));
-                return Response<RegisterUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<SignUpUserResponse>.Failure(_notificator.GetNotifications());
             }
 
-            return Response<RegisterUserResponse>.Success(new(userIdentity.Data.UserId), code: 201);
+            return Response<SignUpUserResponse>.Success(new(userIdentity.Data.UserId), code: 201);
         }
 
         public async Task<Response<SignInUserResponse>> SignInAsync(SignInUserCommand command)

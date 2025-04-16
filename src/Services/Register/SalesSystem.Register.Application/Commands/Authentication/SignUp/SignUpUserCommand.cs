@@ -1,10 +1,10 @@
 ﻿using SalesSystem.SharedKernel.Abstractions;
 
-namespace SalesSystem.Register.Application.Commands.Authentication.Register
+namespace SalesSystem.Register.Application.Commands.Authentication.SignUp
 {
-    public record RegisterUserCommand : Command<RegisterUserResponse>
+    public record SignUpUserCommand : Command<SignUpUserResponse>
     {
-        public RegisterUserCommand(string name, string document, string email, string password, string confirmPassword, DateTime birthDate)
+        public SignUpUserCommand(string name, string document, string email, string password, string confirmPassword, DateTime birthDate)
         {
             Name = name;
             Document = document;
@@ -23,7 +23,7 @@ namespace SalesSystem.Register.Application.Commands.Authentication.Register
 
         public override bool IsValid()
         {
-            SetValidationResult(new RegisterUserValidation().Validate(this));
+            SetValidationResult(new SignUpUserValidation().Validate(this));
             return ValidationResult!.IsValid;
         }
     }

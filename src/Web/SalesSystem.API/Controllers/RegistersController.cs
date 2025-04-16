@@ -5,9 +5,9 @@ using SalesSystem.Register.Application;
 using SalesSystem.Register.Application.Commands.Authentication.AddUserRole;
 using SalesSystem.Register.Application.Commands.Authentication.CreateRole;
 using SalesSystem.Register.Application.Commands.Authentication.ForgetPassword;
-using SalesSystem.Register.Application.Commands.Authentication.Register;
 using SalesSystem.Register.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Register.Application.Commands.Authentication.SignIn;
+using SalesSystem.Register.Application.Commands.Authentication.SignUp;
 using SalesSystem.Register.Application.Commands.Customers.AddAddress;
 using SalesSystem.Register.Application.Queries.Customers.GetById;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
@@ -15,8 +15,8 @@ using SalesSystem.SharedKernel.Enums;
 
 namespace SalesSystem.API.Controllers
 {
-    [Route("api/v1/register")]
-    public class RegisterController(IHttpContextAccessor httpContextAccessor,
+    [Route("api/v1/registers")]
+    public class RegistersController(IHttpContextAccessor httpContextAccessor,
                                 IMediatorHandler mediator,
                                 IMediator mediator1)
                               : MainController(httpContextAccessor)
@@ -26,10 +26,10 @@ namespace SalesSystem.API.Controllers
             => CustomResponse(await mediator.SendQuery(new GetCustomerByIdQuery(GetUserId())));
 
         [HttpPost]
-        public async Task<IResult> RegisterAsync(RegisterUserCommand command)
+        public async Task<IResult> SignUpAsync(SignUpUserCommand command)
             => CustomResponse(await mediator1.DispatchAsync(command));
 
-        [HttpPost("login")]
+        [HttpPost("signin")]
         public async Task<IResult> SignInAsync(SignInUserCommand command)
             => CustomResponse(await mediator.SendCommand(command));
 
