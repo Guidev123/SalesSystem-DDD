@@ -15,10 +15,12 @@ namespace SalesSystem.API.Configuration
     {
         public const int DEFAULT_PAGE_NUMBER = 1;
         public const int DEFAULT_PAGE_SIZE = 15;
-        private const string HANDLERS_SALES_NAME = "SalesSystem.Sales.Application";
-        private const string HANDLERS_CATALOG_NAME = "SalesSystem.Catalog.Application";
-        private const string HANDLERS_REGISTER_NAME = "SalesSystem.Register.Application";
-        private const string HANDLERS_PAYMENTS_NAME = "SalesSystem.Payments.Application";
+        private static readonly string[] _assemblies = 
+            ["SalesSystem.Payments.Application", 
+            "SalesSystem.Sales.Application", 
+            "SalesSystem.Catalog.Application",
+            "SalesSystem.Register.Application"
+            ];
 
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
@@ -49,12 +51,12 @@ namespace SalesSystem.API.Configuration
 
         public static void AddHandlers(this WebApplicationBuilder builder)
         {
-            Assembly.Load(HANDLERS_SALES_NAME);
-            Assembly.Load(HANDLERS_CATALOG_NAME);
-            Assembly.Load(HANDLERS_REGISTER_NAME);
-            Assembly.Load(HANDLERS_PAYMENTS_NAME);
+            foreach (var assembly in _assemblies)
+            {
+                Assembly.Load(assembly);
+            }
 
-            builder.Services.AddMidR(HANDLERS_SALES_NAME, HANDLERS_CATALOG_NAME, HANDLERS_REGISTER_NAME, HANDLERS_PAYMENTS_NAME);
+            builder.Services.AddMidR(_assemblies);
         }
 
         public static void AddCustomMiddlewares(this WebApplicationBuilder builder)
