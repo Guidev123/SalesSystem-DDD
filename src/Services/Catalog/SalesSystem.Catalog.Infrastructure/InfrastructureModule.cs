@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Storage.Blobs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SalesSystem.Catalog.Application.Storage;
@@ -16,6 +17,7 @@ namespace SalesSystem.Catalog.Infrastructure
         public static void AddCatalogModule(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCatalogDbContext(configuration);
+            services.AddBlobStorage(configuration);
             services.AddRedisCache(configuration);
             services.AddRepositories();
             services.AddDomainServices();
@@ -45,6 +47,12 @@ namespace SalesSystem.Catalog.Infrastructure
             });
 
             services.AddTransient<ICacheService, RedisService>();
+        }
+
+        public static void AddBlobStorage(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IBlobService, BlobService>();
+            services.AddSingleton(_ => new BlobServiceClient(configuration.GetConnectionString("BlobConnection")));
         }
     }
 }

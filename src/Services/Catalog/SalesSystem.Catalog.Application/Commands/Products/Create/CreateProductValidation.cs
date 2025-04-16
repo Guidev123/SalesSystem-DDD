@@ -14,9 +14,6 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
                 .NotEmpty().WithMessage("Product description is required.")
                 .MaximumLength(500).WithMessage("Product description must not exceed 500 characters.");
 
-            RuleFor(p => p.Image)
-                .NotEmpty().WithMessage("Product image is required.");
-
             RuleFor(p => p.Price)
                 .GreaterThan(0).WithMessage("Product price must be greater than zero.");
 

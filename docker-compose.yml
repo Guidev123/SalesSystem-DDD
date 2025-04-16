@@ -1,0 +1,14 @@
+services:
+  salessystem.api:
+    image: ${DOCKER_REGISTRY-}salessystemapi
+    build:
+      context: .
+      dockerfile: src/Web/SalesSystem.API/Dockerfile
+  runtracker-blob-storage:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: runtracker.blob-storage
+    volumes:
+      - ./containers/blob_storage/data:/data
+    ports:
+      - "10000:10000"
+    command: "azurite-blob --blobHost 0.0.0.0 -l /data --skipApiVersionCheck"
