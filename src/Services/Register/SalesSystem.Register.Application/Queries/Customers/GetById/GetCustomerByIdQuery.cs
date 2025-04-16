@@ -3,7 +3,7 @@ using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Register.Application.Queries.Customers.GetById
 {
-    public record GetCustomerByIdQuery(Guid CustomerId) : IQuery<CustomerDTO>
+    public record GetCustomerByIdQuery(Guid CustomerId) : IQuery<CustomerDto>
     {
     }
 }

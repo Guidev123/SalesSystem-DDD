@@ -10,12 +10,12 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
 {
     public sealed class GetCustomerOrdersHandler(IOrderRepository orderRepository,
                                                  INotificator notificator)
-                                               : IRequestHandler<GetCustomerOrdersQuery, PagedResponse<IEnumerable<OrderDTO>>>
+                                               : IRequestHandler<GetCustomerOrdersQuery, PagedResponse<IEnumerable<OrderDto>>>
     {
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly INotificator _notificator = notificator;
 
-        public async Task<PagedResponse<IEnumerable<OrderDTO>>> ExecuteAsync(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<IEnumerable<OrderDto>>> ExecuteAsync(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
         {
             var orders = await _orderRepository.GetAllByCutomerIdAsync(request.pageSize, request.pageNumber, request.CustomerId).ConfigureAwait(false);
 
@@ -24,10 +24,10 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
             if (!orders.Any())
             {
                 _notificator.HandleNotification(new("Orders not found."));
-                return PagedResponse<IEnumerable<OrderDTO>>.Failure(_notificator.GetNotifications(), code: 404);
+                return PagedResponse<IEnumerable<OrderDto>>.Failure(_notificator.GetNotifications(), code: 404);
             }
 
-            return PagedResponse<IEnumerable<OrderDTO>>.Success(orders.Select(x => x.MapFromEntity()), orders.Count(),
+            return PagedResponse<IEnumerable<OrderDto>>.Success(orders.Select(x => x.MapFromEntity()), orders.Count(),
                                                                 request.pageNumber, request.pageSize);
         }
     }

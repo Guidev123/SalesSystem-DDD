@@ -2,5 +2,5 @@
 
 namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
 {
-    public record GetAllCategoriesResponse(IEnumerable<CategoryDTO> Categories);
+    public record GetAllCategoriesResponse(IEnumerable<CategoryDto> Categories);
 }

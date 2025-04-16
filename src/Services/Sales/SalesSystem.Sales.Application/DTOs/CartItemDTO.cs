@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.Sales.Application.DTOs
 {
-    public record CartItemDTO(
+    public record CartItemDto(
         Guid ProductId,
         string ProductName,
         int Quantity,

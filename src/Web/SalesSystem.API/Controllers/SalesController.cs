@@ -63,7 +63,7 @@ namespace SalesSystem.API.Controllers
         }
 
         [HttpPost("order")]
-        public async Task<IResult> StartOrderAsync(CartDTO cart)
+        public async Task<IResult> StartOrderAsync(CartDto cart)
         {
             var userId = GetUserId();
 

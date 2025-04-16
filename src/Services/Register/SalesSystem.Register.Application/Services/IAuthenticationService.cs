@@ -18,7 +18,7 @@ namespace SalesSystem.Register.Application.Services
 
         Task<Response<ResetPasswordUserResponse>> ResetPasswordAsync(ResetPasswordUserCommand command);
 
-        Task<Response<UserDTO>> FindByUserEmailAsync(string email);
+        Task<Response<UserDto>> FindByUserEmailAsync(string email);
 
         Task<Response<IReadOnlyCollection<string>>> FindRolesByUserIdAsync(Guid userId);
 

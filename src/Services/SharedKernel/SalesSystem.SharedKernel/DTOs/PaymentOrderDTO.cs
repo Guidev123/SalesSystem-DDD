@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.SharedKernel.DTOs
 {
-    public record PaymentOrderDTO(
+    public record PaymentOrderDto(
         Guid OrderId,
         Guid CustomerId,
         string CustomerEmail,

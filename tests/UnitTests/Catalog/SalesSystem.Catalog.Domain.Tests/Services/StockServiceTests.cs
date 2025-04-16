@@ -281,19 +281,19 @@ namespace SalesSystem.Catalog.Domain.Tests.Services
                         ));
         }
 
-        private static Faker<OrderProductsListDTO> GenerateOrderProductsListDTO()
+        private static Faker<OrderProductsListDto> GenerateOrderProductsListDTO()
         {
-            return new Faker<OrderProductsListDTO>()
-                        .CustomInstantiator(p => new OrderProductsListDTO(
+            return new Faker<OrderProductsListDto>()
+                        .CustomInstantiator(p => new OrderProductsListDto(
                                 p.Random.Guid(),
                                 GenerateItemDTO().Generate(5)
                         ));
         }
 
-        private static Faker<ItemDTO> GenerateItemDTO()
+        private static Faker<ItemDto> GenerateItemDTO()
         {
-            return new Faker<ItemDTO>()
-                        .CustomInstantiator(p => new ItemDTO(
+            return new Faker<ItemDto>()
+                        .CustomInstantiator(p => new ItemDto(
                                 p.Random.Guid(),
                                 p.Random.Int(1, 10)
                         ));

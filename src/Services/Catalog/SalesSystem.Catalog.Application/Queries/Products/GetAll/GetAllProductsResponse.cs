@@ -2,5 +2,5 @@
 
 namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
 {
-    public record GetAllProductsResponse(IEnumerable<ProductDTO> Products);
+    public record GetAllProductsResponse(IEnumerable<ProductDto> Products);
 }

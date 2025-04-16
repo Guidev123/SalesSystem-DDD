@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.SharedKernel.DTOs
 {
-    public record ItemDTO(
+    public record ItemDto(
         Guid Id,
         int Quantity
         );

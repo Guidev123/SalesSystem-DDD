@@ -2,5 +2,5 @@
 
 namespace SalesSystem.Catalog.Application.Queries.Products.GetById
 {
-    public record GetProductByIdResponse(ProductDTO Product);
+    public record GetProductByIdResponse(ProductDto Product);
 }

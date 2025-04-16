@@ -7,7 +7,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
     {
         public CheckoutPaymentCommand(
             Guid orderId, decimal value,
-            string orderCode, List<ProductDTO> products
+            string orderCode, List<ProductDto> products
             )
         {
             AggregateId = orderId;
@@ -22,7 +22,7 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
         public string CustomerEmail { get; private set; } = string.Empty;
         public string OrderCode { get; } = string.Empty;
         public Guid CustomerId { get; private set; }
-        public List<ProductDTO> Products { get; } = [];
+        public List<ProductDto> Products { get; } = [];
 
         public void SetCustomerCredentials(Guid customerId, string customerEmail)
         {

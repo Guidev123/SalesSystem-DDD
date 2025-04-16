@@ -26,13 +26,13 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
                 return Response<CancelOrderProcessingReverseStockResponse>.Failure(_notificator.GetNotifications(), code: 404);
             }
 
-            var listItems = new List<ItemDTO>();
+            var listItems = new List<ItemDto>();
             foreach (var item in order.OrderItems)
             {
-                listItems.Add(new ItemDTO(item.ProductId, item.Quantity));
+                listItems.Add(new ItemDto(item.ProductId, item.Quantity));
             }
 
-            order.AddEvent(new OrderProcessingCanceledIntegrationEvent(order.Id, order.CustomerId, new OrderProductsListDTO(order.Id, listItems)));
+            order.AddEvent(new OrderProcessingCanceledIntegrationEvent(order.Id, order.CustomerId, new OrderProductsListDto(order.Id, listItems)));
             order.DraftOrder();
 
             _orderRepository.Update(order);

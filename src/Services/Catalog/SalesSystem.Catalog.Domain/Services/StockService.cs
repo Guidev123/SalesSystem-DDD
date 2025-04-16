@@ -19,7 +19,7 @@ namespace SalesSystem.Catalog.Domain.Services
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
-        public async Task<bool> AddListStockAsync(OrderProductsListDTO orderProductsList)
+        public async Task<bool> AddListStockAsync(OrderProductsListDto orderProductsList)
         {
             foreach (var orderProduct in orderProductsList.Items)
             {
@@ -36,7 +36,7 @@ namespace SalesSystem.Catalog.Domain.Services
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
-        public async Task<bool> DebitListStockAsync(OrderProductsListDTO orderProductsList)
+        public async Task<bool> DebitListStockAsync(OrderProductsListDto orderProductsList)
         {
             foreach (var orderProduct in orderProductsList.Items)
             {

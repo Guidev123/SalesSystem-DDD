@@ -1,4 +1,4 @@
 ﻿namespace SalesSystem.Register.Application.DTOs
 {
-    public record UserTokenDTO(string Id, string Email, IEnumerable<UserClaimDTO> Claims);
+    public record UserTokenDto(string Id, string Email, IEnumerable<UserClaimDto> Claims);
 }

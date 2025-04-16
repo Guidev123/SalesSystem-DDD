@@ -15,12 +15,12 @@ namespace SalesSystem.Register.Application.Mappers
         public static Customer MapToCustomer(this CreateCustomerCommand command)
             => new(command.Id, command.Name, command.Email, command.Document, command.BirthDate);
 
-        public static AddressDTO MapFromAddress(this Address address)
+        public static AddressDto MapFromAddress(this Address address)
             => new(address.CustomerId, address.Street, address.Number,
                 address.AdditionalInfo, address.Neighborhood,
                 address.ZipCode, address.City, address.State);
 
-        public static CustomerDTO MapFromCustomer(this Customer customer, IReadOnlyCollection<string>? roles)
+        public static CustomerDto MapFromCustomer(this Customer customer, IReadOnlyCollection<string>? roles)
         {
             if(customer.Address is not null)
                 return new(customer.Id, customer.Email.Address, customer.Address.MapFromAddress(), roles);

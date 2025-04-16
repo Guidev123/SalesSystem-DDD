@@ -1,10 +1,10 @@
 ﻿namespace SalesSystem.Sales.Application.DTOs
 {
-    public record CartDTO(
+    public record CartDto(
         Guid OrderId,
         decimal SubTotal,
         decimal TotalPrice,
         decimal TotalDiscount,
         string? VoucherCode,
-        List<CartItemDTO> Items);
+        List<CartItemDto> Items);
 }

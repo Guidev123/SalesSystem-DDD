@@ -5,7 +5,7 @@ namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Orders
 {
     public record OrderProcessingCanceledIntegrationEvent : IntegrationEvent
     {
-        public OrderProcessingCanceledIntegrationEvent(Guid orderId, Guid customerId, OrderProductsListDTO orderProducts)
+        public OrderProcessingCanceledIntegrationEvent(Guid orderId, Guid customerId, OrderProductsListDto orderProducts)
         {
             AggregateId = orderId;
             OrderId = orderId;
@@ -15,6 +15,6 @@ namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Orders
 
         public Guid OrderId { get; }
         public Guid CustomerId { get; }
-        public OrderProductsListDTO OrderProducts { get; }
+        public OrderProductsListDto OrderProducts { get; }
     }
 }

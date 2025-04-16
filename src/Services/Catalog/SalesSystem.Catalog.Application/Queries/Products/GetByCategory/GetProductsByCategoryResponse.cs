@@ -2,5 +2,5 @@
 
 namespace SalesSystem.Catalog.Application.Queries.Products.GetByCategory
 {
-    public record GetProductsByCategoryResponse(IEnumerable<ProductDTO> Products);
+    public record GetProductsByCategoryResponse(IEnumerable<ProductDto> Products);
 }

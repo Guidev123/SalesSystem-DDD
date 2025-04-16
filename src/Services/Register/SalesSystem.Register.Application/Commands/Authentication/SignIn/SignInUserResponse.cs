@@ -2,5 +2,5 @@
 
 namespace SalesSystem.Register.Application.Commands.Authentication.SignIn
 {
-    public record SignInUserResponse(string AccessToken, UserTokenDTO UserToken, double ExpiresIn);
+    public record SignInUserResponse(string AccessToken, UserTokenDto UserToken, double ExpiresIn);
 }

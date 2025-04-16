@@ -67,8 +67,8 @@ namespace SalesSystem.Register.Infrastructure.Services
 
         private SignInUserResponse GetTokenResponse(string encodedToken, IdentityUser user, IEnumerable<Claim> claims)
         {
-            return new SignInUserResponse(encodedToken, new UserTokenDTO(user.Id, user.Email ?? string.Empty,
-                claims.Select(c => new UserClaimDTO(c.Type, c.Value))),
+            return new SignInUserResponse(encodedToken, new UserTokenDto(user.Id, user.Email ?? string.Empty,
+                claims.Select(c => new UserClaimDto(c.Type, c.Value))),
                 TimeSpan.FromHours(appSettings.ExpiresAt).TotalSeconds);
         }
 

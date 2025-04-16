@@ -11,20 +11,20 @@ namespace SalesSystem.Register.Application.Queries.Customers.GetById
     public sealed class GetCustomerByIdHandler(ICustomerRepository customerRepository,
                                                INotificator notificator,
                                                IAuthenticationService authenticationService)
-                                             : IRequestHandler<GetCustomerByIdQuery, Response<CustomerDTO>>
+                                             : IRequestHandler<GetCustomerByIdQuery, Response<CustomerDto>>
     {
-        public async Task<Response<CustomerDTO>> ExecuteAsync(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<CustomerDto>> ExecuteAsync(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {   
             var customer = await customerRepository.GetCustomerAddressByIdAsync(request.CustomerId);
             if(customer is null)
             {
                 notificator.HandleNotification(new("Customer not found."));
-                return Response<CustomerDTO>.Failure(notificator.GetNotifications(), code: 404);
+                return Response<CustomerDto>.Failure(notificator.GetNotifications(), code: 404);
             }
 
             var roles = await authenticationService.FindRolesByUserIdAsync(customer.Id);
 
-            return Response<CustomerDTO>.Success(customer.MapFromCustomer(roles.Data));
+            return Response<CustomerDto>.Success(customer.MapFromCustomer(roles.Data));
         }
     }
 }

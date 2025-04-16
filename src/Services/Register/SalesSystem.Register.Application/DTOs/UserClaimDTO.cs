@@ -1,4 +1,4 @@
 ﻿namespace SalesSystem.Register.Application.DTOs
 {
-    public record UserClaimDTO(string Value, string Type);
+    public record UserClaimDto(string Value, string Type);
 }

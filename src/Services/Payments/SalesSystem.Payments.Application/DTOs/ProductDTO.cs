@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.Payments.Application.DTOs
 {
-    public record ProductDTO(
+    public record ProductDto(
         string Name, int Quantity, decimal Value
         );
 }

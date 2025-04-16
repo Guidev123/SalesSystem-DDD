@@ -6,10 +6,10 @@ namespace SalesSystem.Catalog.Domain.Interfaces.Services
     {
         Task<bool> DebitStockAsync(Guid productId, int quantity);
 
-        Task<bool> DebitListStockAsync(OrderProductsListDTO orderProductsList);
+        Task<bool> DebitListStockAsync(OrderProductsListDto orderProductsList);
 
         Task<bool> AddStockAsync(Guid productId, int quantity);
 
-        Task<bool> AddListStockAsync(OrderProductsListDTO orderProductsList);
+        Task<bool> AddListStockAsync(OrderProductsListDto orderProductsList);
     }
 }

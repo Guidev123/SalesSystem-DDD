@@ -1,4 +1,4 @@
 ﻿namespace SalesSystem.Catalog.Application.DTOs
 {
-    public record CategoryDTO(Guid Id, string Name, int Code);
+    public record CategoryDto(Guid Id, string Name, int Code);
 }

@@ -78,16 +78,16 @@ namespace SalesSystem.Register.Infrastructure.Services
             return Response<SignInUserResponse>.Success(await _jwtGeneratorService.JwtGenerator(command.Email));
         }
 
-        public async Task<Response<UserDTO>> FindByUserEmailAsync(string email)
+        public async Task<Response<UserDto>> FindByUserEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<UserDTO>.Failure(_notificator.GetNotifications());
+                return Response<UserDto>.Failure(_notificator.GetNotifications());
             }
 
-            return Response<UserDTO>.Success(new(Guid.Parse(user.Id), user.Email ?? string.Empty));
+            return Response<UserDto>.Success(new(Guid.Parse(user.Id), user.Email ?? string.Empty));
         }
 
         public async Task<Response<DeleteUserResponse>> DeleteAsync(DeleteUserCommand command)

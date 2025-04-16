@@ -1,6 +1,6 @@
 ﻿namespace SalesSystem.Sales.Application.DTOs
 {
-    public record OrderDTO(
+    public record OrderDto(
         string Code,
         decimal Price,
         DateTime CreatedAt,

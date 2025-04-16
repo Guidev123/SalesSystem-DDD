@@ -10,21 +10,21 @@ namespace SalesSystem.Sales.Application.Mappers
         public static OrderItem MapOrderItemToEntity(this AddOrderItemCommand command)
             => new(command.ProductId, command.Name, command.Quantity, command.UnitPrice);
 
-        public static CartDTO MapOrderToCartDTO(this Order order, IEnumerable<CartItemDTO> items, string? voucherCode = null)
+        public static CartDto MapOrderToCartDTO(this Order order, IEnumerable<CartItemDto> items, string? voucherCode = null)
             => new(order.Id, order.Discount + order.Price, order.Price, order.Discount, voucherCode, items.ToList());
 
-        public static CartItemDTO MapOrderItemToCartItemDTO(this OrderItem orderItem)
+        public static CartItemDto MapOrderItemToCartItemDTO(this OrderItem orderItem)
             => new(orderItem.ProductId, orderItem.ProductName, orderItem.Quantity, orderItem.UnitPrice, orderItem.CalculatePrice());
 
-        public static OrderDTO MapFromEntity(this Order order)
+        public static OrderDto MapFromEntity(this Order order)
             => new(order.Code, order.Price, order.CreatedAt, Enum.GetName(order.Status) ?? string.Empty);
 
-        public static OrderProductsListDTO MapFromEntityToOrderProductsListDTO(List<OrderItem> items, Guid orderId)
+        public static OrderProductsListDto MapFromEntityToOrderProductsListDTO(List<OrderItem> items, Guid orderId)
         {
-            var listItems = new List<ItemDTO>();
+            var listItems = new List<ItemDto>();
 
-            items.ForEach(x => listItems.Add(new ItemDTO(x.ProductId, x.Quantity)));
-            return new OrderProductsListDTO(orderId, listItems);
+            items.ForEach(x => listItems.Add(new ItemDto(x.ProductId, x.Quantity)));
+            return new OrderProductsListDto(orderId, listItems);
         }
     }
 }

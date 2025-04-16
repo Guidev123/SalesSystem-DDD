@@ -1,7 +1,7 @@
 ﻿namespace SalesSystem.SharedKernel.DTOs
 {
-    public record OrderProductsListDTO(
+    public record OrderProductsListDto(
         Guid OrderId,
-        ICollection<ItemDTO> Items
+        ICollection<ItemDto> Items
         );
 }

@@ -3,5 +3,5 @@ using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Register.Application.Queries.Customers.GetAddress
 {
-    public record GetAddressByCustomerQuery(Guid CustomerId) : IQuery<AddressDTO>;
+    public record GetAddressByCustomerQuery(Guid CustomerId) : IQuery<AddressDto>;
 }

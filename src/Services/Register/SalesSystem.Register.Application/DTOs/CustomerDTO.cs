@@ -1,8 +1,8 @@
 ﻿namespace SalesSystem.Register.Application.DTOs
 {
-    public record CustomerDTO(
+    public record CustomerDto(
         Guid Id, string Email,
-        AddressDTO? Address,
+        AddressDto? Address,
         IReadOnlyCollection<string>? Roles
         );
 }
