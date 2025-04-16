@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /src/Web/SalesSystem.API/appsettings.Development.json
 /docker-compose.dcproj
-/containers
+/containers/
