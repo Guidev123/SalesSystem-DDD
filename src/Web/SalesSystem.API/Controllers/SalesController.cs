@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SalesSystem.API.Configuration;
 using SalesSystem.Catalog.Application.Queries.Products.GetById;
-using SalesSystem.Register.Application.Queries.Customers.GetAddress;
+using SalesSystem.Registers.Application.Queries.Customers.GetAddress;
 using SalesSystem.Sales.Application.Commands.Orders.AddOrderItem;
 using SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher;
 using SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem;

@@ -19,7 +19,7 @@ namespace SalesSystem.API.Configuration
             ["SalesSystem.Payments.Application", 
             "SalesSystem.Sales.Application", 
             "SalesSystem.Catalog.Application",
-            "SalesSystem.Register.Application"
+            "SalesSystem.Registers.Application"
             ];
 
         public static void AddConfigurations(this WebApplicationBuilder builder)

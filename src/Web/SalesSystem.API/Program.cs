@@ -1,7 +1,7 @@
 using SalesSystem.API.Configuration;
 using SalesSystem.Catalog.Infrastructure;
 using SalesSystem.Payments.Infrastructure;
-using SalesSystem.Register.Infrastructure;
+using SalesSystem.Registers.Infrastructure;
 using SalesSystem.Sales.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

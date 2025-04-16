@@ -17,10 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\SalesSystem.Email\SalesSystem.Email.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\SalesSystem.EventSourcing\SalesSystem.EventSourcing.csproj" />
     <ProjectReference Include="..\..\Services\Catalog\SalesSystem.Catalog.Infrastructure\SalesSystem.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Services\Payments\SalesSystem.Payments.Infrastructure\SalesSystem.Payments.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Services\Register\SalesSystem.Register.Infrastructure\SalesSystem.Register.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\Registers\SalesSystem.Registers.Infrastructure\SalesSystem.Registers.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Services\Sales\SalesSystem.Sales.Infrastructure\SalesSystem.Sales.Infrastructure.csproj" />
   </ItemGroup>
 
