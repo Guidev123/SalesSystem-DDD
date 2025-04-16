@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SalesSystem.Payments.ACL.Facades;
 using SalesSystem.Payments.ACL.Interfaces;
 using SalesSystem.Payments.ACL.Services;
-using SalesSystem.Payments.Application.Services;
+using SalesSystem.Payments.Application.Facades;
 using SalesSystem.Payments.Domain.Repositories;
 using SalesSystem.Payments.Infrastructure.Persistence;
 using SalesSystem.Payments.Infrastructure.Persistence.Respositories;

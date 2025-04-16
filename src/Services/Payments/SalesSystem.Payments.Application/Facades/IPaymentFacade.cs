@@ -2,7 +2,7 @@
 using SalesSystem.Payments.Application.Commands.Payments.Confirm;
 using SalesSystem.SharedKernel.Responses;
 
-namespace SalesSystem.Payments.Application.Services
+namespace SalesSystem.Payments.Application.Facades
 {
     public interface IPaymentFacade
     {

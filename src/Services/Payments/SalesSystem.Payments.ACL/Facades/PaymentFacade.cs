@@ -4,13 +4,13 @@ using SalesSystem.Payments.ACL.Configurations;
 using SalesSystem.Payments.ACL.Interfaces;
 using SalesSystem.Payments.Application.Commands.Payments.Checkout;
 using SalesSystem.Payments.Application.Commands.Payments.Confirm;
-using SalesSystem.Payments.Application.Services;
+using SalesSystem.Payments.Application.Facades;
 using SalesSystem.Payments.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 using Stripe;
 
-namespace SalesSystem.Payments.ACL.Services
+namespace SalesSystem.Payments.ACL.Facades
 {
     public sealed class PaymentFacade(IStripeService stripeService,
                                       IHttpContextAccessor httpContext,

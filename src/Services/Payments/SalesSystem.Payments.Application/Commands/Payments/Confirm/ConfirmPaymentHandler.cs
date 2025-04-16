@@ -1,5 +1,5 @@
 ﻿using MidR.Interfaces;
-using SalesSystem.Payments.Application.Services;
+using SalesSystem.Payments.Application.Facades;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Payments.Application.Commands.Payments.Confirm

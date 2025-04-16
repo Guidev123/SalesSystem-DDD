@@ -1,6 +1,6 @@
 ﻿using MidR.Interfaces;
+using SalesSystem.Payments.Application.Facades;
 using SalesSystem.Payments.Application.Mappers;
-using SalesSystem.Payments.Application.Services;
 using SalesSystem.Payments.Domain.Repositories;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
