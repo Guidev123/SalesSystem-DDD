@@ -8,18 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="bogus" Version="35.6.3" />
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="moq" Version="4.20.72" />
-    <PackageReference Include="Moq.Automock" Version="3.5.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Services\Catalog\SalesSystem.Catalog.Domain\SalesSystem.Catalog.Domain.csproj" />
-    <ProjectReference Include="..\..\..\..\src\Services\SharedKernel\SalesSystem.SharedKernel\SalesSystem.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\..\src\Web\SalesSystem.API\SalesSystem.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

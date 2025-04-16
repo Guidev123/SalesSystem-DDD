@@ -3,7 +3,7 @@ using SalesSystem.Catalog.Domain.Entities;
 using SalesSystem.Catalog.Domain.ValueObjects;
 using SalesSystem.SharedKernel.DomainObjects;
 
-namespace SalesSystem.Catalog.Domain.Tests.Entities
+namespace Catalog.UnitTests.Domain.Entities
 {
     public class ProductTests
     {

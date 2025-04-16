@@ -9,7 +9,7 @@ using SalesSystem.SharedKernel.Data;
 using SalesSystem.SharedKernel.DTOs;
 using SalesSystem.SharedKernel.Events;
 
-namespace SalesSystem.Catalog.Domain.Tests.Services
+namespace Catalog.UnitTests.Domain.Services
 {
     public class StockServiceTests
     {
