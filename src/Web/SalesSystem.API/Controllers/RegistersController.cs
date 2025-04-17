@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MidR.Interfaces;
 using SalesSystem.Registers.Application.Commands.Authentication.AddUserRole;
 using SalesSystem.Registers.Application.Commands.Authentication.CreateRole;
 using SalesSystem.Registers.Application.Commands.Authentication.ForgetPassword;
