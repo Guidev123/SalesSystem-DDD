@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SalesSystem.Catalog.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace SalesSystem.Catalog.Infrastructure.Migrations
+namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20250416192327_Initial")]
-    partial class Initial
+    partial class CatalogContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,7 +90,7 @@ namespace SalesSystem.Catalog.Infrastructure.Migrations
                     b.HasOne("SalesSystem.Catalog.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
                     b.OwnsOne("SalesSystem.Catalog.Domain.ValueObjects.Dimensions", "Dimensions", b1 =>

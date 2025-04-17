@@ -27,7 +27,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence.Mappings
 
             builder.HasOne(x => x.Category)
                        .WithMany()
-                       .HasForeignKey(x => x.CategoryId)
+                       .HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.ClientNoAction)
                        .IsRequired();
         }
     }
