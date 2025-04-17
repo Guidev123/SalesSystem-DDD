@@ -37,6 +37,8 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
         {
             var existentOrderItem = GetExistentOrderItem(order, orderItem.ProductId);
             var orderItemAlreadyExists = order.ItemAlreadyExists(orderItem);
+            if(!ValidateOrderItemQuantity(order, orderItem, quantity))
+                return Response<Order>.Failure(_notificator.GetNotifications());
 
             order.AddItem(orderItem);
 
@@ -82,5 +84,16 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
         private static void CreateOrderItemAddedEvent(Order order, Guid productId, decimal unitPrice, int quantity, string productName)
             => order.AddEvent(new AddedOrderItemEvent(order.Id, order.CustomerId, productId, unitPrice, quantity, productName));
+
+        private bool ValidateOrderItemQuantity(Order order, OrderItem item, int quantity)
+        {
+            if (order.ItemAlreadyExists(item) && item.Quantity + quantity > MAX_ITEM_QUANTITY)
+            {
+                _notificator.HandleNotification(new($"The maximum quantity of items in the order is {MAX_ITEM_QUANTITY}."));
+                return false;
+            }
+
+            return true;
+        }
     }
 }

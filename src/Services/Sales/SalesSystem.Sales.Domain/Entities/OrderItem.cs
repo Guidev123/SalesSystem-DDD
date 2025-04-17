@@ -48,7 +48,6 @@ namespace SalesSystem.Sales.Domain.Entities
             AssertionConcern.EnsureNotNull(ProductId, "The product ID cannot be null.");
             AssertionConcern.EnsureNotEmpty(ProductName, "The product name cannot be empty.");
             AssertionConcern.EnsureLengthInRange(ProductName, 1, 255, "The product name must be between 1 and 255 characters.");
-            AssertionConcern.EnsureGreaterThan(Quantity, 0, "The quantity must be greater than zero.");
             AssertionConcern.EnsureGreaterThan(UnitPrice, 0, "The unit price must be greater than zero.");
             AssertionConcern.EnsureInRange(Quantity, Order.MIN_ITEM_QUANTITY, Order.MAX_ITEM_QUANTITY,
                 $"Order item quantity must be between {Order.MIN_ITEM_QUANTITY} and {Order.MAX_ITEM_QUANTITY}.");

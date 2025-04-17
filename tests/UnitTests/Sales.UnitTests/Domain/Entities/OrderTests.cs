@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using SalesSystem.Sales.Domain.Entities;
+using SalesSystem.SharedKernel.DomainObjects;
 using static SalesSystem.Sales.Domain.Entities.Order;
 
 namespace Sales.UnitTests.Domain.Entities
@@ -41,6 +42,21 @@ namespace Sales.UnitTests.Domain.Entities
             Assert.Equal(300, order.Price);
             Assert.Single(order.OrderItems);
             Assert.Equal(3, order.OrderItems?.FirstOrDefault(oi => oi.ProductId == productId)?.Quantity);
+        }
+
+        [Fact(DisplayName = "Add More Order Items Than Max Quantity Allowed")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_AddItem_ShouldReturnDomainExceptionIfOrderItemQuantityIsMoreThanQuantityAllowed()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+            var productId = Guid.NewGuid();
+            var orderItem = new OrderItem(productId, "Test Product", 1, 100);
+            var orderItem2 = new OrderItem(productId, "Test Product", MAX_ITEM_QUANTITY, 100);
+            order.AddItem(orderItem);
+
+            // Act & Assert
+            Assert.Throws<DomainException>(() => order.AddItem(orderItem2));
         }
 
         private OrderItem GetValidOrderItem()

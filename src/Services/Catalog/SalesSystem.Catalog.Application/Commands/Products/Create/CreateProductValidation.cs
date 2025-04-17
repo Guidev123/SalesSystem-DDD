@@ -20,9 +20,6 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
             RuleFor(p => p.Price)
                 .GreaterThan(0).WithMessage("Product price must be greater than zero.");
 
-            RuleFor(p => p.QuantityInStock)
-                .GreaterThanOrEqualTo(0).WithMessage("Quantity in stock cannot be negative.");
-
             RuleFor(p => p.Height)
                 .GreaterThan(0).WithMessage("Product height must be greater than zero.");
 

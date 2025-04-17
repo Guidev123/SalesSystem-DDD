@@ -31,9 +31,22 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
             if (!orderItemResult.IsSuccess || orderItemResult.Data is null)
                 return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
 
-            order.UpdateUnities(orderItemResult.Data, request.Quantity);
+            if(!UpdateUnitiesAsync(orderItemResult.Data, request, order))
+                return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications());
 
             return await PersistDataAsync(order, orderItemResult.Data, request.CustomerId).ConfigureAwait(false);
+        }
+
+        private bool UpdateUnitiesAsync(OrderItem orderItem, UpdateOrderItemCommand command, Order order)
+        {
+            if(orderItem.Quantity + command.Quantity > Order.MAX_ITEM_QUANTITY)
+            {
+                _notificator.HandleNotification(new($"The maximum quantity of items in the order is {Order.MAX_ITEM_QUANTITY}."));
+                return false;
+            }
+
+            order.UpdateUnities(orderItem, command.Quantity);
+            return true;
         }
 
         private async Task<Response<OrderItem>> GetOrderItemAsync(Order order, Guid productId)

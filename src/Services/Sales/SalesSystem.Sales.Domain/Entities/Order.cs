@@ -41,7 +41,12 @@ namespace SalesSystem.Sales.Domain.Entities
 
             if (ItemAlreadyExists(item))
             {
+                var itemQuantity = item.Quantity;
                 var existentItem = GetExistentItem(item);
+
+                AssertionConcern.EnsureFalse(itemQuantity + existentItem.Quantity > MAX_ITEM_QUANTITY,
+                    $"The maximum quantity of items in the order is {MAX_ITEM_QUANTITY}.");
+
                 existentItem.AddUnities(item.Quantity);
                 item = existentItem;
 
