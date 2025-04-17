@@ -7,7 +7,7 @@ namespace SalesSystem.Sales.Domain.Repositories
     {
         Task<Order?> GetByIdAsync(Guid id);
 
-        Task<IEnumerable<Order>> GetAllByCutomerIdAsync(int pageSize, int pageNumber, Guid customerId);
+        Task<IEnumerable<Order>> GetAllByCutomerIdAsync(Guid customerId);
 
         Task<Order?> GetDraftOrderByCustomerIdAsync(Guid customerId);
 

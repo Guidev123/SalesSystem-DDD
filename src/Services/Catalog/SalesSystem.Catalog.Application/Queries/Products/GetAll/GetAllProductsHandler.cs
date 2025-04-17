@@ -16,22 +16,25 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
         public async Task<PagedResponse<GetAllProductsResponse>> ExecuteAsync(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var cacheKey = $"products_{request.PageNumber}_{request.PageSize}";
-            var cacheProduct = await cache.GetAsync<IEnumerable<ProductDto>>(cacheKey);
-            if (cacheProduct is not null)
-                return PagedResponse<GetAllProductsResponse>.Success(new(cacheProduct), cacheProduct.Count(), request.PageNumber, request.PageSize);
+            var cacheProduct = await cache.GetAsync<PagedResponse<GetAllProductsResponse>>(cacheKey);
+            if (cacheProduct is not null) return cacheProduct;
 
-            var products = await productRepository.GetAllAsync(request.PageNumber, request.PageSize);
-            if (products is null)
+            var products = await productRepository.GetAllAsync();
+            if (!products.Any())
             {
                 notificator.HandleNotification(new("Products not found"));
                 return PagedResponse<GetAllProductsResponse>.Failure(notificator.GetNotifications());
             }
 
-            var productsResult = products.Select(x => x.MapFromEntity());
+            var pagedProducts = products.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
 
-            await cache.SetAsync(cacheKey, productsResult);
+            var productsResult = pagedProducts.Select(x => x.MapFromEntity());
 
-            return PagedResponse<GetAllProductsResponse>.Success(new(productsResult), productsResult.Count(), request.PageNumber, request.PageSize);
+            var response = PagedResponse<GetAllProductsResponse>.Success(new(productsResult), products.Count(), request.PageNumber, request.PageSize);
+
+            await cache.SetAsync(cacheKey, response);
+
+            return response;
         }
     }
 }

@@ -5,9 +5,9 @@ namespace SalesSystem.Catalog.Domain.Interfaces.Repositories
 {
     public interface IProductRepository : IRepository<Product>
     {
-        Task<IEnumerable<Product>> GetAllAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<Product>> GetAllAsync();
 
-        Task<IEnumerable<Product>> GetByCategoryAsync(int pageNumber, int pageSize, int code);
+        Task<IEnumerable<Product>> GetByCategoryAsync(int code);
 
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
 

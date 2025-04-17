@@ -17,9 +17,11 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
 
         public async Task<PagedResponse<IEnumerable<OrderDto>>> ExecuteAsync(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
         {
-            var orders = await _orderRepository.GetAllByCutomerIdAsync(request.pageSize, request.pageNumber, request.CustomerId).ConfigureAwait(false);
+            var orders = await _orderRepository.GetAllByCutomerIdAsync(request.CustomerId).ConfigureAwait(false);
 
-            orders = orders.Where(x => x.Status == EOrderStatus.Paid || x.Status == EOrderStatus.Canceled);
+            var pagedOrders = orders.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
+
+            orders = pagedOrders.Where(x => x.Status == EOrderStatus.Paid || x.Status == EOrderStatus.Canceled);
 
             if (!orders.Any())
             {
@@ -28,7 +30,7 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
             }
 
             return PagedResponse<IEnumerable<OrderDto>>.Success(orders.Select(x => x.MapFromEntity()), orders.Count(),
-                                                                request.pageNumber, request.pageSize);
+                                                                request.PageNumber, request.PageSize);
         }
     }
 }

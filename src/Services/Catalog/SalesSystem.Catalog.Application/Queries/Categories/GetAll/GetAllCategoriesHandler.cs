@@ -16,22 +16,25 @@ namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
         public async Task<PagedResponse<GetAllCategoriesResponse>> ExecuteAsync(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             var cacheKey = $"products_{request.PageNumber}_{request.PageSize}";
-            var cacheCategory = await cache.GetAsync<IEnumerable<CategoryDto>>(cacheKey);
-            if (cacheCategory is not null)
-                return PagedResponse<GetAllCategoriesResponse>.Success(new(cacheCategory), cacheCategory.Count(), request.PageNumber, request.PageSize);
+            var cacheCategory = await cache.GetAsync<PagedResponse<GetAllCategoriesResponse>>(cacheKey);
+            if (cacheCategory is not null) return cacheCategory;
 
             var categories = await productRepository.GetAllCategoriesAsync();
-            if (categories is null)
+            if (!categories.Any())
             {
                 notification.HandleNotification(new("Categories not found"));
                 return PagedResponse<GetAllCategoriesResponse>.Failure(notification.GetNotifications(), code: 404);
             }
 
-            var categoriesResult = categories.Select(x => x.MapFromEntity());
+            var pagedCategories = categories.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
 
-            await cache.SetAsync(cacheKey, categoriesResult);
+            var categoriesResult = pagedCategories.Select(x => x.MapFromEntity());
 
-            return PagedResponse<GetAllCategoriesResponse>.Success(new(categoriesResult), categoriesResult.Count(), request.PageNumber, request.PageSize);
+            var response = PagedResponse<GetAllCategoriesResponse>.Success(new(categoriesResult), categories.Count(), request.PageNumber, request.PageSize);
+
+            await cache.SetAsync(cacheKey, response);
+
+            return response;
         }
     }
 }

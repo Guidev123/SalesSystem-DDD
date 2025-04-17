@@ -19,10 +19,9 @@ namespace SalesSystem.Sales.Infrastructure.Persistence.Repositories
         public void RemoveItem(OrderItem item)
             => context.OrderItems.Remove(item);
 
-        public async Task<IEnumerable<Order>> GetAllByCutomerIdAsync(int pageSize, int pageNumber, Guid customerId)
-            => await context.Orders.AsNoTrackingWithIdentityResolution().Include(x => x.OrderItems).Include(x => x.Voucher)
-                                    .Skip((pageNumber - 1) * pageSize)
-                                    .Take(pageSize).ToListAsync();
+        public async Task<IEnumerable<Order>> GetAllByCutomerIdAsync(Guid customerId)
+            => await context.Orders.AsNoTrackingWithIdentityResolution().Where(x => x.CustomerId == customerId)
+            .Include(x => x.OrderItems).Include(x => x.Voucher).ToListAsync();
 
         public async Task<Order?> GetByIdAsync(Guid id)
             => await context.Orders.AsNoTrackingWithIdentityResolution().Include(x => x.OrderItems)

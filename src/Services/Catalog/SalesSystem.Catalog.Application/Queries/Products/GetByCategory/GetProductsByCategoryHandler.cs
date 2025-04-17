@@ -15,14 +15,16 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetByCategory
 
         public async Task<PagedResponse<GetProductsByCategoryResponse>> ExecuteAsync(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
         {
-            var products = await _productRepository.GetByCategoryAsync(request.PageNumber, request.PageSize, request.Code);
-            if (products is null)
+            var products = await _productRepository.GetByCategoryAsync(request.Code);
+            if (!products.Any())
             {
                 _notificator.HandleNotification(new("Products not found"));
                 return PagedResponse<GetProductsByCategoryResponse>.Failure(_notificator.GetNotifications());
             }
 
-            return PagedResponse<GetProductsByCategoryResponse>.Success(new(products.Select(x => x.MapFromEntity())),
+            var pagedProducts = products.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
+
+            return PagedResponse<GetProductsByCategoryResponse>.Success(new(pagedProducts.Select(x => x.MapFromEntity())),
                 products.Count(), request.PageNumber, request.PageSize);
         }
     }

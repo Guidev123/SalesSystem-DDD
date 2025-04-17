@@ -3,5 +3,5 @@ using SalesSystem.SharedKernel.Abstractions;
 
 namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerOrders
 {
-    public record GetCustomerOrdersQuery(int pageNumber, int pageSize, Guid CustomerId) : IPagedQuery<IEnumerable<OrderDto>>;
+    public record GetCustomerOrdersQuery(int PageNumber, int PageSize, Guid CustomerId) : IPagedQuery<IEnumerable<OrderDto>>;
 }
