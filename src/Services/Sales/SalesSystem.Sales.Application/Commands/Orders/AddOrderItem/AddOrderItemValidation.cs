@@ -23,7 +23,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             RuleFor(x => x.Quantity)
                 .GreaterThan(0)
                 .WithMessage("Quantity must be greater than zero.")
-                .LessThan(15)
+                .LessThanOrEqualTo(15)
                 .WithMessage("Quantity must be less than 15.");
 
             RuleFor(x => x.UnitPrice)

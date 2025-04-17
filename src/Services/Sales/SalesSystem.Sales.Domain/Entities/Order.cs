@@ -6,6 +6,9 @@ namespace SalesSystem.Sales.Domain.Entities
 {
     public class Order : Entity, IAggregateRoot
     {
+        public const int MAX_ITEM_QUANTITY = 15;
+        public const int MIN_ITEM_QUANTITY = 1;
+
         private Order(Guid customerId)
         {
             CustomerId = customerId;
@@ -31,6 +34,8 @@ namespace SalesSystem.Sales.Domain.Entities
         public void AddItem(OrderItem item)
         {
             AssertionConcern.EnsureNotNull(item, "Order item must be not null.");
+            AssertionConcern.EnsureInRange(item.Quantity, MIN_ITEM_QUANTITY, MAX_ITEM_QUANTITY,
+                $"Order item quantity must be between {MIN_ITEM_QUANTITY} and {MAX_ITEM_QUANTITY}.");
 
             item.AssociateOrder(Id);
 
