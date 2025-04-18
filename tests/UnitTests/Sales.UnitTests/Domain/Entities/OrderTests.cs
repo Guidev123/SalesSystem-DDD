@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using SalesSystem.Sales.Domain.Entities;
+using SalesSystem.Sales.Domain.Enums;
 using SalesSystem.SharedKernel.DomainObjects;
 using static SalesSystem.Sales.Domain.Entities.Order;
 
@@ -51,8 +52,10 @@ namespace Sales.UnitTests.Domain.Entities
             // Arrange
             var order = GetValidNewDraftOrder();
             var productId = Guid.NewGuid();
+
             var orderItem = new OrderItem(productId, "Test Product", 1, 100);
             var orderItem2 = new OrderItem(productId, "Test Product", MAX_ITEM_QUANTITY, 100);
+
             order.AddItem(orderItem);
 
             // Act & Assert
@@ -79,7 +82,9 @@ namespace Sales.UnitTests.Domain.Entities
             var order = GetValidNewDraftOrder();
             var productId = Guid.NewGuid();
             var orderItem = new OrderItem(productId, "Test Product", 1, 100);
+
             order.AddItem(orderItem);
+
             var orderItemUpdated = new OrderItem(productId, "Test Product", 1, 100);
             var newQuantity = orderItemUpdated.Quantity;
 
@@ -98,9 +103,11 @@ namespace Sales.UnitTests.Domain.Entities
             var order = GetValidNewDraftOrder();
             var productId = Guid.NewGuid();
             var orderItem = new OrderItem(productId, "Test Product", 1, 100);
+
             order.AddItem(orderItem);
+
             var orderItemUpdated = new OrderItem(productId, "Test Product", 2, 100);
-            var orderPriceBeforeUpdate = order.Price;   
+            var orderPriceBeforeUpdate = order.Price;
 
             // Act
             order.UpdateItem(orderItemUpdated);
@@ -116,8 +123,10 @@ namespace Sales.UnitTests.Domain.Entities
             // Arrange
             var order = GetValidNewDraftOrder();
             var productId = Guid.NewGuid();
+
             var orderItemExistent = new OrderItem(Guid.NewGuid(), "Test Product", 2, 100);
             var orderItemExistent2 = new OrderItem(productId, "Test Product", 3, 15);
+
             order.AddItem(orderItemExistent);
             order.AddItem(orderItemExistent2);
 
@@ -132,8 +141,159 @@ namespace Sales.UnitTests.Domain.Entities
             Assert.Equal(totalPrice, order.Price);
         }
 
+        [Fact(DisplayName = "Remove Inexistent Order Item")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_RemoveItem_ShouldThrowDomainExceptionIfOrderItemDoesNotExists()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+            var orderItem = GetValidOrderItem();
+
+            // Act & Assert
+            Assert.Throws<DomainException>(() => order.RemoveItem(orderItem));
+        }
+
+        [Fact(DisplayName = "Remove Order Item Should Update Order Price")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_RemoveItem_ShouldUpdateOrderPrice()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+            var orderItem = GetValidOrderItem();
+            var orderItem2 = GetValidOrderItem();
+
+            order.AddItem(orderItem);
+            order.AddItem(orderItem2);
+
+            var totalPrice = orderItem.CalculatePrice() + orderItem2.CalculatePrice();
+
+            // Act
+            order.RemoveItem(orderItem);
+
+            // Assert
+            Assert.NotEqual(totalPrice, order.Price);
+        }
+
+        [Fact(DisplayName = "Apply Voucher To Order Should be Successfully When Voucher Is Valid")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_ApplyVoucher_ShouldReturnWithouErrorsWhenVoucherIsValid()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+            var voucher = GetValidValueVoucher();
+
+            order.AddItem(GetValidOrderItem());
+
+            // Act
+            var result = order.ApplyVoucher(voucher);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.True(order.VoucherIsUsed);
+        }
+
+        [Fact(DisplayName = "Apply Value Voucher Discount Type")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_ApplyVoucher_ShouldUpdatePriceWhenValidValueVoucherIsApplied()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+
+            var orderItem1 = GetValidOrderItem();
+            var orderItem2 = GetValidOrderItem();
+
+            var voucher = GetValidValueVoucher();
+
+            order.AddItem(orderItem1);
+            order.AddItem(orderItem2);
+
+            var priceWithDiscount = order.Price - voucher.Value;
+
+            // Act
+            order.ApplyVoucher(voucher);
+
+            // Assert
+            Assert.Equal(priceWithDiscount, order.Price);
+            Assert.Equal(voucher.Value, order.Discount);
+        }
+
+        [Fact(DisplayName = "Apply Percentual Voucher Discount Type")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_ApplyVoucher_ShouldUpdatePriceWhenValidPercentualVoucherIsApplied()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+
+            var orderItem1 = GetValidOrderItem();
+            var orderItem2 = GetValidOrderItem();
+
+            var voucher = GetValidPercentualVoucher();
+
+            order.AddItem(orderItem1);
+            order.AddItem(orderItem2);
+
+            var discount = (order.Price * voucher.Percentual) / 100;
+            var priceWithDiscount = order.Price - discount;
+
+            // Act
+            order.ApplyVoucher(voucher);
+
+            // Assert
+            Assert.Equal(priceWithDiscount, order.Price);
+            Assert.Equal(discount, order.Discount);
+        }
+
+        [Fact(DisplayName = "When Voucher Discount Is Greater Than Order Price")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_ApplyVoucher_WhenVoucherDiscountIsGreaterThanOrderPriceMustResetOrderPrice()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+
+            var orderItem = new OrderItem(Guid.NewGuid(), "Product Test", 1, 100);
+
+            var voucher = GetValidValueVoucher();
+
+            order.AddItem(orderItem);
+
+            // Act
+            order.ApplyVoucher(voucher);
+
+            // Assert
+            Assert.Equal(0, order.Price);
+        }
+
+        [Fact(DisplayName = "Apply Price Recap on Order Modification")]
+        [Trait("Sales Domain", "Order Tests")]
+        public void Order_ApplyVoucher_ApplyPriceRecapOnOrderModification()
+        {
+            // Arrange
+            var order = GetValidNewDraftOrder();
+
+            var orderItem1 = GetValidOrderItem();
+            order.AddItem(orderItem1);
+
+            var voucher = GetValidValueVoucher();
+            order.ApplyVoucher(voucher);
+
+            var orderItem2 = GetValidOrderItem();
+            
+            // Act
+            order.AddItem(orderItem2);
+
+            // Assert
+            var price = order.OrderItems.Sum(oi => oi.CalculatePrice()) - voucher.Value;
+            Assert.Equal(price, order.Price);
+        }
+
         private OrderItem GetValidOrderItem()
             => new(Guid.NewGuid(), _faker.Commerce.ProductName(), _faker.Random.Int(MIN_ITEM_QUANTITY, MAX_ITEM_QUANTITY), _faker.Random.Decimal(1, 1000));
+
+        private Voucher GetValidValueVoucher()
+            => new(Guid.NewGuid().ToString("N"), null, 150, 100, EVoucherType.Value, DateTime.Now.AddDays(1));
+
+        private Voucher GetValidPercentualVoucher()
+            => new(Guid.NewGuid().ToString("N"), 50, null, 100, EVoucherType.Percentual, DateTime.Now.AddDays(1));
 
         private Order GetValidNewDraftOrder()
             => OrderFactory.NewDraftOrder(Guid.NewGuid());

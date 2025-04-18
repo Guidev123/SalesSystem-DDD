@@ -27,6 +27,12 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
                 return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications(), code: 404);
             }
 
+            if(order.Price <= 0 || order.OrderItems.Count == 0)
+            {
+                _notificator.HandleNotification(new("Order price is zero or order is empty."));
+                return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications());
+            }
+
             var voucher = await _orderRepository.GetVoucherByCodeAsync(request.VoucherCode).ConfigureAwait(false);
 
             if (voucher is null)

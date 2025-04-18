@@ -1,5 +1,4 @@
-﻿using SalesSystem.Catalog.Domain.ValueObjects;
-using SalesSystem.Sales.Domain.Entities;
+﻿using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.SharedKernel.DomainObjects;
 
 namespace Sales.UnitTests.Domain.Entities

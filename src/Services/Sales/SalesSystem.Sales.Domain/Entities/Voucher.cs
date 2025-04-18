@@ -49,7 +49,7 @@ namespace SalesSystem.Sales.Domain.Entities
                 throw new DomainException("A voucher must have either a percentual or a value discount.");
         }
 
-        internal ValidationResult IsValidToApply()
+        public ValidationResult IsValidToApply()
             => new VoucherValidation().Validate(this);
 
         internal void DebitVoucherQuantity()
