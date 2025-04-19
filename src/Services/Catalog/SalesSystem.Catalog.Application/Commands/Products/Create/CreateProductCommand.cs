@@ -6,10 +6,5 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
         decimal Price, decimal Height,
         decimal Width, decimal Depth, Guid CategoryId) : Command<CreateProductResponse>
     {
-        public override bool IsValid()
-        {
-            SetValidationResult(new CreateProductValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

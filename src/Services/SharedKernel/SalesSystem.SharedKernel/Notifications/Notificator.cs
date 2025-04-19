@@ -4,7 +4,7 @@
     {
         private readonly List<Notification> _notifications = [];
 
-        public List<string> GetNotifications() => _notifications.Select(x => x.Message).ToList();
+        public List<Notification> GetNotifications() => _notifications;
 
         public void HandleNotification(Notification notification) => _notifications.Add(notification);
 

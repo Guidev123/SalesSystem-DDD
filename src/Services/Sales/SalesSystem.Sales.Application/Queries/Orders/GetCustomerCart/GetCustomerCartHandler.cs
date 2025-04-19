@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Application.DTOs;
+﻿using SalesSystem.Sales.Application.DTOs;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -9,18 +9,15 @@ namespace SalesSystem.Sales.Application.Queries.Orders.GetCustomerCart
 {
     public sealed class GetCustomerCartHandler(IOrderRepository orderRepository,
                                                INotificator notificator)
-                                             : IRequestHandler<GetCustomerCartQuery, Response<CartDto>>
+                                             : QueryHandler<GetCustomerCartQuery, CartDto>(notificator)
     {
-        private readonly IOrderRepository _orderRepository = orderRepository;
-        private readonly INotificator _notificator = notificator;
-
-        public async Task<Response<CartDto>> ExecuteAsync(GetCustomerCartQuery request, CancellationToken cancellationToken)
+        public override async Task<Response<CartDto>> ExecuteAsync(GetCustomerCartQuery request, CancellationToken cancellationToken)
         {
-            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId).ConfigureAwait(false);
+            var order = await orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId).ConfigureAwait(false);
             if (order is null)
             {
-                _notificator.HandleNotification(new("Cart not found."));
-                return Response<CartDto>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Cart not found.");
+                return Response<CartDto>.Failure(GetNotifications(), code: 404);
             }
 
             var cartItem = order.OrderItems.Select(x => x.MapOrderItemToCartItemDTO());

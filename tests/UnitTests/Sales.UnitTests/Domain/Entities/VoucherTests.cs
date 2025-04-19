@@ -83,8 +83,10 @@ namespace Sales.UnitTests.Domain.Entities
 
         private Voucher GetValidPercentualVoucher()
              => new(Guid.NewGuid().ToString("N"), 150, null, 100, EVoucherType.Percentual, DateTime.Now.AddDays(1));
+
         private Voucher GetInvalidPercentualVoucher()
              => new(Guid.NewGuid().ToString("N"), null, 100, 100, EVoucherType.Percentual, DateTime.Now.AddDays(1));
+
         private Voucher GetInvalidValueVoucher()
              => new(Guid.NewGuid().ToString("N"), 100, null, 100, EVoucherType.Value, DateTime.Now.AddDays(1));
     }

@@ -1,5 +1,4 @@
 ﻿using SalesSystem.SharedKernel.DTOs;
-using SalesSystem.SharedKernel.Events.IntegrationEvents;
 
 namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Orders
 {

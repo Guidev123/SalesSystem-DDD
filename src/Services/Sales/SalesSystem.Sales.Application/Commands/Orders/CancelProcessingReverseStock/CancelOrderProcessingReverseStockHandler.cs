@@ -1,5 +1,5 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Domain.Repositories;
+﻿using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.DTOs;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 using SalesSystem.SharedKernel.Notifications;
@@ -9,21 +9,18 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
 {
     public sealed class CancelOrderProcessingReverseStockHandler(IOrderRepository orderRepository,
                                                                  INotificator notificator)
-                                                               : IRequestHandler<CancelOrderProcessingReverseStockCommand, Response<CancelOrderProcessingReverseStockResponse>>
+                                                               : CommandHandler<CancelOrderProcessingReverseStockCommand, CancelOrderProcessingReverseStockResponse>(notificator)
     {
-        private readonly IOrderRepository _orderRepository = orderRepository;
-        private readonly INotificator _notificator = notificator;
-
-        public async Task<Response<CancelOrderProcessingReverseStockResponse>> ExecuteAsync(CancelOrderProcessingReverseStockCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<CancelOrderProcessingReverseStockResponse>> ExecuteAsync(CancelOrderProcessingReverseStockCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<CancelOrderProcessingReverseStockResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new CancelOrderProcessingReverseStockValidation(), request))
+                return Response<CancelOrderProcessingReverseStockResponse>.Failure(GetNotifications());
 
-            var order = await _orderRepository.GetByIdAsync(request.OrderId).ConfigureAwait(false);
+            var order = await orderRepository.GetByIdAsync(request.OrderId).ConfigureAwait(false);
             if (order is null)
             {
-                _notificator.HandleNotification(new("Order not found."));
-                return Response<CancelOrderProcessingReverseStockResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order not found.");
+                return Response<CancelOrderProcessingReverseStockResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var listItems = new List<ItemDto>();
@@ -35,16 +32,16 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
             order.AddEvent(new OrderProcessingCanceledIntegrationEvent(order.Id, order.CustomerId, new OrderProductsListDto(order.Id, listItems)));
             order.DraftOrder();
 
-            _orderRepository.Update(order);
+            orderRepository.Update(order);
             return await PersistDataAsync();
         }
 
         private async Task<Response<CancelOrderProcessingReverseStockResponse>> PersistDataAsync()
         {
-            if (await _orderRepository.UnitOfWork.CommitAsync())
+            if (await orderRepository.UnitOfWork.CommitAsync())
             {
-                _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<CancelOrderProcessingReverseStockResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<CancelOrderProcessingReverseStockResponse>.Failure(GetNotifications());
             }
 
             return Response<CancelOrderProcessingReverseStockResponse>.Success(default);

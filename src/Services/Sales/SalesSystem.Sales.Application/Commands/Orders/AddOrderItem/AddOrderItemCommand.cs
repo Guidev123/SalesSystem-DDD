@@ -23,11 +23,5 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             CustomerId = customerId;
             AggregateId = customerId;
         }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new AddOrderItemValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

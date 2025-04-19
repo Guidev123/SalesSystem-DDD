@@ -13,10 +13,5 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
 
         public Guid OrderId { get; }
         public Guid CustomerId { get; }
-        public override bool IsValid()
-        {
-            SetValidationResult(new FinishOrderValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

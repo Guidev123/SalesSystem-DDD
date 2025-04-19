@@ -1,5 +1,5 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Domain.Interfaces.Services;
+﻿using SalesSystem.Catalog.Domain.Interfaces.Services;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -7,20 +7,17 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.AddStock
 {
     public sealed class AddStockHandler(IStockService stockService,
                                         INotificator notificator)
-                                      : IRequestHandler<AddStockCommand, Response<AddStockResponse>>
+                                      : CommandHandler<AddStockCommand, AddStockResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IStockService _stockService = stockService;
-
-        public async Task<Response<AddStockResponse>> ExecuteAsync(AddStockCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<AddStockResponse>> ExecuteAsync(AddStockCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<AddStockResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new AddStockValidation(), request))
+                return Response<AddStockResponse>.Failure(GetNotifications());
 
-            if (!await _stockService.AddStockAsync(request.Id, request.Quantity))
+            if (!await stockService.AddStockAsync(request.Id, request.Quantity))
             {
-                _notificator.HandleNotification(new($"Fail to add {request.Quantity} products to stock."));
-                return Response<AddStockResponse>.Failure(_notificator.GetNotifications());
+                Notify($"Fail to add {request.Quantity} products to stock.");
+                return Response<AddStockResponse>.Failure(GetNotifications());
             }
 
             return Response<AddStockResponse>.Success(null, code: 204);

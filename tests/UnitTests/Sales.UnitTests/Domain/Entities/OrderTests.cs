@@ -277,7 +277,7 @@ namespace Sales.UnitTests.Domain.Entities
             order.ApplyVoucher(voucher);
 
             var orderItem2 = GetValidOrderItem();
-            
+
             // Act
             order.AddItem(orderItem2);
 

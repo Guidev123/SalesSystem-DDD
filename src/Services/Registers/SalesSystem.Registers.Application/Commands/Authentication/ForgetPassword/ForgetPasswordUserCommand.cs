@@ -12,11 +12,5 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.ForgetPasswo
 
         public string Email { get; }
         public string ClientUrlToResetPassword { get; private set; }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new ForgetPasswordUserValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

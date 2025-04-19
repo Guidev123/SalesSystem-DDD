@@ -18,10 +18,5 @@ namespace SalesSystem.Registers.Application.Commands.Customers.Create
         public string Email { get; } = string.Empty;
         public string Document { get; } = string.Empty;
         public DateTime BirthDate { get; }
-        public override bool IsValid()
-        {
-            SetValidationResult(new CreateCustomerValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

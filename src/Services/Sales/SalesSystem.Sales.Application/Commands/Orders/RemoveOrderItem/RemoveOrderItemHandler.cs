@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Application.Events;
+﻿using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -9,27 +9,24 @@ namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
 {
     public sealed class RemoveOrderItemHandler(IOrderRepository orderRepository,
                                                INotificator notificator)
-                                             : IRequestHandler<RemoveOrderItemCommand, Response<RemoveOrderItemResponse>>
+                                             : CommandHandler<RemoveOrderItemCommand, RemoveOrderItemResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IOrderRepository _orderRepository = orderRepository;
-
-        public async Task<Response<RemoveOrderItemResponse>> ExecuteAsync(RemoveOrderItemCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<RemoveOrderItemResponse>> ExecuteAsync(RemoveOrderItemCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<RemoveOrderItemResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new RemoveOrderItemValidation(), request))
+                return Response<RemoveOrderItemResponse>.Failure(GetNotifications());
 
-            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
+            var order = await orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
 
             if (order is null)
             {
-                _notificator.HandleNotification(new("Order not foud."));
-                return Response<RemoveOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order not foud.");
+                return Response<RemoveOrderItemResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var orderItemResult = await GetOrderItemAsync(order, request.ProductId).ConfigureAwait(false);
             if (!orderItemResult.IsSuccess || orderItemResult.Data is null)
-                return Response<RemoveOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                return Response<RemoveOrderItemResponse>.Failure(GetNotifications(), code: 404);
 
             order.RemoveItem(orderItemResult.Data);
 
@@ -38,11 +35,11 @@ namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
 
         private async Task<Response<OrderItem>> GetOrderItemAsync(Order order, Guid productId)
         {
-            var orderItem = await _orderRepository.GetItemByOrderIdAsync(order.Id, productId);
+            var orderItem = await orderRepository.GetItemByOrderIdAsync(order.Id, productId);
             if (orderItem is not null && !order.ItemAlreadyExists(orderItem))
             {
-                _notificator.HandleNotification(new("Order item not foud."));
-                return Response<OrderItem>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order item not foud.");
+                return Response<OrderItem>.Failure(GetNotifications(), code: 404);
             }
 
             return Response<OrderItem>.Success(orderItem);
@@ -50,13 +47,13 @@ namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
 
         private async Task<Response<RemoveOrderItemResponse>> PersistDataAsync(Order order, OrderItem item, RemoveOrderItemCommand request)
         {
-            _orderRepository.RemoveItem(item);
-            _orderRepository.Update(order);
+            orderRepository.RemoveItem(item);
+            orderRepository.Update(order);
 
-            if (!await _orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
+            if (!await orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
             {
-                _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<RemoveOrderItemResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<RemoveOrderItemResponse>.Failure(GetNotifications());
             }
 
             order.AddEvent(new RemovedOrderItemEvent(order.Id, request.CustomerId, item.ProductId));

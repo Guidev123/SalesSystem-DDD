@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Application.Events;
+﻿using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -9,39 +9,36 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 {
     public sealed class UpdateOrderItemHandler(IOrderRepository orderRepository,
                                                INotificator notificator)
-                                             : IRequestHandler<UpdateOrderItemCommand, Response<UpdateOrderItemResponse>>
+                                             : CommandHandler<UpdateOrderItemCommand, UpdateOrderItemResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IOrderRepository _orderRepository = orderRepository;
-
-        public async Task<Response<UpdateOrderItemResponse>> ExecuteAsync(UpdateOrderItemCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<UpdateOrderItemResponse>> ExecuteAsync(UpdateOrderItemCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<UpdateOrderItemResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new UpdateOrderItemValidation(), request))
+                return Response<UpdateOrderItemResponse>.Failure(GetNotifications());
 
-            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
+            var order = await orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
 
             if (order is null)
             {
-                _notificator.HandleNotification(new("Order not foud."));
-                return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order not foud.");
+                return Response<UpdateOrderItemResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var orderItemResult = await GetOrderItemAsync(order, request.ProductId).ConfigureAwait(false);
             if (!orderItemResult.IsSuccess || orderItemResult.Data is null)
-                return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                return Response<UpdateOrderItemResponse>.Failure(GetNotifications(), code: 404);
 
-            if(!UpdateUnitiesAsync(orderItemResult.Data, request, order))
-                return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications());
+            if (!UpdateUnitiesAsync(orderItemResult.Data, request, order))
+                return Response<UpdateOrderItemResponse>.Failure(GetNotifications());
 
             return await PersistDataAsync(order, orderItemResult.Data, request.CustomerId).ConfigureAwait(false);
         }
 
         private bool UpdateUnitiesAsync(OrderItem orderItem, UpdateOrderItemCommand command, Order order)
         {
-            if(orderItem.Quantity + command.Quantity > Order.MAX_ITEM_QUANTITY)
+            if (orderItem.Quantity + command.Quantity > Order.MAX_ITEM_QUANTITY)
             {
-                _notificator.HandleNotification(new($"The maximum quantity of items in the order is {Order.MAX_ITEM_QUANTITY}."));
+                Notify($"The maximum quantity of items in the order is {Order.MAX_ITEM_QUANTITY}.");
                 return false;
             }
 
@@ -51,11 +48,11 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 
         private async Task<Response<OrderItem>> GetOrderItemAsync(Order order, Guid productId)
         {
-            var orderItem = await _orderRepository.GetItemByOrderIdAsync(order.Id, productId);
+            var orderItem = await orderRepository.GetItemByOrderIdAsync(order.Id, productId);
             if (orderItem is not null && !order.ItemAlreadyExists(orderItem))
             {
-                _notificator.HandleNotification(new("Order item not foud."));
-                return Response<OrderItem>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order item not foud.");
+                return Response<OrderItem>.Failure(GetNotifications(), code: 404);
             }
 
             return Response<OrderItem>.Success(orderItem);
@@ -63,13 +60,13 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 
         private async Task<Response<UpdateOrderItemResponse>> PersistDataAsync(Order order, OrderItem item, Guid customerId)
         {
-            _orderRepository.UpdateItem(item);
-            _orderRepository.Update(order);
+            orderRepository.UpdateItem(item);
+            orderRepository.Update(order);
 
-            if (!await _orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
+            if (!await orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
             {
-                _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<UpdateOrderItemResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<UpdateOrderItemResponse>.Failure(GetNotifications());
             }
 
             order.AddEvent(new UpdatedOrderItemEvent(order.Id, customerId, order.Price, item.Quantity));

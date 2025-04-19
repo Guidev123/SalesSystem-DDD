@@ -14,11 +14,5 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Start
         public Guid OrderId { get; }
         public Guid CustomerId { get; }
         public decimal TotalPrice { get; }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new StartOrderValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

@@ -13,10 +13,5 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.Delete
 
         public Guid Id { get; }
         public string Email { get; } = string.Empty;
-        public override bool IsValid()
-        {
-            SetValidationResult(new DeleteUserValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

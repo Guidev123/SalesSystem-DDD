@@ -1,18 +1,19 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Registers.Application.Services;
+﻿using SalesSystem.Registers.Application.Services;
+using SalesSystem.SharedKernel.Abstractions;
+using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Registers.Application.Commands.Authentication.ForgetPassword
 {
-    public sealed class ForgetPasswordUserHandler(IAuthenticationService authenticationService)
-                                                : IRequestHandler<ForgetPasswordUserCommand, Response<ForgetPasswordUserResponse>>
+    public sealed class ForgetPasswordUserHandler(IAuthenticationService authenticationService,
+                                                  INotificator notificator)
+                                                : CommandHandler<ForgetPasswordUserCommand, ForgetPasswordUserResponse>(notificator)
     {
-        public async Task<Response<ForgetPasswordUserResponse>> ExecuteAsync(ForgetPasswordUserCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<ForgetPasswordUserResponse>> ExecuteAsync(ForgetPasswordUserCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<ForgetPasswordUserResponse>.Failure(request.GetErrorMessages());
-
-            return await authenticationService.GeneratePasswordResetTokenAsync(request);
+            return !ExecuteValidation(new ForgetPasswordUserValidation(), request)
+                ? Response<ForgetPasswordUserResponse>.Failure(GetNotifications())
+                : await authenticationService.GeneratePasswordResetTokenAsync(request);
         }
     }
 }

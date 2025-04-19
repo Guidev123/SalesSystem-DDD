@@ -15,9 +15,10 @@ namespace SalesSystem.API.Configuration
     {
         public const int DEFAULT_PAGE_NUMBER = 1;
         public const int DEFAULT_PAGE_SIZE = 15;
-        private static readonly string[] _assemblies = 
-            ["SalesSystem.Payments.Application", 
-            "SalesSystem.Sales.Application", 
+
+        private static readonly string[] _assemblies =
+            ["SalesSystem.Payments.Application",
+            "SalesSystem.Sales.Application",
             "SalesSystem.Catalog.Application",
             "SalesSystem.Registers.Application"
             ];

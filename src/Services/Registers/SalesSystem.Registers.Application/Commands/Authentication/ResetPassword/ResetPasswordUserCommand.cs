@@ -16,11 +16,5 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.ResetPasswor
         public string ConfirmPassword { get; }
         public string Email { get; }
         public string Token { get; }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new ResetPasswordUserValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

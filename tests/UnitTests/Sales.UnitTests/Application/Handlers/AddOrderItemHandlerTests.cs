@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using MidR.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using SalesSystem.Sales.Application.Commands.Orders.AddOrderItem;
@@ -9,7 +8,7 @@ using SalesSystem.SharedKernel.Data;
 using SalesSystem.SharedKernel.Notifications;
 using static SalesSystem.Sales.Domain.Entities.Order;
 
-namespace Sales.UnitTests.Application.Commands.AddOrderItem
+namespace Sales.UnitTests.Application.Handlers
 {
     public class AddOrderItemHandlerTests
     {
@@ -137,12 +136,19 @@ namespace Sales.UnitTests.Application.Commands.AddOrderItem
             // Arrange
             var command = new AddOrderItemCommand(Guid.Empty, string.Empty, 0, 0);
 
+            var notifications = new List<Notification>();
+            _notificatorMock.Setup(n => n.HandleNotification(It.IsAny<Notification>()))
+                .Callback<Notification>(notifications.Add);
+
+            _notificatorMock.Setup(n => n.GetNotifications())
+                .Returns(() => notifications);
+
             var addOrderItemHandler = new AddOrderItemHandler(_notificatorMock.Object, _orderRepositoryMock.Object);
 
             // Act
             var result = await addOrderItemHandler.ExecuteAsync(command, CancellationToken.None);
 
-            // Assert   
+            // Assert
             Assert.False(result.IsSuccess);
             Assert.NotEmpty(result.Errors ?? []);
             Assert.Equal(5, result.Errors?.Count);

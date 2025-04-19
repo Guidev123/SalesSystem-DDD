@@ -1,16 +1,18 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Registers.Application.Services;
+﻿using SalesSystem.Registers.Application.Services;
+using SalesSystem.SharedKernel.Abstractions;
+using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Registers.Application.Commands.Authentication.CreateRole
 {
-    public sealed class CreateRoleHandler(IAuthenticationService authenticationService)
-                                        : IRequestHandler<CreateRoleCommand, Response<CreateRoleResponse>>
+    public sealed class CreateRoleHandler(IAuthenticationService authenticationService,
+                                          INotificator notificator)
+                                        : CommandHandler<CreateRoleCommand, CreateRoleResponse>(notificator)
     {
-        public async Task<Response<CreateRoleResponse>> ExecuteAsync(CreateRoleCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<CreateRoleResponse>> ExecuteAsync(CreateRoleCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<CreateRoleResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new CreateRoleValidation(), request))
+                return Response<CreateRoleResponse>.Failure(GetNotifications());
 
             return await authenticationService.CreateRoleAsync(request);
         }

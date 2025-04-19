@@ -17,7 +17,7 @@ namespace Catalog.UnitTests.Domain.Services
         private readonly Mock<IProductRepository> _productRepository;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IMediatorHandler> _mediator;
-        
+
         public StockServiceTests()
         {
             _productRepository = _mocker.GetMock<IProductRepository>();

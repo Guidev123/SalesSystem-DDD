@@ -1,6 +1,6 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Application.Mappers;
+﻿using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -8,18 +8,15 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetById
 {
     public sealed class GetProductByIdHandler(IProductRepository productRepository,
                                               INotificator notificator)
-                                            : IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
+                                            : QueryHandler<GetProductByIdQuery, GetProductByIdResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IProductRepository _productRepository = productRepository;
-
-        public async Task<Response<GetProductByIdResponse>> ExecuteAsync(GetProductByIdQuery request, CancellationToken cancellationToken)
+        public override async Task<Response<GetProductByIdResponse>> ExecuteAsync(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetByIdAsync(request.Id);
+            var product = await productRepository.GetByIdAsync(request.Id);
             if (product is null)
             {
-                _notificator.HandleNotification(new("Product not found"));
-                return PagedResponse<GetProductByIdResponse>.Failure(_notificator.GetNotifications());
+                Notify("Product not found");
+                return PagedResponse<GetProductByIdResponse>.Failure(GetNotifications(), code: 404);
             }
 
             return Response<GetProductByIdResponse>.Success(new(product.MapFromEntity()));

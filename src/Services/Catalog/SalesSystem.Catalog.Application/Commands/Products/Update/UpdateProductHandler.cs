@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Application.Storage;
+﻿using SalesSystem.Catalog.Application.Storage;
 using SalesSystem.Catalog.Domain.Entities;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -10,30 +10,30 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
     public sealed class UpdateProductHandler(IProductRepository productRepository,
                                              INotificator notificator,
                                              IBlobService blobService)
-                                           : IRequestHandler<UpdateProductCommand, Response<UpdateProductResponse>>
+                                           : CommandHandler<UpdateProductCommand, UpdateProductResponse>(notificator)
     {
-        public async Task<Response<UpdateProductResponse>> ExecuteAsync(UpdateProductCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<UpdateProductResponse>> ExecuteAsync(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<UpdateProductResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new UpdateProductValidation(), request))
+                return Response<UpdateProductResponse>.Failure(GetNotifications());
 
             var product = await productRepository.GetByIdAsync(request.Id);
             if (product is null)
             {
-                notificator.HandleNotification(new("Product not found."));
-                return Response<UpdateProductResponse>.Failure(notificator.GetNotifications(), code: 404);
+                Notify("Product not found.");
+                return Response<UpdateProductResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var imageResult = await UpdateProduct(request, product);
-            if(!imageResult)
-                return Response<UpdateProductResponse>.Failure(notificator.GetNotifications());
+            if (!imageResult)
+                return Response<UpdateProductResponse>.Failure(GetNotifications());
 
             productRepository.Update(product);
 
             if (!await productRepository.UnitOfWork.CommitAsync())
             {
-                notificator.HandleNotification(new("Fail to persist data."));
-                return Response<UpdateProductResponse>.Failure(notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<UpdateProductResponse>.Failure(GetNotifications());
             }
 
             return Response<UpdateProductResponse>.Success(null, code: 204);
@@ -58,7 +58,7 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
         {
             if (!IsBase64(command.Image!))
             {
-                notificator.HandleNotification(new("Product image must be a valid Base64 string."));
+                Notify("Product image must be a valid Base64 string.");
                 return null;
             }
 
@@ -73,14 +73,14 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
             var imageStream = ConvertBase64ToStream(command.Image!, out string contentType);
             if (imageStream is null)
             {
-                notificator.HandleNotification(new("Something has failed to process image."));
+                Notify("Something has failed to process image.");
                 return null;
             }
 
             var imageUrl = await blobService.UploadAsync(imageStream, contentType, default);
             if (string.IsNullOrEmpty(imageUrl))
             {
-                notificator.HandleNotification(new("Something has failed to process image."));
+                Notify("Something has failed to process image.");
                 return null;
             }
 
@@ -103,12 +103,12 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Update
             catch
             {
                 contentType = "image/png";
-                notificator.HandleNotification(new("The image is in invalid format."));
+                Notify("The image is in invalid format.");
                 return null;
             }
         }
 
-        private bool IsBase64(string base64)
+        private static bool IsBase64(string base64)
         {
             if (string.IsNullOrWhiteSpace(base64))
                 return false;

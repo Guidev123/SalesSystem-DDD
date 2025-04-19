@@ -1,5 +1,5 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Domain.Repositories;
+﻿using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
@@ -8,25 +8,22 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
 {
     public sealed class FinishOrderHandler(IOrderRepository orderRepository,
                                            INotificator notificator)
-                                         : IRequestHandler<FinishOrderCommand, Response<FinishOrderResponse>>
+                                         : CommandHandler<FinishOrderCommand, FinishOrderResponse>(notificator)
     {
-        private readonly IOrderRepository _orderRepository = orderRepository;
-        private readonly INotificator _notificator = notificator;
-
-        public async Task<Response<FinishOrderResponse>> ExecuteAsync(FinishOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<FinishOrderResponse>> ExecuteAsync(FinishOrderCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<FinishOrderResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new FinishOrderValidation(), request))
+                return Response<FinishOrderResponse>.Failure(GetNotifications());
 
-            var order = await _orderRepository.GetByIdAsync(request.OrderId).ConfigureAwait(false);
+            var order = await orderRepository.GetByIdAsync(request.OrderId).ConfigureAwait(false);
             if (order is null)
             {
-                _notificator.HandleNotification(new("Order not found."));
-                return Response<FinishOrderResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order not found.");
+                return Response<FinishOrderResponse>.Failure(GetNotifications(), code: 404);
             }
 
             order.PayOrder();
-            _orderRepository.Update(order);
+            orderRepository.Update(order);
 
             order.AddEvent(new FinishedOrderIntegrationEvent(request.OrderId));
 
@@ -35,10 +32,10 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
 
         private async Task<Response<FinishOrderResponse>> PersistDataAsync()
         {
-            if (await _orderRepository.UnitOfWork.CommitAsync())
+            if (await orderRepository.UnitOfWork.CommitAsync())
             {
-                _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<FinishOrderResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<FinishOrderResponse>.Failure(GetNotifications());
             }
 
             return Response<FinishOrderResponse>.Success(default);
