@@ -1,19 +1,18 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Application.DTOs;
-using SalesSystem.Catalog.Application.Mappers;
+﻿using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Application.Storage;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
 namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
 {
     public sealed class GetAllCategoriesHandler(IProductRepository productRepository,
-                                                INotificator notification,
+                                                INotificator notificator,
                                                 ICacheService cache)
-                                              : IRequestHandler<GetAllCategoriesQuery, PagedResponse<GetAllCategoriesResponse>>
+                                              : PagedQueryHandler<GetAllCategoriesQuery, GetAllCategoriesResponse>(notificator)
     {
-        public async Task<PagedResponse<GetAllCategoriesResponse>> ExecuteAsync(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public override async Task<PagedResponse<GetAllCategoriesResponse>> ExecuteAsync(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             var cacheKey = $"products_{request.PageNumber}_{request.PageSize}";
             var cacheCategory = await cache.GetAsync<PagedResponse<GetAllCategoriesResponse>>(cacheKey);
@@ -22,8 +21,8 @@ namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
             var categories = await productRepository.GetAllCategoriesAsync();
             if (!categories.Any())
             {
-                notification.HandleNotification(new("Categories not found"));
-                return PagedResponse<GetAllCategoriesResponse>.Failure(notification.GetNotifications(), code: 404);
+                Notify("Categories not found");
+                return PagedResponse<GetAllCategoriesResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var pagedCategories = categories.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);

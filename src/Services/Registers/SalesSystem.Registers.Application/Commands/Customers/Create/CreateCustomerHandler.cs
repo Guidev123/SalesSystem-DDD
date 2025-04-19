@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Registers.Application.Events;
+﻿using SalesSystem.Registers.Application.Events;
 using SalesSystem.Registers.Application.Mappers;
 using SalesSystem.Registers.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
@@ -11,14 +11,14 @@ namespace SalesSystem.Registers.Application.Commands.Customers.Create
     public sealed class CreateCustomerHandler(ICustomerRepository customerRepository,
                                               IMediatorHandler mediator,
                                               INotificator notificator)
-                                            : IRequestHandler<CreateCustomerCommand, Response<CreateCustomerResponse>>
+                                            : CommandHandler<CreateCustomerCommand, CreateCustomerResponse>(notificator)
     {
-        public async Task<Response<CreateCustomerResponse>> ExecuteAsync(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<CreateCustomerResponse>> ExecuteAsync(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
+            if (!ExecuteValidation(new CreateCustomerValidation(), request))
             {
                 await HandleErrorToCreateCustomer(request);
-                return Response<CreateCustomerResponse>.Failure(request.GetErrorMessages());
+                return Response<CreateCustomerResponse>.Failure(GetNotifications());
             }
 
             var customer = request.MapToCustomer();
@@ -27,7 +27,7 @@ namespace SalesSystem.Registers.Application.Commands.Customers.Create
 
             if (!await customerRepository.UnitOfWork.CommitAsync())
             {
-                notificator.HandleNotification(new("Fail to persist data."));
+                Notify("Fail to persist data.");
                 await mediator.PublishEventAsync(new CustomerCreationFailedEvent(request.Id, request.Email));
             }
 
@@ -35,12 +35,6 @@ namespace SalesSystem.Registers.Application.Commands.Customers.Create
         }
 
         private async Task HandleErrorToCreateCustomer(CreateCustomerCommand command)
-        {
-            await mediator.PublishEventAsync(new CustomerCreationFailedEvent(command.Id, command.Email));
-            foreach (var item in command.GetErrorMessages())
-            {
-                notificator.HandleNotification(new(item));
-            }
-        }
+            => await mediator.PublishEventAsync(new CustomerCreationFailedEvent(command.Id, command.Email));
     }
 }

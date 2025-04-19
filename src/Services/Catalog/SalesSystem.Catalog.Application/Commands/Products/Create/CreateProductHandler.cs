@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Application.Mappers;
+﻿using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Application.Storage;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -10,16 +10,16 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
     public sealed class CreateProductHandler(IProductRepository productRepository,
                                              INotificator notificator,
                                              IBlobService blobService)
-                                           : IRequestHandler<CreateProductCommand, Response<CreateProductResponse>>
+                                           : CommandHandler<CreateProductCommand, CreateProductResponse>(notificator)
     {
-        public async Task<Response<CreateProductResponse>> ExecuteAsync(CreateProductCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<CreateProductResponse>> ExecuteAsync(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<CreateProductResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new CreateProductValidation(), request))
+                return Response<CreateProductResponse>.Failure(GetNotifications());
 
             var imageUrl = await ProcessImageAsync(request);
-            if(string.IsNullOrEmpty(imageUrl))
-                return Response<CreateProductResponse>.Failure(notificator.GetNotifications());
+            if (string.IsNullOrEmpty(imageUrl))
+                return Response<CreateProductResponse>.Failure(GetNotifications());
 
             var product = request.MapToEntity(imageUrl);
 
@@ -27,8 +27,8 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
 
             if (!await productRepository.UnitOfWork.CommitAsync())
             {
-                notificator.HandleNotification(new("Fail to persist data."));
-                return Response<CreateProductResponse>.Failure(notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<CreateProductResponse>.Failure(GetNotifications());
             }
 
             return Response<CreateProductResponse>.Success(new(product.Id));
@@ -39,21 +39,21 @@ namespace SalesSystem.Catalog.Application.Commands.Products.Create
             var imageStream = ConvertBase64ToStream(command.Image, out string contentType);
             if (imageStream is null)
             {
-                notificator.HandleNotification(new("Something has failed to process image."));
+                Notify("Something has failed to process image.");
                 return null;
             }
 
             var imageUrl = await blobService.UploadAsync(imageStream, contentType, default);
             if (string.IsNullOrEmpty(imageUrl))
             {
-                notificator.HandleNotification(new("Something has failed to process image."));
+                Notify("Something has failed to process image.");
                 return null;
             }
 
             return imageUrl;
         }
 
-        private MemoryStream? ConvertBase64ToStream(string base64, out string contentType)
+        private static MemoryStream? ConvertBase64ToStream(string base64, out string contentType)
         {
             try
             {

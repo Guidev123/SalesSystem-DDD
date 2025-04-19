@@ -19,11 +19,5 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 
         public void SetCustomerId(Guid customerId)
             => CustomerId = customerId;
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new UpdateOrderItemValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

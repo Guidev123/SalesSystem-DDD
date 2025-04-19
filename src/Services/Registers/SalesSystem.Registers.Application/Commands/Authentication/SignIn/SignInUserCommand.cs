@@ -12,11 +12,5 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.SignIn
 
         public string Email { get; }
         public string Password { get; }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new SignInUserValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

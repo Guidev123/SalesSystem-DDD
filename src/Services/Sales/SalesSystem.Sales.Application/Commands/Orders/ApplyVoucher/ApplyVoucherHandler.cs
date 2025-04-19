@@ -1,7 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Application.Events;
+﻿using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -9,36 +9,33 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
 {
     public sealed class ApplyVoucherHandler(IOrderRepository orderRepository,
                                             INotificator notificator)
-                                          : IRequestHandler<ApplyVoucherCommand, Response<ApplyVoucherResponse>>
+                                          : CommandHandler<ApplyVoucherCommand, ApplyVoucherResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IOrderRepository _orderRepository = orderRepository;
-
-        public async Task<Response<ApplyVoucherResponse>> ExecuteAsync(ApplyVoucherCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<ApplyVoucherResponse>> ExecuteAsync(ApplyVoucherCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<ApplyVoucherResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new ApplyVoucherValidation(), request))
+                return Response<ApplyVoucherResponse>.Failure(GetNotifications());
 
-            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
+            var order = await orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
 
             if (order is null)
             {
-                _notificator.HandleNotification(new("Order not foud."));
-                return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Order not foud.");
+                return Response<ApplyVoucherResponse>.Failure(GetNotifications(), code: 404);
             }
 
-            if(order.Price <= 0 || order.OrderItems.Count == 0)
+            if (order.Price <= 0 || order.OrderItems.Count == 0)
             {
-                _notificator.HandleNotification(new("Order price is zero or order is empty."));
-                return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications());
+                Notify("Order price is zero or order is empty.");
+                return Response<ApplyVoucherResponse>.Failure(GetNotifications());
             }
 
-            var voucher = await _orderRepository.GetVoucherByCodeAsync(request.VoucherCode).ConfigureAwait(false);
+            var voucher = await orderRepository.GetVoucherByCodeAsync(request.VoucherCode).ConfigureAwait(false);
 
             if (voucher is null)
             {
-                _notificator.HandleNotification(new("Voucher not found."));
-                return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                Notify("Voucher not found.");
+                return Response<ApplyVoucherResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var voucherApplyValidation = order.ApplyVoucher(voucher);
@@ -50,13 +47,13 @@ namespace SalesSystem.Sales.Application.Commands.Orders.ApplyVoucher
 
         private async Task<Response<ApplyVoucherResponse>> PersistDataAsync(Order order, Voucher voucher, ApplyVoucherCommand request)
         {
-            _orderRepository.Update(order);
-            _orderRepository.UpdateVoucher(voucher);
+            orderRepository.Update(order);
+            orderRepository.UpdateVoucher(voucher);
 
-            if (!await _orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
+            if (!await orderRepository.UnitOfWork.CommitAsync().ConfigureAwait(false))
             {
-                _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<ApplyVoucherResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<ApplyVoucherResponse>.Failure(GetNotifications());
             }
 
             order.AddEvent(new AppliedVoucherEvent(request.CustomerId, order.Id, voucher.Id));

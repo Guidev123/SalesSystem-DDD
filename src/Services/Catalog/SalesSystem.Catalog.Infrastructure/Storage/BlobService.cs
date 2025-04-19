@@ -7,6 +7,7 @@ namespace SalesSystem.Catalog.Infrastructure.Storage
     internal sealed class BlobService(BlobServiceClient blob) : IBlobService
     {
         private const string CONTAINER_NAME = "images";
+
         public async Task DeleteAsync(Guid fileId, CancellationToken cancellationToken = default)
         {
             var containerClient = blob.GetBlobContainerClient(CONTAINER_NAME);

@@ -1,6 +1,4 @@
-﻿using SalesSystem.SharedKernel.Events.IntegrationEvents;
-
-namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Payments
+﻿namespace SalesSystem.SharedKernel.Events.IntegrationEvents.Payments
 {
     public record PaymentFailedIntegrationEvent : IntegrationEvent
     {

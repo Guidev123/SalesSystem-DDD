@@ -1,5 +1,5 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Domain.Interfaces.Services;
+﻿using SalesSystem.Catalog.Domain.Interfaces.Services;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -7,20 +7,17 @@ namespace SalesSystem.Catalog.Application.Commands.Stock.DebitStock
 {
     public sealed class DebitStockHandler(IStockService stockService,
                                           INotificator notificator)
-                                        : IRequestHandler<DebitStockCommand, Response<DebitStockResponse>>
+                                        : CommandHandler<DebitStockCommand, DebitStockResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IStockService _stockService = stockService;
-
-        public async Task<Response<DebitStockResponse>> ExecuteAsync(DebitStockCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<DebitStockResponse>> ExecuteAsync(DebitStockCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<DebitStockResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new DebitStockValidation(), request))
+                return Response<DebitStockResponse>.Failure(GetNotifications());
 
-            if (!await _stockService.DebitStockAsync(request.Id, request.Quantity))
+            if (!await stockService.DebitStockAsync(request.Id, request.Quantity))
             {
-                _notificator.HandleNotification(new("Fail to debit quantity."));
-                return Response<DebitStockResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to debit quantity.");
+                return Response<DebitStockResponse>.Failure(GetNotifications());
             }
 
             return Response<DebitStockResponse>.Success(null, code: 204);

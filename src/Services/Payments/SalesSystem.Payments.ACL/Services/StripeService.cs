@@ -90,20 +90,20 @@ namespace SalesSystem.Payments.ACL.Services
             if (!charge.Metadata.TryGetValue("customerId", out var customerId) || string.IsNullOrEmpty(customerId))
             {
                 notificator.HandleNotification(new("Customer ID not found in metadata."));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
 
             if (!Guid.TryParse(customerId, out var guidCustomerId))
             {
                 notificator.HandleNotification(new("Invalid Customer ID format."));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
 
             var payment = await paymentRepository.GetByCustomerIdAsync(guidCustomerId);
             if (payment is null)
             {
                 notificator.HandleNotification(new("Payment not found for customer."));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
 
             try
@@ -115,7 +115,7 @@ namespace SalesSystem.Payments.ACL.Services
                         notificator.HandleNotification(new("Order number not found in metadata."));
                         payment.SetAsFailed();
                         payment.AddEvent(new PaymentFailedIntegrationEvent(payment.OrderId, payment.CustomerId));
-                        return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                        return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
                     }
 
                     var transaction = new Transaction(payment.OrderId, payment.Id, payment.Amount, orderNumber);
@@ -134,7 +134,7 @@ namespace SalesSystem.Payments.ACL.Services
                     payment.SetAsFailed();
                     payment.AddEvent(new PaymentFailedIntegrationEvent(payment.OrderId, payment.CustomerId));
                     notificator.HandleNotification(new($"Unhandled Stripe event type: {stripeEvent.Type}"));
-                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                    return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
                 }
             }
             catch (Exception ex)
@@ -142,8 +142,11 @@ namespace SalesSystem.Payments.ACL.Services
                 payment.SetAsFailed();
                 payment.AddEvent(new PaymentFailedIntegrationEvent(payment.OrderId, payment.CustomerId));
                 notificator.HandleNotification(new($"Payment processing error: {ex.Message}"));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
         }
+
+        private List<string> GetNotifications()
+            => [.. notificator.GetNotifications().Select(x => x.Message)];
     }
 }

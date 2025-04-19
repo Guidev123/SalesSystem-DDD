@@ -1,8 +1,7 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Catalog.Application.DTOs;
-using SalesSystem.Catalog.Application.Mappers;
+﻿using SalesSystem.Catalog.Application.Mappers;
 using SalesSystem.Catalog.Application.Storage;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -11,9 +10,9 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
     public sealed class GetAllProductsHandler(IProductRepository productRepository,
                                               INotificator notificator,
                                               ICacheService cache)
-                                            : IRequestHandler<GetAllProductsQuery, PagedResponse<GetAllProductsResponse>>
+                                            : PagedQueryHandler<GetAllProductsQuery, GetAllProductsResponse>(notificator)
     {
-        public async Task<PagedResponse<GetAllProductsResponse>> ExecuteAsync(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public override async Task<PagedResponse<GetAllProductsResponse>> ExecuteAsync(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var cacheKey = $"products_{request.PageNumber}_{request.PageSize}";
             var cacheProduct = await cache.GetAsync<PagedResponse<GetAllProductsResponse>>(cacheKey);
@@ -22,8 +21,8 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetAll
             var products = await productRepository.GetAllAsync();
             if (!products.Any())
             {
-                notificator.HandleNotification(new("Products not found"));
-                return PagedResponse<GetAllProductsResponse>.Failure(notificator.GetNotifications());
+                Notify("Products not found");
+                return PagedResponse<GetAllProductsResponse>.Failure(GetNotifications());
             }
 
             var pagedProducts = products.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);

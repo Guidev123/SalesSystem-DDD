@@ -20,11 +20,5 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.SignUp
         public DateTime BirthDate { get; }
         public string Password { get; } = string.Empty;
         public string ConfirmPassword { get; } = string.Empty;
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new SignUpUserValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

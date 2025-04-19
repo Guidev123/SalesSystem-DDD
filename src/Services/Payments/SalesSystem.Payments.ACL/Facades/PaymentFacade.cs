@@ -25,7 +25,7 @@ namespace SalesSystem.Payments.ACL.Facades
             if (context is null)
             {
                 notificator.HandleNotification(new("HttpContext is null."));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
 
             try
@@ -41,13 +41,13 @@ namespace SalesSystem.Payments.ACL.Facades
                 if (stripeEvent is null)
                 {
                     notificator.HandleNotification(new("Invalid Stripe event."));
-                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                    return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
                 }
 
                 if (stripeEvent.Data.Object is not Charge charge)
                 {
                     notificator.HandleNotification(new("Event data is not a Charge object."));
-                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                    return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
                 }
 
                 var response = await stripeService.ConfirmPaymentInternal(stripeEvent, charge);
@@ -57,7 +57,7 @@ namespace SalesSystem.Payments.ACL.Facades
                 if (!commitResult)
                 {
                     notificator.HandleNotification(new("Failed to persist transaction data."));
-                    return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                    return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
                 }
 
                 return Response<ConfirmPaymentResponse>.Success(default);
@@ -65,12 +65,12 @@ namespace SalesSystem.Payments.ACL.Facades
             catch (StripeException ex)
             {
                 notificator.HandleNotification(new($"Stripe error: {ex.Message}"));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
             catch (Exception ex)
             {
                 notificator.HandleNotification(new($"Unexpected error: {ex.Message}"));
-                return Response<ConfirmPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<ConfirmPaymentResponse>.Failure(GetNotifications());
             }
         }
 
@@ -82,12 +82,15 @@ namespace SalesSystem.Payments.ACL.Facades
             if (string.IsNullOrWhiteSpace(stripeResponse))
             {
                 notificator.HandleNotification(new("Fail to create session with Stripe."));
-                return Response<CheckoutPaymentResponse>.Failure(notificator.GetNotifications());
+                return Response<CheckoutPaymentResponse>.Failure(GetNotifications());
             }
 
             return Response<CheckoutPaymentResponse>.Success(new(stripeResponse, command.OrderCode));
         }
 
         private StripeSettings GetStripeProperties() => stripeSettings.Value;
+
+        private List<string> GetNotifications()
+            => [.. notificator.GetNotifications().Select(x => x.Message)];
     }
 }

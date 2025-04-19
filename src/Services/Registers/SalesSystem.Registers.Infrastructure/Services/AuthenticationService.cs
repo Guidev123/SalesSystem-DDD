@@ -47,14 +47,14 @@ namespace SalesSystem.Registers.Infrastructure.Services
                     _notificator.HandleNotification(new(item.Description));
                 }
 
-                return Response<SignUpUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<SignUpUserResponse>.Failure(GetNotifications());
             }
 
             var userIdentity = await FindByUserEmailAsync(command.Email);
             if (!userIdentity.IsSuccess || userIdentity.Data is null)
             {
                 _notificator.HandleNotification(new("Fail to create user."));
-                return Response<SignUpUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<SignUpUserResponse>.Failure(GetNotifications());
             }
 
             return Response<SignUpUserResponse>.Success(new(userIdentity.Data.UserId), code: 201);
@@ -66,13 +66,13 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (!result.Succeeded)
             {
                 _notificator.HandleNotification(new("Invalid user credentials."));
-                return Response<SignInUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<SignInUserResponse>.Failure(GetNotifications());
             }
 
             if (result.IsLockedOut)
             {
                 _notificator.HandleNotification(new("You cannot SignIn now, try later."));
-                return Response<SignInUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<SignInUserResponse>.Failure(GetNotifications());
             }
 
             return Response<SignInUserResponse>.Success(await _jwtGeneratorService.JwtGenerator(command.Email));
@@ -84,7 +84,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<UserDto>.Failure(_notificator.GetNotifications());
+                return Response<UserDto>.Failure(GetNotifications());
             }
 
             return Response<UserDto>.Success(new(Guid.Parse(user.Id), user.Email ?? string.Empty));
@@ -96,7 +96,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<DeleteUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<DeleteUserResponse>.Failure(GetNotifications());
             }
 
             var delete = await _userManager.DeleteAsync(user);
@@ -107,7 +107,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
                     _notificator.HandleNotification(new(item.Description));
                 }
 
-                return Response<DeleteUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<DeleteUserResponse>.Failure(GetNotifications());
             }
 
             return Response<DeleteUserResponse>.Success(new(Guid.Parse(user.Id)), code: 204);
@@ -119,7 +119,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<ResetPasswordUserResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                return Response<ResetPasswordUserResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var result = await _userManager.ResetPasswordAsync(user, command.Token, command.Password);
@@ -130,7 +130,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
                     _notificator.HandleNotification(new(item.Description));
                 }
 
-                return Response<ResetPasswordUserResponse>.Failure(_notificator.GetNotifications());
+                return Response<ResetPasswordUserResponse>.Failure(GetNotifications());
             }
 
             return Response<ResetPasswordUserResponse>.Success(default, code: 204);
@@ -142,7 +142,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<ForgetPasswordUserResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                return Response<ForgetPasswordUserResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -167,14 +167,14 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (!roleIsValid)
             {
                 _notificator.HandleNotification(new("Invalid role name."));
-                return Response<AddUserRoleResponse>.Failure(_notificator.GetNotifications());
+                return Response<AddUserRoleResponse>.Failure(GetNotifications());
             }
 
             var user = await _userManager.FindByEmailAsync(command.Email);
             if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<AddUserRoleResponse>.Failure(_notificator.GetNotifications(), code: 404);
+                return Response<AddUserRoleResponse>.Failure(GetNotifications(), code: 404);
             }
 
             var result = await _userManager.AddToRoleAsync(user, command.RoleName);
@@ -184,7 +184,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
                 {
                     _notificator.HandleNotification(new(item.Description));
                 }
-                return Response<AddUserRoleResponse>.Failure(_notificator.GetNotifications());
+                return Response<AddUserRoleResponse>.Failure(GetNotifications());
             }
 
             return Response<AddUserRoleResponse>.Success(default, code: 204);
@@ -195,13 +195,13 @@ namespace SalesSystem.Registers.Infrastructure.Services
             if (!RoleIsInEnum(command.RoleName))
             {
                 _notificator.HandleNotification(new("Invalid role name. Must be a valid role from enum UserRoles."));
-                return Response<CreateRoleResponse>.Failure(_notificator.GetNotifications());
+                return Response<CreateRoleResponse>.Failure(GetNotifications());
             }
 
             if (await _roleManager.RoleExistsAsync(command.RoleName))
             {
                 _notificator.HandleNotification(new($"Role '{command.RoleName}' already exists."));
-                return Response<CreateRoleResponse>.Failure(_notificator.GetNotifications());
+                return Response<CreateRoleResponse>.Failure(GetNotifications());
             }
 
             var role = new IdentityRole(command.RoleName);
@@ -213,7 +213,7 @@ namespace SalesSystem.Registers.Infrastructure.Services
                 {
                     _notificator.HandleNotification(new(error.Description));
                 }
-                return Response<CreateRoleResponse>.Failure(_notificator.GetNotifications());
+                return Response<CreateRoleResponse>.Failure(GetNotifications());
             }
 
             var roleResult = new CreateRoleResponse(Guid.Parse(role.Id));
@@ -223,10 +223,10 @@ namespace SalesSystem.Registers.Infrastructure.Services
         public async Task<Response<IReadOnlyCollection<string>>> FindRolesByUserIdAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if(user is null)
+            if (user is null)
             {
                 _notificator.HandleNotification(new("User not found."));
-                return Response<IReadOnlyCollection<string>>.Failure(_notificator.GetNotifications(), code: 404);
+                return Response<IReadOnlyCollection<string>>.Failure(GetNotifications(), code: 404);
             }
 
             return Response<IReadOnlyCollection<string>>.Success([.. await _userManager.GetRolesAsync(user)]);
@@ -243,5 +243,8 @@ namespace SalesSystem.Registers.Infrastructure.Services
 
         private static bool RoleIsInEnum(string roleName)
             => Enum.GetNames<EUserRoles>().Any(name => name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+
+        private List<string> GetNotifications()
+            => [.. notificator.GetNotifications().Select(x => x.Message)];
     }
 }

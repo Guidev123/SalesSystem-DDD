@@ -4,7 +4,7 @@
     {
         bool HasNotifications();
 
-        List<string> GetNotifications();
+        List<Notification> GetNotifications();
 
         void HandleNotification(Notification notification);
     }

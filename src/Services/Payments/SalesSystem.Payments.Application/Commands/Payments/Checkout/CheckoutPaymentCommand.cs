@@ -29,11 +29,5 @@ namespace SalesSystem.Payments.Application.Commands.Payments.Checkout
             CustomerEmail = customerEmail;
             CustomerId = customerId;
         }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new CheckoutPaymentValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

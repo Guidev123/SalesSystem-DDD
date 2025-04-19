@@ -31,10 +31,5 @@ namespace SalesSystem.Registers.Application.Commands.Customers.AddAddress
             AggregateId = customerId;
             CustomerId = customerId;
         }
-        public override bool IsValid()
-        {
-            SetValidationResult(new AddAddressValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

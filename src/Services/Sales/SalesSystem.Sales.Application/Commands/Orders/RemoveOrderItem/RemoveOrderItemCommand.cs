@@ -19,11 +19,5 @@ namespace SalesSystem.Sales.Application.Commands.Orders.RemoveOrderItem
             CustomerId = customerId;
             AggregateId = customerId;
         }
-
-        public override bool IsValid()
-        {
-            SetValidationResult(new RemoveOrderItemValidation().Validate(this));
-            return ValidationResult!.IsValid;
-        }
     }
 }

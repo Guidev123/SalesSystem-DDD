@@ -1,8 +1,8 @@
-﻿using MidR.Interfaces;
-using SalesSystem.Sales.Application.Events;
+﻿using SalesSystem.Sales.Application.Events;
 using SalesSystem.Sales.Application.Mappers;
 using SalesSystem.Sales.Domain.Entities;
 using SalesSystem.Sales.Domain.Repositories;
+using SalesSystem.SharedKernel.Abstractions;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 using static SalesSystem.Sales.Domain.Entities.Order;
@@ -11,17 +11,14 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 {
     public sealed class AddOrderItemHandler(INotificator notificator,
                                             IOrderRepository orderRepository)
-                                          : IRequestHandler<AddOrderItemCommand, Response<AddOrderItemResponse>>
+                                          : CommandHandler<AddOrderItemCommand, AddOrderItemResponse>(notificator)
     {
-        private readonly INotificator _notificator = notificator;
-        private readonly IOrderRepository _orderRepository = orderRepository;
-
-        public async Task<Response<AddOrderItemResponse>> ExecuteAsync(AddOrderItemCommand request, CancellationToken cancellationToken)
+        public override async Task<Response<AddOrderItemResponse>> ExecuteAsync(AddOrderItemCommand request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
-                return Response<AddOrderItemResponse>.Failure(request.GetErrorMessages());
+            if (!ExecuteValidation(new AddOrderItemValidation(), request))
+                return Response<AddOrderItemResponse>.Failure(GetNotifications());
 
-            var order = await _orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
+            var order = await orderRepository.GetDraftOrderByCustomerIdAsync(request.CustomerId);
             var orderItem = request.MapOrderItemToEntity();
 
             var response = order is null
@@ -30,24 +27,24 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
             return response.IsSuccess
                 ? await PersistDataAsync(request.ProductId)
-                : Response<AddOrderItemResponse>.Failure(_notificator.GetNotifications());
+                : Response<AddOrderItemResponse>.Failure(GetNotifications());
         }
 
         private Response<Order> HandleExistentOrder(Order order, OrderItem orderItem, decimal unitPrice, int quantity)
         {
             var existentOrderItem = GetExistentOrderItem(order, orderItem.ProductId);
             var orderItemAlreadyExists = order.ItemAlreadyExists(orderItem);
-            if(!ValidateOrderItemQuantity(order, orderItem, quantity))
-                return Response<Order>.Failure(_notificator.GetNotifications());
+            if (!ValidateOrderItemQuantity(order, orderItem, quantity))
+                return Response<Order>.Failure(GetNotifications());
 
             order.AddItem(orderItem);
 
             if (orderItemAlreadyExists)
-                _orderRepository.UpdateItem(existentOrderItem!);
+                orderRepository.UpdateItem(existentOrderItem!);
             else
-                _orderRepository.AddOrderItem(orderItem);
+                orderRepository.AddOrderItem(orderItem);
 
-            _orderRepository.Update(order);
+            orderRepository.Update(order);
 
             order.AddEvent(new UpdatedOrderItemEvent(order.Id, order.CustomerId, order.Price, quantity));
             CreateOrderItemAddedEvent(order, orderItem.ProductId, unitPrice, quantity, orderItem.ProductName);
@@ -60,7 +57,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
             var order = OrderFactory.NewDraftOrder(customerId);
             order.AddItem(orderItem);
 
-            _orderRepository.Create(order);
+            orderRepository.Create(order);
 
             order.AddEvent(new DraftOrderStartedEvent(customerId, order.Id));
             CreateOrderItemAddedEvent(order, orderItem.ProductId, unitPrice, quantity, orderItem.ProductName);
@@ -70,10 +67,10 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
         private async Task<Response<AddOrderItemResponse>> PersistDataAsync(Guid productId)
         {
-            if (!await _orderRepository.UnitOfWork.CommitAsync())
+            if (!await orderRepository.UnitOfWork.CommitAsync())
             {
-                _notificator.HandleNotification(new("Fail to persist data."));
-                return Response<AddOrderItemResponse>.Failure(_notificator.GetNotifications());
+                Notify("Fail to persist data.");
+                return Response<AddOrderItemResponse>.Failure(GetNotifications());
             }
 
             return Response<AddOrderItemResponse>.Success(new(productId));
@@ -89,7 +86,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
         {
             if (order.ItemAlreadyExists(item) && item.Quantity + quantity > MAX_ITEM_QUANTITY)
             {
-                _notificator.HandleNotification(new($"The maximum quantity of items in the order is {MAX_ITEM_QUANTITY}."));
+                Notify($"The maximum quantity of items in the order is {MAX_ITEM_QUANTITY}.");
                 return false;
             }
 

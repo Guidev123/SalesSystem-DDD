@@ -22,7 +22,7 @@ namespace SalesSystem.Registers.Application.Mappers
 
         public static CustomerDto MapFromCustomer(this Customer customer, IReadOnlyCollection<string>? roles)
         {
-            if(customer.Address is not null)
+            if (customer.Address is not null)
                 return new(customer.Id, customer.Email.Address, customer.Address.MapFromAddress(), roles);
 
             return new(customer.Id, customer.Email.Address, null, roles);
