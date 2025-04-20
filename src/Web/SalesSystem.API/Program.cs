@@ -19,3 +19,5 @@ var app = builder.Build();
 app.AddApiUsing();
 
 app.Run();
+
+public partial class Program { }

@@ -25,15 +25,15 @@ namespace SalesSystem.API.Configuration
 
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
-            builder.AddModelConfig();
             builder.AddCorsConfig();
             builder.AddConfigureMediator();
-            builder.Services.AddJwtConfiguration(builder.Configuration);
-            builder.AddHandlers();
             builder.AddCustomMiddlewares();
+            builder.AddEmailServices();
+            builder.AddHandlers();
+            builder.AddModelConfig();
             builder.AddNotifications();
             builder.Services.AddEventStoreConfiguration();
-            builder.AddEmailServices();
+            builder.Services.AddJwtConfiguration(builder.Configuration);
             builder.Services.AddSwaggerConfig();
             builder.Services.AddHttpContextAccessor();
         }
