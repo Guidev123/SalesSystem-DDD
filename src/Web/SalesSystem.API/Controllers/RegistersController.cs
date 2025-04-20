@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SalesSystem.Registers.Application.Commands.Authentication.AddUserRole;
 using SalesSystem.Registers.Application.Commands.Authentication.CreateRole;
+using SalesSystem.Registers.Application.Commands.Authentication.Delete;
 using SalesSystem.Registers.Application.Commands.Authentication.ForgetPassword;
 using SalesSystem.Registers.Application.Commands.Authentication.ResetPassword;
 using SalesSystem.Registers.Application.Commands.Authentication.SignIn;
@@ -29,6 +30,10 @@ namespace SalesSystem.API.Controllers
         [HttpPost("signin")]
         public async Task<IResult> SignInAsync(SignInUserCommand command)
             => CustomResponse(await mediatorHandler.SendCommand(command));
+
+        [HttpDelete("{userId:guid}")]
+        public async Task<IResult> DeleteAsync(Guid userId)
+             => CustomResponse(await mediatorHandler.SendCommand(new DeleteUserCommand(userId)));
 
         [HttpPost("address")]
         public async Task<IResult> AddAddressAsync(AddAddressCommand command)

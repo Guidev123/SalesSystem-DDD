@@ -41,6 +41,12 @@ namespace SalesSystem.Registers.Domain.Entities
             Address = address;
         }
 
+        public void SetDeleted()
+        {
+            IsDeleted = true;
+            DeletedAt = DateTime.Now;
+        }
+
         public override void Validate()
         {
             AssertionConcern.EnsureNotEmpty(Name, "Customer name cannot be empty.");

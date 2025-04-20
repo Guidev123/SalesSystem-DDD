@@ -4,11 +4,10 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.Delete
 {
     public record DeleteUserCommand : Command<DeleteUserResponse>
     {
-        public DeleteUserCommand(Guid id, string email)
+        public DeleteUserCommand(Guid id)
         {
             AggregateId = id;
             Id = id;
-            Email = email;
         }
 
         public Guid Id { get; }

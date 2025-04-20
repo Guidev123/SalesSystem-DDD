@@ -9,10 +9,6 @@ namespace SalesSystem.Registers.Application.Commands.Authentication.Delete
             RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)
                 .WithMessage("User id invalid");
-
-            RuleFor(c => c.Email)
-                .EmailAddress()
-                .WithMessage("Invalid E-mail");
         }
     }
 }

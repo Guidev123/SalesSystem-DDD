@@ -64,4 +64,5 @@ namespace SalesSystem.IntegrationTests.Configuration
         }
     }
     public record Response(bool? IsSuccess, List<string?>? Errors, string? Message);
+    public record Response<T>(bool? IsSuccess, List<string?>? Errors, string? Message, T? Data);
 }
