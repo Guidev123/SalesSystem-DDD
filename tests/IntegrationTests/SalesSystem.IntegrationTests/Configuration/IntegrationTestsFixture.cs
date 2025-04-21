@@ -16,6 +16,7 @@ namespace SalesSystem.IntegrationTests.Configuration
         public readonly SalesAppFactory<TProgram> Factory;
         public HttpClient HttpClient;
 
+        public Guid UserId;
         public string UserPassword = string.Empty;
         public string UserEmail = string.Empty;
         public string UserDocument = string.Empty;
