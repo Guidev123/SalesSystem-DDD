@@ -48,10 +48,10 @@ namespace SalesSystem.API.Controllers
             return CustomResponse(await mediatorHandler.SendCommand(command));
         }
 
-        [HttpDelete("cart/item/{orderId:guid}/{productId:guid}")]
-        public async Task<IResult> RemoveOrderItemAsync(Guid orderId, Guid productId)
+        [HttpDelete("cart/item/{productId:guid}")]
+        public async Task<IResult> RemoveOrderItemAsync(Guid productId)
         {
-            var command = new RemoveOrderItemCommand(orderId, productId);
+            var command = new RemoveOrderItemCommand(productId);
             command.SetCustomerId(GetUserId());
             return CustomResponse(await mediatorHandler.SendCommand(command));
         }

@@ -1,6 +1,8 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
 using Microsoft.AspNetCore.Mvc.Testing;
+using SalesSystem.Registers.Application.Commands.Authentication.SignIn;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -24,10 +26,7 @@ namespace SalesSystem.IntegrationTests.Configuration
         {
             var clientOptions = new WebApplicationFactoryClientOptions
             {
-                AllowAutoRedirect = true,
                 BaseAddress = new Uri("http://localhost"),
-                HandleCookies = true,
-                MaxAutomaticRedirections = 7
             };
 
             Factory = new SalesAppFactory<TProgram>();
@@ -50,11 +49,19 @@ namespace SalesSystem.IntegrationTests.Configuration
                 Encoding.UTF8,
                 "application/json");
 
-        public async Task<Response> GetResponse(HttpResponseMessage response)
-            => JsonSerializer.Deserialize<Response>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions
+        public async Task SignInAsync()
         {
-            PropertyNameCaseInsensitive = true
-        })!;
+            var response = await HttpClient.PostAsJsonAsync("/api/v1/registers/signin", new SignInUserCommand("teste@teste.com", "Teste@123"));
+            response.EnsureSuccessStatusCode();
+            var result = await GetResponse<Response<SignInUserResponse>>(response);
+            TestsExtensions.SetJsonWebToken(HttpClient, result.Data?.AccessToken ?? string.Empty);
+        }
+
+        public async Task<T> GetResponse<T>(HttpResponseMessage response)
+            => JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            })!;
 
         public void Dispose()
         {

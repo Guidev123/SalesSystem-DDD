@@ -10,7 +10,7 @@ namespace SalesSystem.IntegrationTests
     {
         [Fact(DisplayName = "Sign Up With Success"), TestPriority(1)]
         [Trait("Registers", "Integration Tests")]
-        public async Task User_SignUp_ShouldExecuteWithSuccess()
+        public async Task Registers_SignUp_ShouldExecuteWithSuccess()
         {
             // Arrange
             testsFixture.GenerateUserData();
@@ -24,7 +24,7 @@ namespace SalesSystem.IntegrationTests
             var response = await testsFixture.HttpClient.PostAsync("/api/v1/registers", testsFixture.GetContent(command));
 
             // Assert
-            var result = await testsFixture.GetResponse(response);
+            var result = await testsFixture.GetResponse<Response>(response);
             Assert.True(response.IsSuccessStatusCode);
             Assert.True(result.IsSuccess);
             Assert.Null(result.Errors);
@@ -32,7 +32,7 @@ namespace SalesSystem.IntegrationTests
 
         [Fact(DisplayName = "Sign In With Success"), TestPriority(2)]
         [Trait("Registers", "Integration Tests")]
-        public async Task User_SignIn_ShouldExecuteWithSuccess()
+        public async Task Registers_SignIn_ShouldExecuteWithSuccess()
         {
             // Arrange
             var command = new SignInUserCommand(testsFixture.UserEmail, testsFixture.UserPassword);
@@ -41,7 +41,7 @@ namespace SalesSystem.IntegrationTests
             var response = await testsFixture.HttpClient.PostAsync("/api/v1/registers/signin", testsFixture.GetContent(command));
 
             // Assert
-            var result = await testsFixture.GetResponse(response);
+            var result = await testsFixture.GetResponse<Response>(response);
             Assert.True(response.IsSuccessStatusCode);
             Assert.True(result.IsSuccess);
             Assert.Empty(result.Errors ?? []);
@@ -49,7 +49,7 @@ namespace SalesSystem.IntegrationTests
 
         [Fact(DisplayName = "Sign Up With Weak Password Should Return Error"), TestPriority(3)]
         [Trait("Registers", "Integration Tests")]
-        public async Task User_SignUp_ShouldFailWhenPasswordIsWeak()
+        public async Task Registers_SignUp_ShouldFailWhenPasswordIsWeak()
         {
             // Arrange
             testsFixture.GenerateUserData();
@@ -63,7 +63,7 @@ namespace SalesSystem.IntegrationTests
             var response = await testsFixture.HttpClient.PostAsync("/api/v1/registers", testsFixture.GetContent(command));
 
             // Assert
-            var result = await testsFixture.GetResponse(response);
+            var result = await testsFixture.GetResponse<Response>(response);
             Assert.False(response.IsSuccessStatusCode);
             Assert.False(result.IsSuccess);
             Assert.NotNull(result.Errors);
