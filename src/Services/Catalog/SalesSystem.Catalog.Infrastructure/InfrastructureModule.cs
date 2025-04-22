@@ -25,7 +25,7 @@ namespace SalesSystem.Catalog.Infrastructure
 
         public static void AddCatalogDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         }
 
         public static void AddRepositories(this IServiceCollection services)

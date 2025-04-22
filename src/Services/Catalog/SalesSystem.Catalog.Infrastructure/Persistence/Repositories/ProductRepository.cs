@@ -5,9 +5,9 @@ using SalesSystem.SharedKernel.Data;
 
 namespace SalesSystem.Catalog.Infrastructure.Persistence.Repositories
 {
-    public sealed class ProductRepository(CatalogContext context) : IProductRepository
+    public sealed class ProductRepository(CatalogDbContext context) : IProductRepository
     {
-        private readonly CatalogContext _context = context;
+        private readonly CatalogDbContext _context = context;
 
         public IUnitOfWork UnitOfWork => _context;
 

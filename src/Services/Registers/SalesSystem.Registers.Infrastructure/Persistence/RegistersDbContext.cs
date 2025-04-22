@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace SalesSystem.Registers.Infrastructure.Persistence
 {
-    public sealed class RegisterDbContext(DbContextOptions<RegisterDbContext> options,
+    public sealed class RegistersDbContext(DbContextOptions<RegistersDbContext> options,
                                           IMediatorHandler mediatorHandler)
                                         : IdentityDbContext<User>(options), IUnitOfWork
     {
@@ -25,7 +25,7 @@ namespace SalesSystem.Registers.Infrastructure.Persistence
                 .SelectMany(x => x.GetProperties())
                 .Where(x => x.ClrType == typeof(string) && x.GetColumnType() == null);
 
-            builder.HasDefaultSchema("register");
+            builder.HasDefaultSchema("registers");
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

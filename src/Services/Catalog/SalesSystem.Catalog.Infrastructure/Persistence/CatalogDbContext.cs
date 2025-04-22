@@ -7,7 +7,7 @@ using SalesSystem.SharedKernel.Events;
 
 namespace SalesSystem.Catalog.Infrastructure.Persistence
 {
-    public class CatalogContext(DbContextOptions<CatalogContext> options,
+    public sealed class CatalogDbContext(DbContextOptions<CatalogDbContext> options,
                                 IMediatorHandler mediatorHandler)
                               : DbContext(options), IUnitOfWork
     {
@@ -25,7 +25,7 @@ namespace SalesSystem.Catalog.Infrastructure.Persistence
                 .Where(p => p.ClrType == typeof(string)
                 && p.GetColumnType() == null);
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
 
             foreach (var item in properties)
             {

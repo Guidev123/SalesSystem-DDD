@@ -5,7 +5,7 @@ using SalesSystem.SharedKernel.Data;
 
 namespace SalesSystem.Registers.Infrastructure.Persistence.Repositories
 {
-    public sealed class CustomerRepository(RegisterDbContext context) : ICustomerRepository
+    public sealed class CustomerRepository(RegistersDbContext context) : ICustomerRepository
     {
         public IUnitOfWork UnitOfWork => context;
 

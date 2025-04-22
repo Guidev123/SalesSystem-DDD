@@ -9,18 +9,18 @@ using SalesSystem.Registers.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
+namespace SalesSystem.Registers.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(RegisterDbContext))]
-    [Migration("20250328134958_IdentityUserTableFix")]
-    partial class IdentityUserTableFix
+    [DbContext(typeof(RegistersDbContext))]
+    [Migration("20250422185459_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("register")
+                .HasDefaultSchema("registers")
                 .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -57,7 +57,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role", "register");
+                    b.ToTable("Role", "registers");
 
                     b.HasDiscriminator().HasValue("IdentityRole<string>");
 
@@ -86,7 +86,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleClaim", "register");
+                    b.ToTable("RoleClaim", "registers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -162,7 +162,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users", "register");
+                    b.ToTable("Users", "registers");
 
                     b.HasDiscriminator().HasValue("IdentityUser");
 
@@ -194,7 +194,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Claim", "register");
+                    b.ToTable("Claim", "registers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -219,7 +219,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserLogin", "register");
+                    b.ToTable("UserLogin", "registers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -234,7 +234,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.ToTable("UserRole", "register");
+                    b.ToTable("UserRole", "registers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -257,10 +257,10 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserToken", "register");
+                    b.ToTable("UserToken", "registers");
                 });
 
-            modelBuilder.Entity("SalesSystem.Register.Domain.Entities.Address", b =>
+            modelBuilder.Entity("SalesSystem.Registers.Domain.Entities.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -302,10 +302,10 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
-                    b.ToTable("Addresses", "register");
+                    b.ToTable("Addresses", "registers");
                 });
 
-            modelBuilder.Entity("SalesSystem.Register.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("SalesSystem.Registers.Domain.Entities.Customer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,7 +330,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", "register");
+                    b.ToTable("Customers", "registers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -340,7 +340,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     b.HasDiscriminator().HasValue("IdentityRole");
                 });
 
-            modelBuilder.Entity("SalesSystem.Register.Infrastructure.Models.User", b =>
+            modelBuilder.Entity("SalesSystem.Registers.Infrastructure.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -383,20 +383,20 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SalesSystem.Register.Domain.Entities.Address", b =>
+            modelBuilder.Entity("SalesSystem.Registers.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("SalesSystem.Register.Domain.Entities.Customer", "Customer")
+                    b.HasOne("SalesSystem.Registers.Domain.Entities.Customer", "Customer")
                         .WithOne("Address")
-                        .HasForeignKey("SalesSystem.Register.Domain.Entities.Address", "CustomerId")
+                        .HasForeignKey("SalesSystem.Registers.Domain.Entities.Address", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("SalesSystem.Register.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("SalesSystem.Registers.Domain.Entities.Customer", b =>
                 {
-                    b.OwnsOne("SalesSystem.Register.Domain.ValueObjects.Document", "Document", b1 =>
+                    b.OwnsOne("SalesSystem.Registers.Domain.ValueObjects.Document", "Document", b1 =>
                         {
                             b1.Property<Guid>("CustomerId")
                                 .HasColumnType("uniqueidentifier");
@@ -408,13 +408,13 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("CustomerId");
 
-                            b1.ToTable("Customers", "register");
+                            b1.ToTable("Customers", "registers");
 
                             b1.WithOwner()
                                 .HasForeignKey("CustomerId");
                         });
 
-                    b.OwnsOne("SalesSystem.Register.Domain.ValueObjects.Email", "Email", b1 =>
+                    b.OwnsOne("SalesSystem.Registers.Domain.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("CustomerId")
                                 .HasColumnType("uniqueidentifier");
@@ -426,7 +426,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("CustomerId");
 
-                            b1.ToTable("Customers", "register");
+                            b1.ToTable("Customers", "registers");
 
                             b1.WithOwner()
                                 .HasForeignKey("CustomerId");
@@ -439,7 +439,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SalesSystem.Register.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("SalesSystem.Registers.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Address");
                 });

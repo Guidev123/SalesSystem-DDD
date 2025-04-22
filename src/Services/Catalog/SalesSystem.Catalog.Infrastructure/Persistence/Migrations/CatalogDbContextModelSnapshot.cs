@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SalesSystem.Catalog.Infrastructure.Persistence;
 
@@ -11,12 +10,10 @@ using SalesSystem.Catalog.Infrastructure.Persistence;
 
 namespace SalesSystem.Catalog.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(CatalogContext))]
-    [Migration("20250417144747_Init")]
-    partial class Init
+    [DbContext(typeof(CatalogDbContext))]
+    partial class CatalogDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

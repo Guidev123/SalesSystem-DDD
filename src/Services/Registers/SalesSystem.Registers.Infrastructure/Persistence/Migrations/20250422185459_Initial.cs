@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
+namespace SalesSystem.Registers.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -11,11 +12,11 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "register");
+                name: "registers");
 
             migrationBuilder.CreateTable(
                 name: "Customers",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -34,7 +35,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Role",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(160)", unicode: false, nullable: false),
@@ -50,7 +51,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RoleClaim",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -66,10 +67,11 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Users",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(160)", unicode: false, nullable: false),
+                    Discriminator = table.Column<string>(type: "varchar(160)", unicode: false, maxLength: 13, nullable: false),
                     UserName = table.Column<string>(type: "VARCHAR(160)", maxLength: 160, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "VARCHAR(160)", maxLength: 160, nullable: true),
                     Email = table.Column<string>(type: "VARCHAR(160)", maxLength: 160, nullable: true),
@@ -92,7 +94,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Addresses",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -111,7 +113,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Addresses_Customers_CustomerId",
                         column: x => x.CustomerId,
-                        principalSchema: "register",
+                        principalSchema: "registers",
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -119,7 +121,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Claim",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -134,7 +136,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Claim_Users_UserId",
                         column: x => x.UserId,
-                        principalSchema: "register",
+                        principalSchema: "registers",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -142,7 +144,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserLogin",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "varchar(160)", unicode: false, nullable: false),
@@ -156,7 +158,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_UserLogin_Users_UserId",
                         column: x => x.UserId,
-                        principalSchema: "register",
+                        principalSchema: "registers",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -164,7 +166,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserRole",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "varchar(160)", unicode: false, nullable: false),
@@ -176,7 +178,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_UserRole_Users_UserId",
                         column: x => x.UserId,
-                        principalSchema: "register",
+                        principalSchema: "registers",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -184,7 +186,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserToken",
-                schema: "register",
+                schema: "registers",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "varchar(160)", unicode: false, nullable: false),
@@ -198,7 +200,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_UserToken_Users_UserId",
                         column: x => x.UserId,
-                        principalSchema: "register",
+                        principalSchema: "registers",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -206,20 +208,20 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_CustomerId",
-                schema: "register",
+                schema: "registers",
                 table: "Addresses",
                 column: "CustomerId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Claim_UserId",
-                schema: "register",
+                schema: "registers",
                 table: "Claim",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Role_NormalizedName",
-                schema: "register",
+                schema: "registers",
                 table: "Role",
                 column: "NormalizedName",
                 unique: true,
@@ -227,7 +229,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_NormalizedEmail",
-                schema: "register",
+                schema: "registers",
                 table: "Users",
                 column: "NormalizedEmail",
                 unique: true,
@@ -235,7 +237,7 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_NormalizedUserName",
-                schema: "register",
+                schema: "registers",
                 table: "Users",
                 column: "NormalizedUserName",
                 unique: true,
@@ -247,39 +249,39 @@ namespace SalesSystem.Register.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Addresses",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "Claim",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "Role",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "RoleClaim",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "UserLogin",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "UserRole",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "UserToken",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "Customers",
-                schema: "register");
+                schema: "registers");
 
             migrationBuilder.DropTable(
                 name: "Users",
-                schema: "register");
+                schema: "registers");
         }
     }
 }
