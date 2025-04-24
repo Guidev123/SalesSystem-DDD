@@ -29,7 +29,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessing
 
         private async Task<Response<CancelOrderProcessingResponse>> PersistDataAsync()
         {
-            if (await orderRepository.UnitOfWork.CommitAsync())
+            if (!await orderRepository.UnitOfWork.CommitAsync())
             {
                 Notify("Fail to persist data.");
                 return Response<CancelOrderProcessingResponse>.Failure(GetNotifications());
