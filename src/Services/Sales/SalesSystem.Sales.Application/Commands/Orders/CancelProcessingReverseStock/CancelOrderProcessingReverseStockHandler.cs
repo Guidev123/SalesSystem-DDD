@@ -38,7 +38,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
 
         private async Task<Response<CancelOrderProcessingReverseStockResponse>> PersistDataAsync()
         {
-            if (await orderRepository.UnitOfWork.CommitAsync())
+            if (!await orderRepository.UnitOfWork.CommitAsync())
             {
                 Notify("Fail to persist data.");
                 return Response<CancelOrderProcessingReverseStockResponse>.Failure(GetNotifications());

@@ -32,7 +32,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Finish
 
         private async Task<Response<FinishOrderResponse>> PersistDataAsync()
         {
-            if (await orderRepository.UnitOfWork.CommitAsync())
+            if (!await orderRepository.UnitOfWork.CommitAsync())
             {
                 Notify("Fail to persist data.");
                 return Response<FinishOrderResponse>.Failure(GetNotifications());
