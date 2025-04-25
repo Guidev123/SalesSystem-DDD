@@ -5,11 +5,11 @@ namespace SalesSystem.Catalog.Domain.Interfaces.Repositories
 {
     public interface IProductRepository : IRepository<Product>
     {
-        Task<IEnumerable<Product>> GetAllAsync();
+        Task<(IEnumerable<Product> pagedProducts, int totalCount)> GetAllAsync(int pageNumber, int pageSize);
 
-        Task<IEnumerable<Product>> GetByCategoryAsync(int code);
+        Task<(IEnumerable<Product> pagedProducts, int totalCount)> GetByCategoryAsync(int pageNumber, int pageSize, int code);
 
-        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<(IEnumerable<Category> pagedCategories, int totalCount)> GetAllCategoriesAsync(int pageNumber, int pageSize);
 
         Task<Product?> GetByIdAsync(Guid id);
 

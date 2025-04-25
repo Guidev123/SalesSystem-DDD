@@ -18,18 +18,16 @@ namespace SalesSystem.Catalog.Application.Queries.Categories.GetAll
             var cacheCategory = await cache.GetAsync<PagedResponse<GetAllCategoriesResponse>>(cacheKey);
             if (cacheCategory is not null) return cacheCategory;
 
-            var categories = await productRepository.GetAllCategoriesAsync();
-            if (!categories.Any())
+            var (categories, totalCount) = await productRepository.GetAllCategoriesAsync(request.PageNumber, request.PageSize);
+            if (!categories.Any() || totalCount <= 0)
             {
                 Notify("Categories not found");
                 return PagedResponse<GetAllCategoriesResponse>.Failure(GetNotifications(), code: 404);
             }
 
-            var pagedCategories = categories.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
+            var categoriesResult = categories.Select(x => x.MapFromEntity());
 
-            var categoriesResult = pagedCategories.Select(x => x.MapFromEntity());
-
-            var response = PagedResponse<GetAllCategoriesResponse>.Success(new(categoriesResult), categories.Count(), request.PageNumber, request.PageSize);
+            var response = PagedResponse<GetAllCategoriesResponse>.Success(new(categoriesResult), totalCount, request.PageNumber, request.PageSize);
 
             await cache.SetAsync(cacheKey, response);
 

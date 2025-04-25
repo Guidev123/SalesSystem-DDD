@@ -12,17 +12,15 @@ namespace SalesSystem.Catalog.Application.Queries.Products.GetByCategory
     {
         public override async Task<PagedResponse<GetProductsByCategoryResponse>> ExecuteAsync(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
         {
-            var products = await productRepository.GetByCategoryAsync(request.Code);
-            if (!products.Any())
+            var (products, totalCount) = await productRepository.GetByCategoryAsync(request.PageNumber, request.PageSize, request.Code);
+            if (!products.Any() || totalCount <= 0)
             {
                 Notify("Products not found");
                 return PagedResponse<GetProductsByCategoryResponse>.Failure(GetNotifications());
             }
 
-            var pagedProducts = products.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
-
-            return PagedResponse<GetProductsByCategoryResponse>.Success(new(pagedProducts.Select(x => x.MapFromEntity())),
-                products.Count(), request.PageNumber, request.PageSize);
+            return PagedResponse<GetProductsByCategoryResponse>.Success(new(products.Select(x => x.MapFromEntity())),
+                totalCount, request.PageNumber, request.PageSize);
         }
     }
 }
