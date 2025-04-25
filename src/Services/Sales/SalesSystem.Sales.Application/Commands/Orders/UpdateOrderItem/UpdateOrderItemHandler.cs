@@ -36,7 +36,8 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 
         private bool UpdateUnitiesAsync(OrderItem orderItem, UpdateOrderItemCommand command, Order order)
         {
-            if (orderItem.Quantity + command.Quantity > Order.MAX_ITEM_QUANTITY)
+            var orderItemQuantity = order.OrderItems.FirstOrDefault(x => x.ProductId == orderItem.ProductId)?.Quantity;
+            if ((orderItemQuantity + command.Quantity) > Order.MAX_ITEM_QUANTITY)
             {
                 Notify($"The maximum quantity of items in the order is {Order.MAX_ITEM_QUANTITY}.");
                 return false;

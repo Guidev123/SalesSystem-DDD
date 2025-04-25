@@ -84,7 +84,8 @@ namespace SalesSystem.Sales.Application.Commands.Orders.AddOrderItem
 
         private bool ValidateOrderItemQuantity(Order order, OrderItem item, int quantity)
         {
-            if (order.ItemAlreadyExists(item) && item.Quantity + quantity > MAX_ITEM_QUANTITY)
+            var orderItem = order.OrderItems.FirstOrDefault(x => x.ProductId == item.ProductId);
+            if (order.ItemAlreadyExists(item) && (orderItem?.Quantity + quantity) > MAX_ITEM_QUANTITY)
             {
                 Notify($"The maximum quantity of items in the order is {MAX_ITEM_QUANTITY}.");
                 return false;
