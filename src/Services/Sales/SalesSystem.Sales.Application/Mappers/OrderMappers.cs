@@ -11,7 +11,7 @@ namespace SalesSystem.Sales.Application.Mappers
             => new(command.ProductId, command.Name, command.Quantity, command.UnitPrice);
 
         public static CartDto MapOrderToCartDTO(this Order order, IEnumerable<CartItemDto> items, string? voucherCode = null)
-            => new(order.Id, order.Discount + order.Price, order.Price, order.Discount, voucherCode, items.ToList());
+            => new(order.Discount + order.Price, order.Price, order.Discount, voucherCode, items.ToList());
 
         public static CartItemDto MapOrderItemToCartItemDTO(this OrderItem orderItem)
             => new(orderItem.ProductId, orderItem.ProductName, orderItem.Quantity, orderItem.UnitPrice, orderItem.CalculatePrice());

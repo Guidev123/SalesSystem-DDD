@@ -4,15 +4,16 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Start
 {
     public record StartOrderCommand : Command<StartOrderResponse>
     {
-        public StartOrderCommand(Guid orderId, Guid customerId, decimal totalPrice)
+        public StartOrderCommand(Guid customerId, decimal totalPrice)
         {
-            OrderId = orderId;
             CustomerId = customerId;
             TotalPrice = totalPrice;
         }
 
-        public Guid OrderId { get; }
         public Guid CustomerId { get; }
         public decimal TotalPrice { get; }
+
+        public void SetAggregateId(Guid aggregateId)
+            => AggregateId = aggregateId;
     }
 }

@@ -34,7 +34,7 @@ namespace Sales.UnitTests.Application.Handlers
             var customerId = Guid.NewGuid();
             var voucher = GetValidValueVoucher();
             var order = GetValidNewDraftOrder(customerId);
-            var command = new ApplyVoucherCommand(order.Id, voucher.Code);
+            var command = new ApplyVoucherCommand(voucher.Code);
             command.SetCustomerId(customerId);
 
             order.AddItem(GetValidOrderItem());
@@ -77,7 +77,7 @@ namespace Sales.UnitTests.Application.Handlers
             var customerId = Guid.NewGuid();
             var voucher = GetValidValueVoucher();
             var order = GetValidNewDraftOrder(customerId);
-            var command = new ApplyVoucherCommand(order.Id, voucher.Code);
+            var command = new ApplyVoucherCommand(voucher.Code);
             command.SetCustomerId(customerId);
 
             order.AddItem(GetValidOrderItem());
@@ -128,7 +128,7 @@ namespace Sales.UnitTests.Application.Handlers
             var customerId = Guid.NewGuid();
             var voucher = GetValidValueVoucher();
             var order = GetValidNewDraftOrder(customerId);
-            var command = new ApplyVoucherCommand(order.Id, voucher.Code);
+            var command = new ApplyVoucherCommand(voucher.Code);
             var orderItem = GetValidOrderItem();
             command.SetCustomerId(customerId);
 

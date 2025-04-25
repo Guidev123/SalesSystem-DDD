@@ -75,7 +75,7 @@ namespace SalesSystem.API.Controllers
             if (!cartResponse.IsSuccess
                 || cartResponse.Data is null) CustomResponse(cartResponse);
 
-            return CustomResponse(await mediatorHandler.SendCommand(new StartOrderCommand(cart.OrderId, userId, cart.TotalPrice)));
+            return CustomResponse(await mediatorHandler.SendCommand(new StartOrderCommand(userId, cart.TotalPrice)));
         }
 
         private async Task<bool> CustomerHasAddress(Guid customerId)

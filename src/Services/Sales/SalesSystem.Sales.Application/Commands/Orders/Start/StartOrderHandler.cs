@@ -27,6 +27,8 @@ namespace SalesSystem.Sales.Application.Commands.Orders.Start
             order.AddEvent(new StartedOrderIntegrationEvent(order.Id, order.CustomerId, order.Price,
                 OrderMappers.MapFromEntityToOrderProductsListDTO([.. order.OrderItems], order.Id)));
 
+            request.SetAggregateId(order.Id);
+
             orderRepository.Update(order);
             return await PersistDataAsync();
         }
