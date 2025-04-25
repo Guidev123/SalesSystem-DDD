@@ -24,6 +24,8 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
                 return Response<UpdateOrderItemResponse>.Failure(GetNotifications(), code: 404);
             }
 
+            request.SetAggregateId(order.Id);
+
             var orderItemResult = await GetOrderItemAsync(order, request.ProductId).ConfigureAwait(false);
             if (!orderItemResult.IsSuccess || orderItemResult.Data is null)
                 return Response<UpdateOrderItemResponse>.Failure(GetNotifications(), code: 404);
@@ -36,8 +38,7 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
 
         private bool UpdateUnitiesAsync(OrderItem orderItem, UpdateOrderItemCommand command, Order order)
         {
-            var orderItemQuantity = order.OrderItems.FirstOrDefault(x => x.ProductId == orderItem.ProductId)?.Quantity;
-            if ((orderItemQuantity + command.Quantity) > Order.MAX_ITEM_QUANTITY)
+            if (command.Quantity > Order.MAX_ITEM_QUANTITY)
             {
                 Notify($"The maximum quantity of items in the order is {Order.MAX_ITEM_QUANTITY}.");
                 return false;

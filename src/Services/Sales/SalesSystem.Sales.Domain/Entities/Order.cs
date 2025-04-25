@@ -107,7 +107,6 @@ namespace SalesSystem.Sales.Domain.Entities
 
         private void ApplyPercentualVoucher(decimal value, decimal voucherPercentual)
         {
-            AssertionConcern.EnsureGreaterThan(value, 0, "Value must be not null.");
             AssertionConcern.EnsureGreaterThan(voucherPercentual, 0, "Voucher Percentual must be not null.");
 
             var discount = (value * voucherPercentual) / 100;
@@ -119,7 +118,6 @@ namespace SalesSystem.Sales.Domain.Entities
 
         private void ApplyValueVoucher(decimal value, decimal voucherValue)
         {
-            AssertionConcern.EnsureGreaterThan(value, 0, "Value must be not null.");
             AssertionConcern.EnsureGreaterThan(voucherValue, 0, "Voucher Value must be not null.");
 
             var discount = voucherValue;

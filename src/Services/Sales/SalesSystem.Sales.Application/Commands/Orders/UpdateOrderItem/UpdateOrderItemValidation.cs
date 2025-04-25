@@ -10,10 +10,6 @@ namespace SalesSystem.Sales.Application.Commands.Orders.UpdateOrderItem
                 .NotEqual(Guid.Empty)
                 .WithMessage("Customer Id cannot be empty.");
 
-            RuleFor(x => x.OrderId)
-                .NotEqual(Guid.Empty)
-                .WithMessage("Order Id cannot be empty.");
-
             RuleFor(x => x.ProductId)
                 .NotEqual(Guid.Empty)
                 .WithMessage("Product Id cannot be empty.");
