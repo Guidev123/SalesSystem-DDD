@@ -52,7 +52,7 @@ namespace SalesSystem.IntegrationTests.Configuration
 
         public async Task SignInAsync()
         {
-            var response = await HttpClient.PostAsJsonAsync("/api/v1/registers/signin", new SignInUserCommand("teste@teste.com", "Teste@123"));
+            var response = await HttpClient.PostAsJsonAsync("/api/v1/registers/signin", new SignInUserCommand("test@test.com", "Test@123"));
             response.EnsureSuccessStatusCode();
             var result = await GetResponse<Response<SignInUserResponse>>(response);
             TestsExtensions.SetJsonWebToken(HttpClient, result.Data?.AccessToken ?? string.Empty);
