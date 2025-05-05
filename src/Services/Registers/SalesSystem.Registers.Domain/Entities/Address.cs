@@ -16,6 +16,7 @@ namespace SalesSystem.Registers.Domain.Entities
             ZipCode = zipCode;
             City = city;
             State = state;
+            Validate();
         }
 
         private Address()
