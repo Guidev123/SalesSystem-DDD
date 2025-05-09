@@ -3,7 +3,7 @@
 </p>
 
 
-# Sales System - Modular Monolith
+# Sales System - Vertical Slice Architecture
 
 ## Technologies Used 🛠️
   - **Framework**: ASP.NET 9.0
@@ -13,7 +13,7 @@
   - **Event Storage**: EventStore (Event Sourcing)
 
 ## Architecture 🏛️
-<p>The project follows a <strong>Modular Monolith</strong> architecture, split into four main modules, each with its own database schema and implementing the <strong>Hexagonal Architecture</strong>. Communication between modules is asynchronous and event-based, adhering to an <strong>EDA (Event-Driven Architecture)</strong> approach, ensuring modules remain unaware of each other. Concepts of <strong>Clean Architecture</strong> and <strong>DDD (Domain-Driven Design)</strong> are strictly applied, alongside <strong>CQRS</strong> and <strong>Event Sourcing</strong>. A <strong>Shared Kernel</strong> is used as a shared context to provide common models, utilities, and logic reused across the bounded contexts (modules).</p>
+<p>The project follows a <strong>Vertical Slice</strong> architecture, split into four main modules, each with its own database schema and implementing the <strong>Hexagonal Architecture</strong>. Communication between modules is asynchronous and event-based, adhering to an <strong>EDA (Event-Driven Architecture)</strong> approach, ensuring modules remain unaware of each other. Concepts of <strong>Clean Architecture</strong> and <strong>DDD (Domain-Driven Design)</strong> are strictly applied, alongside <strong>CQRS</strong> and <strong>Event Sourcing</strong>. A <strong>Shared Kernel</strong> is used as a shared context to provide common models, utilities, and logic reused across the bounded contexts (modules).</p>
 
 ### Modules
   - **Sales**: Handles orders and the sales workflow.
