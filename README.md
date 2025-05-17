@@ -9,7 +9,6 @@
   - **Framework**: ASP.NET 9.0
   - **Database**: SQL Server
   - **Containerization**: Docker
-  - **Mediator Library**: MediatR (for Commands, Queries, and Events)
   - **Event Storage**: EventStore (Event Sourcing)
 
 ## Architecture 🏛️
