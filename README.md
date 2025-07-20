@@ -3,7 +3,7 @@
 </p>
 
 
-# Sales System - Vertical Slice Architecture
+# Sales System - Domain Driven Design
 
 ## Technologies Used 🛠️
   - **Framework**: ASP.NET 9.0
