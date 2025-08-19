@@ -7,10 +7,10 @@ namespace SalesSystem.SharedKernel.Abstractions.Mediator
     {
         Task PublishEventAsync<T>(T @event) where T : Event;
 
-        Task<Response<T>> SendCommand<T>(Command<T> command);
+        Task<Response<T>> SendCommandAsync<T>(Command<T> command);
 
-        Task<Response<T>> SendQuery<T>(IQuery<T> query);
+        Task<Response<T>> SendQueryAsync<T>(IQuery<T> query);
 
-        Task<PagedResponse<T>> SendQuery<T>(IPagedQuery<T> query);
+        Task<PagedResponse<T>> SendQueryAsync<T>(IPagedQuery<T> query);
     }
 }

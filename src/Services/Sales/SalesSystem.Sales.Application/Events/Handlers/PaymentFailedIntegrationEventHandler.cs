@@ -8,6 +8,6 @@ namespace SalesSystem.Sales.Application.Events.Handlers
     public sealed class PaymentFailedIntegrationEventHandler(IMediatorHandler mediator) : INotificationHandler<PaymentFailedIntegrationEvent>
     {
         public async Task ExecuteAsync(PaymentFailedIntegrationEvent notification, CancellationToken cancellationToken)
-            => await mediator.SendCommand(new CancelOrderProcessingReverseStockCommand(notification.OrderId, notification.CustomerId));
+            => await mediator.SendCommandAsync(new CancelOrderProcessingReverseStockCommand(notification.OrderId, notification.CustomerId));
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using SalesSystem.Catalog.Application.Storage;
+using SalesSystem.Catalog.Application.Abstractions;
 
 namespace SalesSystem.Catalog.Infrastructure.Storage
 {

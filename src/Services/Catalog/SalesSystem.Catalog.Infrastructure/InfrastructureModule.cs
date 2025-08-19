@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SalesSystem.Catalog.Application.Storage;
+using SalesSystem.Catalog.Application.Abstractions;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
 using SalesSystem.Catalog.Domain.Services;

@@ -1,7 +1,7 @@
 ﻿using SalesSystem.Sales.Domain.Repositories;
 using SalesSystem.SharedKernel.Abstractions;
-using SalesSystem.SharedKernel.DTOs;
 using SalesSystem.SharedKernel.Events.IntegrationEvents.Orders;
+using SalesSystem.SharedKernel.Models;
 using SalesSystem.SharedKernel.Notifications;
 using SalesSystem.SharedKernel.Responses;
 
@@ -23,13 +23,13 @@ namespace SalesSystem.Sales.Application.Commands.Orders.CancelProcessingReverseS
                 return Response<CancelOrderProcessingReverseStockResponse>.Failure(GetNotifications(), code: 404);
             }
 
-            var listItems = new List<ItemDto>();
+            var listItems = new List<Item>();
             foreach (var item in order.OrderItems)
             {
-                listItems.Add(new ItemDto(item.ProductId, item.Quantity));
+                listItems.Add(new Item(item.ProductId, item.Quantity));
             }
 
-            order.AddEvent(new OrderProcessingCanceledIntegrationEvent(order.Id, order.CustomerId, new OrderProductsListDto(order.Id, listItems)));
+            order.AddEvent(new OrderProcessingCanceledIntegrationEvent(order.Id, order.CustomerId, new OrderProductsList(order.Id, listItems)));
             order.DraftOrder();
 
             orderRepository.Update(order);

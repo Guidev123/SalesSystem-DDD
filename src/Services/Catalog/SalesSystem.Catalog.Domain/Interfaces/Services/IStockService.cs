@@ -1,4 +1,4 @@
-﻿using SalesSystem.SharedKernel.DTOs;
+﻿using SalesSystem.SharedKernel.Models;
 
 namespace SalesSystem.Catalog.Domain.Interfaces.Services
 {
@@ -6,10 +6,10 @@ namespace SalesSystem.Catalog.Domain.Interfaces.Services
     {
         Task<bool> DebitStockAsync(Guid productId, int quantity);
 
-        Task<bool> DebitListStockAsync(OrderProductsListDto orderProductsList);
+        Task<bool> DebitListStockAsync(OrderProductsList orderProductsList);
 
         Task<bool> AddStockAsync(Guid productId, int quantity);
 
-        Task<bool> AddListStockAsync(OrderProductsListDto orderProductsList);
+        Task<bool> AddListStockAsync(OrderProductsList orderProductsList);
     }
 }

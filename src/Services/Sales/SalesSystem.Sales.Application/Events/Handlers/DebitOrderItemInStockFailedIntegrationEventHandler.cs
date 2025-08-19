@@ -10,7 +10,7 @@ namespace SalesSystem.Sales.Application.Events.Handlers
     {
         public async Task ExecuteAsync(DebitOrderItemInStockFailedIntegrationEvent notification, CancellationToken cancellationToken)
         {
-            await mediator.SendCommand(new CancelOrderProcessingCommand(notification.OrderId, notification.CustomerId));
+            await mediator.SendCommandAsync(new CancelOrderProcessingCommand(notification.OrderId, notification.CustomerId));
         }
     }
 }

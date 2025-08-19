@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using SalesSystem.Catalog.Application.Storage;
+using SalesSystem.Catalog.Application.Abstractions;
 
 namespace SalesSystem.Catalog.Infrastructure.Storage
 {

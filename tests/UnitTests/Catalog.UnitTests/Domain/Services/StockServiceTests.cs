@@ -6,8 +6,8 @@ using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Services;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
 using SalesSystem.SharedKernel.Data;
-using SalesSystem.SharedKernel.DTOs;
 using SalesSystem.SharedKernel.Events;
+using SalesSystem.SharedKernel.Models;
 
 namespace Catalog.UnitTests.Domain.Services
 {
@@ -281,19 +281,19 @@ namespace Catalog.UnitTests.Domain.Services
                         ));
         }
 
-        private static Faker<OrderProductsListDto> GenerateOrderProductsListDTO()
+        private static Faker<OrderProductsList> GenerateOrderProductsListDTO()
         {
-            return new Faker<OrderProductsListDto>()
-                        .CustomInstantiator(p => new OrderProductsListDto(
+            return new Faker<OrderProductsList>()
+                        .CustomInstantiator(p => new OrderProductsList(
                                 p.Random.Guid(),
                                 GenerateItemDTO().Generate(5)
                         ));
         }
 
-        private static Faker<ItemDto> GenerateItemDTO()
+        private static Faker<Item> GenerateItemDTO()
         {
-            return new Faker<ItemDto>()
-                        .CustomInstantiator(p => new ItemDto(
+            return new Faker<Item>()
+                        .CustomInstantiator(p => new Item(
                                 p.Random.Guid(),
                                 p.Random.Int(1, 10)
                         ));

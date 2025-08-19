@@ -8,7 +8,7 @@ namespace SalesSystem.Registers.Application.Events.Handlers
     {
         public async Task ExecuteAsync(UserDeletedEvent notification, CancellationToken cancellationToken)
         {
-            await mediatorHandler.SendCommand(new DeleteCustomerCommand(notification.UserId));
+            await mediatorHandler.SendCommandAsync(new DeleteCustomerCommand(notification.UserId));
         }
     }
 }

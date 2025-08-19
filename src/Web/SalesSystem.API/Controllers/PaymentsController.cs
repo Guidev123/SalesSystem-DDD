@@ -19,11 +19,11 @@ namespace SalesSystem.API.Controllers
         public async Task<IResult> CheckoutAsync(CheckoutPaymentCommand command)
         {
             command.SetCustomerCredentials(GetUserId(), GetUserEmail());
-            return CustomResponse(await mediatorHandler.SendCommand(command));
+            return CustomResponse(await mediatorHandler.SendCommandAsync(command));
         }
 
         [HttpPost("confirm")]
         public async Task<IResult> ConfirmPaymentWebhookAsync()
-            => CustomResponse(await mediatorHandler.SendCommand(new ConfirmPaymentCommand(stripeSettings.Value.WebhookSecret)));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(new ConfirmPaymentCommand(stripeSettings.Value.WebhookSecret)));
     }
 }

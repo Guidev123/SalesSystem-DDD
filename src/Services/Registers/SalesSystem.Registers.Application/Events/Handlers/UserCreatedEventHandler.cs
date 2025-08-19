@@ -8,7 +8,7 @@ namespace SalesSystem.Registers.Application.Events.Handlers
     {
         public async Task ExecuteAsync(UserCreatedEvent notification, CancellationToken cancellationToken)
         {
-            await mediator.SendCommand(new CreateCustomerCommand(notification.Id, notification.Name,
+            await mediator.SendCommandAsync(new CreateCustomerCommand(notification.Id, notification.Name,
                 notification.Email, notification.Document,
                 notification.BirthDate));
         }

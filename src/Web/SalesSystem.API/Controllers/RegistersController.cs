@@ -21,43 +21,43 @@ namespace SalesSystem.API.Controllers
     {
         [HttpGet]
         public async Task<IResult> GetByIdAsync()
-            => CustomResponse(await mediatorHandler.SendQuery(new GetCustomerByIdQuery(GetUserId())));
+            => CustomResponse(await mediatorHandler.SendQueryAsync(new GetCustomerByIdQuery(GetUserId())));
 
         [HttpPost]
         public async Task<IResult> SignUpAsync(SignUpUserCommand command)
-            => CustomResponse(await mediatorHandler.SendCommand(command));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(command));
 
         [HttpPost("signin")]
         public async Task<IResult> SignInAsync(SignInUserCommand command)
-            => CustomResponse(await mediatorHandler.SendCommand(command));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(command));
 
         [HttpDelete("{userId:guid}")]
         public async Task<IResult> DeleteAsync(Guid userId)
-             => CustomResponse(await mediatorHandler.SendCommand(new DeleteUserCommand(userId)));
+             => CustomResponse(await mediatorHandler.SendCommandAsync(new DeleteUserCommand(userId)));
 
         [HttpPost("address")]
         public async Task<IResult> AddAddressAsync(AddAddressCommand command)
         {
             command.SetCustomerId(GetUserId());
-            return CustomResponse(await mediatorHandler.SendCommand(command));
+            return CustomResponse(await mediatorHandler.SendCommandAsync(command));
         }
 
         [HttpPost("forget-password")]
         public async Task<IResult> ForgetPasswordAsync(ForgetPasswordUserCommand command)
-            => CustomResponse(await mediatorHandler.SendCommand(command));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(command));
 
         [HttpPut]
         public async Task<IResult> ResetPasswordAsync(ResetPasswordUserCommand command)
-            => CustomResponse(await mediatorHandler.SendCommand(command));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(command));
 
         [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPost("roles")]
         public async Task<IResult> CreateRoleAsync(CreateRoleCommand command)
-            => CustomResponse(await mediatorHandler.SendCommand(command));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(command));
 
         [Authorize(Roles = nameof(EUserRoles.Admin))]
         [HttpPost("roles/user-role")]
         public async Task<IResult> AddRoleToUserAsync(AddUserRoleCommand command)
-            => CustomResponse(await mediatorHandler.SendCommand(command));
+            => CustomResponse(await mediatorHandler.SendCommandAsync(command));
     }
 }

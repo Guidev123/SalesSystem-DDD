@@ -1,8 +1,8 @@
-﻿using SalesSystem.Catalog.Domain.Events.ProductLowQuantityInStock;
+﻿using SalesSystem.Catalog.Domain.Events;
 using SalesSystem.Catalog.Domain.Interfaces.Repositories;
 using SalesSystem.Catalog.Domain.Interfaces.Services;
 using SalesSystem.SharedKernel.Abstractions.Mediator;
-using SalesSystem.SharedKernel.DTOs;
+using SalesSystem.SharedKernel.Models;
 
 namespace SalesSystem.Catalog.Domain.Services
 {
@@ -19,7 +19,7 @@ namespace SalesSystem.Catalog.Domain.Services
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
-        public async Task<bool> AddListStockAsync(OrderProductsListDto orderProductsList)
+        public async Task<bool> AddListStockAsync(OrderProductsList orderProductsList)
         {
             foreach (var orderProduct in orderProductsList.Items)
             {
@@ -36,7 +36,7 @@ namespace SalesSystem.Catalog.Domain.Services
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
-        public async Task<bool> DebitListStockAsync(OrderProductsListDto orderProductsList)
+        public async Task<bool> DebitListStockAsync(OrderProductsList orderProductsList)
         {
             foreach (var orderProduct in orderProductsList.Items)
             {
